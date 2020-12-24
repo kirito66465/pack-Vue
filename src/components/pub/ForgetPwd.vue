@@ -1,0 +1,193 @@
+<template>
+  <div>
+    <el-container>
+      <el-header height="300px">
+        <div id="title"><b>基 于 Web 的 校 园 快 递 管 理 系 统</b></div>
+      </el-header>
+      <el-main style="height: 500px">
+        <div style="height: 300px">
+          <el-row>
+            <el-col :span="8"><div class="grid-content"></div></el-col>
+            <el-col :span="8">
+              <div class="grid-content">
+                <el-steps :active="active" finish-status="success" align-center>
+                  <el-step title="请输入学号"></el-step>
+                  <el-step title="请输入手机号"></el-step>
+                  <el-step title="请重新设置密码"></el-step>
+                </el-steps>
+              </div>
+            </el-col>
+            <el-col :span="8"><div class="grid-content"></div></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="8"><div class="grid-content"></div></el-col>
+            <el-col :span="8"><div class="grid-content"></div></el-col>
+            <el-col :span="8"><div class="grid-content"></div></el-col>
+          </el-row>
+          <el-row style="height: 150px">
+            <el-col :span="11"><div class="grid-content"></div></el-col>
+            <el-col :span="4">
+              <div class="grid-content">
+                <el-form v-if="active === 0" ref="user" :model="user" :rules="rules">
+                  <el-form-item :required="true" label=" " prop="card">
+                    <el-input v-model="user.card" placeholder="username" clearable size="small" type="text" style="width: 200px"></el-input>
+                  </el-form-item>
+                </el-form>
+                <el-form v-if="active === 1" ref="user" :model="user" :rules="rules">
+                  <el-form-item :required="true" label=" " prop="phone">
+                    <el-input v-model="user.phone" placeholder="telephone" clearable size="small" type="text" style="width: 200px"></el-input>
+                  </el-form-item>
+                </el-form>
+                <el-form v-if="active === 2" ref="user" :model="user" :rules="rules">
+                  <el-form-item :required="true" label=" " prop="password">
+                    <el-input v-model="user.password" placeholder="password" show-password clearable size="small" type="text" style="width: 200px"></el-input>
+                  </el-form-item>
+                  <el-form-item :required="true" label=" " prop="checkPwd">
+                    <el-input v-model="user.checkPwd" placeholder="password again" show-password clearable size="small" type="text" style="width: 200px"></el-input>
+                  </el-form-item>
+                </el-form>
+              </div>
+            </el-col>
+            <el-col :span="9"><div class="grid-content"></div></el-col>
+          </el-row>
+          <el-row>
+            <el-col :span="11"><div class="grid-content"></div></el-col>
+            <el-col :span="5">
+              <div class="grid-content">
+                <el-button style="margin-top: 12px;" @click="next">下一步</el-button>
+                <el-button style="margin-top: 12px;" @click="submit" ref="btn" :disabled="active !== 2">提交</el-button>
+              </div>
+            </el-col>
+            <el-col :span="9"><div class="grid-content"></div></el-col>
+          </el-row>
+        </div>
+      </el-main>
+    </el-container>
+  </div>
+
+</template>
+
+<script>
+	export default {
+		name: "ForgetPwd",
+    data() {
+      const validatePass = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入密码'));
+        } else {
+          if (this.user.checkPwd !== '') {
+            this.$refs.user.validateField('checkPwd');
+          }
+          callback();
+        }
+      }
+      const validatePass2 = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入密码'));
+        } else if (value !== this.user.password) {
+          callback(new Error('两次输入密码不一致!'));
+        } else {
+          callback();
+        }
+      }
+		  return {
+        active: 0,
+        user: {
+          card: '',
+          phone: '',
+          password: '',
+          checkPwd: ''
+        },
+        rules: {
+          card: [
+            { required: true, message: '请输入学号!', trigger: 'blur' },
+            { min: 10, max: 11, message: '长度为10 个字符!', trigger: 'blur' }
+          ],
+          password: [
+            { validator: validatePass, trigger: 'blur' }
+          ],
+          checkPwd: [
+            { validator: validatePass2, trigger: 'blur' }
+          ],
+          tel: [
+            { required: true, message: '请输入手机号!', trigger: 'blur' },
+            { min: 8, max: 11, message: '请正确输入手机号!', trigger: 'blur' }
+          ]
+        }
+      };
+    },
+    methods: {
+      next() {
+        const _this = this
+        this.$refs['user'].validate((valid) => {
+          if (valid) {
+            console.log(_this.active)
+            _this.active++
+            if (_this.active > 2) {
+              _this.active = 0
+            }
+          } else {
+            console.log('error submit!!');
+            return false
+          }
+        })
+      },
+      submit() {
+        const _this = this
+        this.$refs['user'].validate((valid) => {
+          if (valid) {
+            console.log("----------忘记密码----------")
+            _this.forgetPwd()
+          } else {
+            console.log('请正确输入内容!!!');
+            return false
+          }
+        })
+      },
+      forgetPwd() {
+        let param = new URLSearchParams()
+        param.append('card', this.user.card)
+        param.append('phone', this.user.phone)
+        param.append('password', this.user.password)
+        const _this = this
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:8080/user/forgetPwd',
+          data: param
+        })
+          .then(function (response) {
+            console.log(response.data.flag)
+            if (response.data.flag === 'update password success') {
+              console.log("重置密码成功！")
+              _this.$router.push('/userHome')
+            } else if (response.data.flag === 'not exist') {
+              console.log("用户不存在！")
+              alert("用户不存在！")
+            } else {
+              console.log("服务器出错！")
+              alert("服务器出错！")
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
+      }
+    }
+	}
+</script>
+
+<style scoped>
+  #title {
+    font: 50px Extra large;
+    font-family: "微软雅黑";
+    line-height: 1.7;
+    text-align: center;
+    color: coral;
+    margin-top: 3%;
+  }
+
+  .grid-content {
+    border-radius: 4px;
+    min-height: 36px;
+  }
+</style>
