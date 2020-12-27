@@ -77,12 +77,14 @@
     created() {
 		  let userUrl = 'assets/image/user.png'
       this.imgUrl = require("@/" + userUrl)
+      console.log("UserHome的created时获取信息")
       console.log("-------------3---------------")
       console.log(this.$store.state.userName)
     },
     mounted() {
       this.userCard = this.$store.state.userCard
       this.userName = this.$store.state.userName
+      console.log("UserHome的mounted时获取信息")
       console.log("-------------4---------------")
       console.log(this.$store.state.userName)
     }
