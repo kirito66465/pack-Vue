@@ -51,7 +51,6 @@
         param.append('card', this.user.card)
         param.append('password', this.user.password)
         const _this = this
-        console.log("即将进行登录Post请求")
         this.$axios({
           method: 'post',
           url: 'http://localhost:8080/user/login',
@@ -80,10 +79,9 @@
           data: param
         })
           .then(function (response) {
-            console.log("已经获取到获取用户信息请求响应")
             console.log(response.data)
             if (response.data === 'login success') {
-              _this.$router.push('/adminHome')
+              _this.getAdminInfo()
             } else {
               alert("账户或密码输入错误！")
             }
@@ -111,9 +109,22 @@
           .catch(function (error) {
             console.log(error)
           })
+      },
+      getAdminInfo() {
+        const _this = this
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:8080/admin/getInfo'
+        })
+          .then(function (response) {
+            _this.$store.dispatch("setAdminCard", response.data.result.card)
+            _this.$store.dispatch("setAdminName", response.data.result.name)
+            _this.$router.push('/adminHome')
+          })
+          .catch(function (error) {
+            console.log(error)
+          })
       }
-    },
-    updated() {
     }
   }
 </script>

@@ -37,10 +37,6 @@
               _this.$router.push('/loginAndRegister')
             } else {
               console.log(response.data.result)
-
-              console.log("-------------5---------------")
-              console.log(_this.$store.state.userName)
-
               _this.$store.dispatch("setUserCard", response.data.result.card)
               _this.$store.dispatch("setUserName", response.data.result.name)
               _this.$store.dispatch("setUserPhone", response.data.result.phone)
@@ -48,9 +44,6 @@
               _this.$store.dispatch("setUserCount", response.data.result.count)
               _this.userCard = _this.$store.state.userCard
               _this.userName = _this.$store.state.userName
-
-              console.log("-------------6---------------")
-              console.log(_this.$store.state.userName)
             }
           })
           .catch(function (error) {

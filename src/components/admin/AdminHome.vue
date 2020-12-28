@@ -6,17 +6,20 @@
       </el-header>
       <el-container>
         <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <admin-all-pack></admin-all-pack>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-	import AdminHeader from "./AdminHeader";
+	import AdminHeader from "./AdminHeader"
+  import AdminAllPack from "./AdminAllPack"
   export default {
 		name: "AdminHome",
-    components: {AdminHeader},
+    components: {AdminAllPack, AdminHeader},
     data() {
       return {
         adminCard: '',
@@ -36,8 +39,14 @@
               window.alert("请登录再操作！")
               _this.$router.push('/loginAndRegister')
             } else {
-              _this.adminCard = response.data.admin.card
-              _this.adminName = response.data.admin.name
+              console.log(response.data.result)
+              _this.$store.dispatch("setAdminCard", response.data.result.card)
+              _this.$store.dispatch("setAdminName", response.data.result.name)
+              _this.$store.dispatch("setAdminPhone", response.data.result.phone)
+              _this.$store.dispatch("setAdminAddr", response.data.result.addr)
+              _this.$store.dispatch("setAdminCount", response.data.result.count)
+              _this.adminCard = _this.$store.state.adminCard
+              _this.adminName = _this.$store.state.adminName
             }
           })
           .catch(function (error) {
@@ -47,6 +56,9 @@
     },
     created() {
       this.getAdminInfo()
+    },
+    mounted() {
+		  this.getAdminInfo()
     }
   }
 </script>
@@ -70,7 +82,7 @@
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    /*line-height: 160px;*/
   }
 
   body > .el-container {

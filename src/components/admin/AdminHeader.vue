@@ -2,7 +2,7 @@
 	<div>
     <el-row>
       <el-col :span="8" class="grid-content">
-        <div id="title"><b>基 于 Web 的 校 园 快 递 管 理 系 统</b></div>
+        <div id="title">基 于 Web 的 校 园 快 递 管 理 系 统</div>
       </el-col>
       <el-col :span="8" class="grid-content">
         <el-menu
@@ -24,10 +24,11 @@
           </el-menu-item>
           <el-menu-item index="2">消息中心</el-menu-item>
           <el-submenu index="3">
-            <template slot="title">我的工作台</template>
-            <el-menu-item index="3-1">已入站</el-menu-item>
-            <el-menu-item index="3-2">揽收</el-menu-item>
-            <el-menu-item index="3-3">入站</el-menu-item>
+            <template slot="title">快递管理</template>
+            <el-menu-item index="3-1">全部快递</el-menu-item>   <!-- 指所有入站快递，包括已取、未取 -->
+            <el-menu-item index="3-2">揽收快递</el-menu-item>
+            <el-menu-item index="3-3">未取快递</el-menu-item>   <!-- 指所有未取快递，无论有无取件码 -->
+            <el-menu-item index="3-4">已取快递</el-menu-item>
           </el-submenu>
           <el-menu-item index="4">
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">
@@ -92,7 +93,12 @@
     created() {
 		  let adminUrl = 'assets/image/admin.png'
       this.imgUrl = require("@/" + adminUrl)
-      this.getAdminInfo()
+      this.adminCard = this.$store.state.adminCard
+      this.adminName = this.$store.state.adminName
+    },
+    mounted() {
+      this.adminCard = this.$store.state.adminCard
+      this.adminName = this.$store.state.adminName
     }
   }
 </script>
@@ -113,13 +119,13 @@
   }
 
   #title {
-    font: 50px Extra large;
+    font: 20px Extra large;
     font-family: "微软雅黑";
     line-height: 1.7;
     text-align: center;
     color: coral;
     margin-top: 3%;
-    position: absolute;
+    /*position: absolute;*/
     left: 20%;
   }
 
