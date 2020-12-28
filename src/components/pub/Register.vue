@@ -107,6 +107,17 @@
         })
           .then(function (response) {
             console.log(response.data)
+            if (response.data === "register success") {
+              this.$store.dispatch("setUserCard", this.user.card)
+              this.$store.dispatch("setUserName", this.user.name)
+              this.$router.push('/userHome')
+            } else if (response.data === "register fail") {
+              alert("注册失败！请稍后再试！");
+            } else if (response.data === "is exist") {
+              alert("此学号已注册！")
+            } else {
+              alert("服务器出错啦！")
+            }
           })
           .catch(function (error) {
             console.log(error)
