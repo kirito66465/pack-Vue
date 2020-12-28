@@ -94,6 +94,7 @@
         this.$refs[formName].resetFields();
       },
       userRegister() {
+        const _this = this
         this.$axios({
           method: 'post',
           url: 'http://localhost:8080/user/addUser',
@@ -108,9 +109,9 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data === "register success") {
-              this.$store.dispatch("setUserCard", this.user.card)
-              this.$store.dispatch("setUserName", this.user.name)
-              this.$router.push('/userHome')
+              _this.$store.dispatch("setUserCard", _this.user.card)
+              _this.$store.dispatch("setUserName", _this.user.name)
+              _this.$router.push('/userHome')
             } else if (response.data === "register fail") {
               alert("注册失败！请稍后再试！");
             } else if (response.data === "is exist") {
