@@ -97,7 +97,7 @@
         const _this = this
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/addUser',
+          url: 'http://localhost:8080/user/register',
           data: {
             card: this.user.card,
             password: this.user.password,

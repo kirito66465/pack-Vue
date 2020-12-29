@@ -11,40 +11,40 @@
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="快递单号">
+                <el-form-item label="快递单号: ">
                   <span>{{ props.row.id }}</span>
                 </el-form-item>
-                <el-form-item label="快递公司">
+                <el-form-item label="快递公司: ">
                   <span>{{ props.row.org }}</span>
                 </el-form-item>
-                <el-form-item label="收件人">
+                <el-form-item label="收件人: ">
                   <span>{{ props.row.per_name }}</span>
                 </el-form-item>
-                <el-form-item label="收件手机号">
+                <el-form-item label="收件手机号: ">
                   <span>{{ props.row.per_tel }}</span>
                 </el-form-item>
-                <el-form-item label="收件地址">
+                <el-form-item label="收件地址: ">
                   <span>{{ props.row.per_addr }}</span>
                 </el-form-item>
-                <el-form-item label="所在驿站">
+                <el-form-item label="所在驿站: ">
                   <span>{{ props.row.addr }}</span>
                 </el-form-item>
-                <el-form-item label="取件码">
+                <el-form-item label="取件码: ">
                   <span>{{ props.row.code }}</span>
                 </el-form-item>
-                <el-form-item label="驿站联系人">
+                <el-form-item label="驿站联系人: ">
                   <span>{{ props.row.cont_name }}</span>
                 </el-form-item>
-                <el-form-item label="驿站联系方式">
+                <el-form-item label="驿站联系方式: ">
                   <span>{{ props.row.cont_tel }}</span>
                 </el-form-item>
-                <el-form-item label="快递状态">
+                <el-form-item label="快递状态: ">
                   <span>{{ props.row.status }}</span>
                 </el-form-item>
-                <el-form-item label="入站时间">
+                <el-form-item label="入站时间: ">
                   <span>{{ props.row.start }}</span>
                 </el-form-item>
-                <el-form-item label="取站时间">
+                <el-form-item label="取站时间: ">
                   <span>{{ props.row.end }}</span>
                 </el-form-item>
               </el-form>
@@ -69,7 +69,14 @@
             label="快递公司"
             prop="org"
             width="200"
-            :filters="[{ text: '中通', value: '中通' }, { text: '申通', value: '申通' }, { text: '圆通', value: '圆通' }]"
+            :filters="[{ text: '中通', value: '中通' }
+                      , { text: '申通', value: '申通' }
+                      , { text: '圆通', value: '圆通' }
+                      , { text: '京东', value: '京东' }
+                      , { text: '顺丰', value: '顺丰' }
+                      , { text: '韵达', value: '韵达' }
+                      , { text: '天天', value: '天天' }
+                      , { text: 'EMS', value: 'EMS' }]"
             :filter-method="filterOrg"
             filter-placement="bottom-end">
             <template slot-scope="scope">
@@ -138,7 +145,7 @@
 
 <script>
 	export default {
-		name: "AdminAllPack",
+		name: "UserAllPack",
     data() {
       return {
         currentPage: 1,       // 默认当前页，第一页
@@ -210,8 +217,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getAdminPacksByPage',
-          // url: 'http://localhost:8080/pack/getPacksByAdmin'
+          url: 'http://localhost:8080/pack/getUserPackByPage',
           data: param
         })
           .then(function (response) {
@@ -238,11 +244,14 @@
 <style scoped>
   .demo-table-expand {
     font-size: 0;
+    font-weight: bold;
   }
+
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
   }
+
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;

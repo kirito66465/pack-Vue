@@ -29,6 +29,7 @@
             <el-menu-item index="3-2">揽收快递</el-menu-item>
             <el-menu-item index="3-3">未取快递</el-menu-item>   <!-- 指所有未取快递，无论有无取件码 -->
             <el-menu-item index="3-4">已取快递</el-menu-item>
+            <el-menu-item index="3-5">货架查看</el-menu-item>
           </el-submenu>
           <el-menu-item index="4">
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">

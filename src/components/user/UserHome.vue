@@ -6,17 +6,20 @@
       </el-header>
       <el-container>
         <el-aside width="200px">Aside</el-aside>
-        <el-main>Main</el-main>
+        <el-main>
+          <user-all-pack></user-all-pack>
+        </el-main>
       </el-container>
     </el-container>
   </div>
 </template>
 
 <script>
-  import UserHeader from "./UserHeader";
+  import UserHeader from "./UserHeader"
+  import UserAllPack from "./UserAllPack"
   export default {
     name: "UserHome",
-    components: {UserHeader},
+    components: {UserAllPack, UserHeader},
     data() {
       return {
         userCard: '',
@@ -54,6 +57,9 @@
     created() {
       console.log("UserHead的created时获取信息")
       this.getUserInfo()
+    },
+    mounted() {
+      this.getUserInfo()
     }
   }
 </script>
@@ -77,7 +83,7 @@
     background-color: #E9EEF3;
     color: #333;
     text-align: center;
-    line-height: 160px;
+    /*line-height: 160px;*/
   }
 
   body > .el-container {
