@@ -22,13 +22,13 @@
               </div>
             </div>
           </el-menu-item>
-          <el-menu-item index="2">消息中心</el-menu-item>
+          <el-menu-item index="2" @click="">消息中心</el-menu-item>
           <el-submenu index="3">
             <template slot="title">快递管理</template>
-            <el-menu-item index="3-1">全部快递</el-menu-item>
-            <el-menu-item index="3-1">已取快递</el-menu-item>
-            <el-menu-item index="3-2">未取快递</el-menu-item>
-            <el-menu-item index="3-3">我要寄件</el-menu-item>
+            <el-menu-item index="3-1" @click.native="">全部快递</el-menu-item>
+            <el-menu-item index="3-1" @click.native="">已取快递</el-menu-item>
+            <el-menu-item index="3-2" @click.native="">未取快递</el-menu-item>
+            <el-menu-item index="3-3" @click.native="">我要寄件</el-menu-item>
           </el-submenu>
           <el-menu-item index="4">
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">

@@ -44,7 +44,7 @@
                 <el-form-item label="入站时间">
                   <span>{{ props.row.start }}</span>
                 </el-form-item>
-                <el-form-item label="取站时间">
+                <el-form-item label="取件时间">
                   <span>{{ props.row.end }}</span>
                 </el-form-item>
               </el-form>

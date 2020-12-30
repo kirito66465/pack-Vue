@@ -145,7 +145,7 @@
 
 <script>
 	export default {
-		name: "UserAllPack",
+		name: "UserNoPick",
     data() {
       return {
         currentPage: 1,       // 默认当前页，第一页
@@ -217,7 +217,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getUserPackByPage',
+          url: 'http://localhost:8080/pack/getUserNoPick',
           data: param
         })
           .then(function (response) {

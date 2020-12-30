@@ -96,17 +96,14 @@
             width="250">
           </el-table-column>
           <el-table-column
-            label="快递状态"
-            prop="status"
-            width="100"
-            :filters="[{ text: '已取出', value: '已取出' }, { text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
-            :filter-method="filterStatus"
-            filter-placement="bottom-end">
-            <template slot-scope="scope">
-              <el-tag
-                :type="scope.row.status === '已取件' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
-            </template>
+            label="入站时间"
+            prop="start"
+            width="250">
+          </el-table-column>
+          <el-table-column
+            label="取件时间"
+            prop="end"
+            width="250">
           </el-table-column>
           <el-table-column
             align="right"
@@ -118,9 +115,6 @@
                 placeholder="输入关键字搜索"/>
             </template>
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handlePick(scope.$index, scope.row)">取件</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -145,7 +139,7 @@
 
 <script>
 	export default {
-		name: "UserAllPack",
+		name: "UserHavePack",
     data() {
       return {
         currentPage: 1,       // 默认当前页，第一页
@@ -178,10 +172,6 @@
         console.log(`当前页: ${val}`)
         this.getPacks()
       },
-      // 单条记录编辑
-      handlePick(index, row) {
-        console.log(index, row)
-      },
       // 单条记录删除
       handleDelete(index, row) {
         console.log(index, row)
@@ -205,10 +195,6 @@
       filterOrg(value, row) {
         return row.org === value
       },
-      // 快递状态过滤
-      filterStatus(value, row) {
-        return row.status === value
-      },
       getPacks() {
         let param = new URLSearchParams()
         param.append('currentPage', this.currentPage)
@@ -217,7 +203,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getUserPackByPage',
+          url: 'http://localhost:8080/pack/getUserIsPick',
           data: param
         })
           .then(function (response) {

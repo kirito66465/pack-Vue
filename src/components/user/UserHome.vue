@@ -7,7 +7,10 @@
       <el-container>
         <el-aside width="200px">Aside</el-aside>
         <el-main>
-          <user-all-pack></user-all-pack>
+<!--          <user-all-pack></user-all-pack>-->
+<!--          <user-is-pick></user-is-pick>-->
+<!--          <user-no-pick></user-no-pick>-->
+          <router-view />
         </el-main>
       </el-container>
     </el-container>
@@ -17,9 +20,11 @@
 <script>
   import UserHeader from "./UserHeader"
   import UserAllPack from "./UserAllPack"
+  import UserIsPick from "./UserIsPick"
+  import UserNoPick from "./UserNoPick"
   export default {
     name: "UserHome",
-    components: {UserAllPack, UserHeader},
+    components: {UserNoPick, UserIsPick, UserAllPack, UserHeader},
     data() {
       return {
         userCard: '',
