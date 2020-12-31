@@ -16,7 +16,7 @@
           <el-menu-item index="1">
             <div class="bottom">
               <div class="block">
-                <el-tooltip class="item" effect="dark" :content="userName" placement="bottom">
+                <el-tooltip class="item" effect="dark" :content="name" placement="bottom">
                   <el-avatar :size="40" :src="imgUrl"></el-avatar>
                 </el-tooltip>
               </div>
@@ -48,8 +48,8 @@
       return {
         activeIndex: '1',
         imgUrl: '',
-        userCard: '',
-        userName: ''
+        card: '',
+        name: ''
       };
     },
     methods: {
@@ -58,13 +58,21 @@
       },
       exit() {
         const _this = this
+        let token = localStorage.getItem("token")
+        let param = new URLSearchParams()
+        param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/exit'
+          url: 'http://localhost:8080/user/exit',
+          data: param
         })
           .then(function (response) {
             console.log(response.data)
             if (response.data === 'exit success') {
+              localStorage.removeItem("token")
+              localStorage.removeItem("card")
+              localStorage.removeItem("userCard")
+              localStorage.removeItem("name")
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
@@ -73,17 +81,19 @@
           .catch(function (error) {
             console.log(error)
           })
+      },
+      getUserInfo() {
+        this.card = localStorage.getItem("card")
+        this.name = localStorage.getItem("name")
       }
     },
     created() {
 		  let userUrl = 'assets/image/user.png'
       this.imgUrl = require("@/" + userUrl)
-      this.userCard = this.$store.state.userCard
-      this.userName = this.$store.state.userName
+      this.getUserInfo()
     },
     mounted() {
-      this.userCard = this.$store.state.userCard
-      this.userName = this.$store.state.userName
+      this.getUserInfo()
     }
   }
 </script>

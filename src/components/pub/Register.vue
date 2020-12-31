@@ -108,16 +108,22 @@
         })
           .then(function (response) {
             console.log(response.data)
-            if (response.data === "register success") {
-              _this.$store.dispatch("setUserCard", _this.user.card)
-              _this.$store.dispatch("setUserName", _this.user.name)
+            if (response.data.register_result === "register success") {
+              localStorage.setItem("card", response.data.user.card)
+              localStorage.setItem("name", response.data.user.name)
               _this.$router.push('/userHome')
-            } else if (response.data === "register fail") {
-              alert("注册失败！请稍后再试！");
-            } else if (response.data === "is exist") {
-              alert("此学号已注册！")
+            } else if (response.data.register_result === "register fail") {
+              _this.$message({
+                message: '注册失败！请稍后再试！',
+                type: 'warning'
+              })
+            } else if (response.data.register_result === "is exist") {
+              _this.$message({
+                message: '此学号已注册！',
+                type: 'warning'
+              })
             } else {
-              alert("服务器出错啦！")
+              _this.$message.error('服务器出错啦！')
             }
           })
           .catch(function (error) {

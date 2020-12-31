@@ -9,7 +9,11 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
+  created() {
+    localStorage.removeItem("card")
+    localStorage.removeItem("token")
+  }
 }
 </script>
 

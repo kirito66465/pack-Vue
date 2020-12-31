@@ -5,7 +5,9 @@
         <admin-header></admin-header>
       </el-header>
       <el-container>
-        <el-aside width="200px">Aside</el-aside>
+        <el-aside width="200px">
+          <admin-aside></admin-aside>
+        </el-aside>
         <el-main>
           <admin-all-pack></admin-all-pack>
         </el-main>
@@ -17,9 +19,10 @@
 <script>
 	import AdminHeader from "./AdminHeader"
   import AdminAllPack from "./AdminAllPack"
+  import AdminAside from "./AdminAside";
   export default {
 		name: "AdminHome",
-    components: {AdminAllPack, AdminHeader},
+    components: {AdminAllPack, AdminHeader, AdminAside},
     data() {
       return {
         adminCard: '',
@@ -28,30 +31,8 @@
     },
     methods: {
 		  getAdminInfo() {
-        const _this = this
-        this.$axios({
-          method: 'post',
-          url: 'http://localhost:8080/admin/getInfo'
-        })
-          .then(function (response) {
-            console.log(response.data)
-            if (response.data.result === 'get info fail') {
-              window.alert("请登录再操作！")
-              _this.$router.push('/loginAndRegister')
-            } else {
-              console.log(response.data.result)
-              _this.$store.dispatch("setAdminCard", response.data.result.card)
-              _this.$store.dispatch("setAdminName", response.data.result.name)
-              _this.$store.dispatch("setAdminPhone", response.data.result.phone)
-              _this.$store.dispatch("setAdminAddr", response.data.result.addr)
-              _this.$store.dispatch("setAdminCount", response.data.result.count)
-              _this.adminCard = _this.$store.state.adminCard
-              _this.adminName = _this.$store.state.adminName
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        this.adminCard = localStorage.getItem("card")
+        this.adminName = localStorage.getItem("name")
       }
     },
     created() {
@@ -75,7 +56,7 @@
     background-color: #D3DCE6;
     color: #333;
     text-align: center;
-    line-height: 200px;
+    line-height: 50px;
   }
 
   .el-main {

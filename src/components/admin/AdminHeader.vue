@@ -59,13 +59,18 @@
       },
       exit() {
         const _this = this
+        let token = localStorage.getItem("token")
+        let param = new URLSearchParams()
+        param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/admin/exit'
+          url: 'http://localhost:8080/admin/exit',
+          data: param
         })
           .then(function (response) {
             console.log(response.data)
             if (response.data === 'exit success') {
+              localStorage.removeItem("token")
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
@@ -76,30 +81,17 @@
           })
       },
       getAdminInfo() {
-        const _this = this
-        this.$axios({
-          method: 'post',
-          url: 'http://localhost:8080/admin/getInfo'
-        })
-          .then(function (response) {
-            console.log(response.data)
-            _this.adminCard = response.data.result.card
-            _this.adminName = response.data.result.name
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        this.adminCard = localStorage.getItem("card")
+        this.adminName = localStorage.getItem("name")
       },
     },
     created() {
 		  let adminUrl = 'assets/image/admin.png'
       this.imgUrl = require("@/" + adminUrl)
-      this.adminCard = this.$store.state.adminCard
-      this.adminName = this.$store.state.adminName
+      this.getAdminInfo()
     },
     mounted() {
-      this.adminCard = this.$store.state.adminCard
-      this.adminName = this.$store.state.adminName
+      this.getAdminInfo()
     }
   }
 </script>

@@ -86,9 +86,17 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="收件人"
-            prop="per_name"
-            width="200">
+            label="所在驿站"
+            prop="addr"
+            width="200"
+            :filters="[{ text: '中苑', value: '中苑' }, { text: '西苑', value: '西苑' }, { text: '北苑', value: '北苑' }]"
+            :filter-method="filterAddr"
+            filter-placement="bottom-end">
+            <template slot-scope="scope">
+              <el-tag
+                :type="scope.row.addr === '中苑' ? 'primary' : 'success'"
+                disable-transitions>{{scope.row.addr}}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             label="取件码"
@@ -209,10 +217,16 @@
       filterStatus(value, row) {
         return row.status === value
       },
+      // 快递所在驿站过滤
+      filterAddr(value, row) {
+        return row.addr === value
+      },
       getPacks() {
         let param = new URLSearchParams()
+        let token = localStorage.getItem("token")
         param.append('currentPage', this.currentPage)
         param.append('pageSize', this.pageSize)
+        param.append('token', token)
         const _this = this
         console.log("准备发出请求")
         this.$axios({

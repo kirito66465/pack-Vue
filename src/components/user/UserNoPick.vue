@@ -211,8 +211,10 @@
       },
       getPacks() {
         let param = new URLSearchParams()
+        let token = localStorage.getItem("token")
         param.append('currentPage', this.currentPage)
         param.append('pageSize', this.pageSize)
+        param.append('token', token)
         const _this = this
         console.log("准备发出请求")
         this.$axios({

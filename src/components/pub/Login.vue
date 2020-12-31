@@ -39,10 +39,8 @@
       onSubmit() {
         console.log('----------login----------');
         if (this.user.radio === 1) {
-          console.log("身份: user")
           this.userLogin()
         } else {
-          console.log("身份: admin");
           this.adminLogin()
         }
       },
@@ -58,10 +56,15 @@
         })
           .then(function (response) {
             console.log(response.data)
-            if (response.data === 'login success') {
+            if (response.data.login_result === 'login success') {
+              // 将用户的token存储到本地localstorage中
+              localStorage.setItem('card', _this.user.card)
+              let token = response.data.token
+              localStorage.setItem('token', token)
+              let t = localStorage.getItem('token')
               _this.getUserInfo()
             } else {
-              alert("账户或密码输入错误！")
+              _this.$message.error('账户或密码输入错误！');
             }
           })
           .catch(function (error) {
@@ -80,10 +83,15 @@
         })
           .then(function (response) {
             console.log(response.data)
-            if (response.data === 'login success') {
+            if (response.data.login_result === 'login success') {
+              // 将用户的token存储到本地localstorage中
+              localStorage.setItem('card', _this.user.card)
+              let token = response.data.token
+              localStorage.setItem('token', token)
+              let t = localStorage.getItem('token')
               _this.getAdminInfo()
             } else {
-              alert("账户或密码输入错误！")
+              _this.$message.error('账户或密码输入错误！');
             }
           })
           .catch(function (error) {
@@ -96,15 +104,26 @@
       },
       getUserInfo() {
         const _this = this
-        console.log("即将进行获取用户信息Post请求")
+        let param = new URLSearchParams()
+        let token = localStorage.getItem("token")
+        param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/getInfo'
+          url: 'http://localhost:8080/user/getInfo',
+          data: param
         })
           .then(function (response) {
-            _this.$store.dispatch("setUserCard", response.data.result.card)
-            _this.$store.dispatch("setUserName", response.data.result.name)
-            _this.$router.push('/userHome')
+            if (response.data.info_result === 'get info success') {
+              localStorage.setItem("card", response.data.user.card)
+              localStorage.setItem("name", response.data.user.name)
+              _this.$router.push('/userHome')
+            } else {
+              _this.$message({
+                message: '请先登录！',
+                type: 'warning'
+              })
+              _this.$router.push('/LoginAndRegister')
+            }
           })
           .catch(function (error) {
             console.log(error)
@@ -112,14 +131,26 @@
       },
       getAdminInfo() {
         const _this = this
+        let param = new URLSearchParams()
+        let token = localStorage.getItem("token")
+        param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/admin/getInfo'
+          url: 'http://localhost:8080/admin/getInfo',
+          data: param
         })
           .then(function (response) {
-            _this.$store.dispatch("setAdminCard", response.data.result.card)
-            _this.$store.dispatch("setAdminName", response.data.result.name)
-            _this.$router.push('/adminHome')
+            if (response.data.info_result === 'get info success') {
+              localStorage.setItem("card", response.data.admin.card)
+              localStorage.setItem("name", response.data.admin.name)
+              _this.$router.push('/adminHome')
+            } else {
+              _this.$message({
+                message: '警告,请登录！',
+                type: 'warning'
+              })
+              _this.$router.push('/LoginAndRegister')
+            }
           })
           .catch(function (error) {
             console.log(error)

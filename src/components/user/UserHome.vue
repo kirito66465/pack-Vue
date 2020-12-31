@@ -7,10 +7,10 @@
       <el-container>
         <el-aside width="200px">Aside</el-aside>
         <el-main>
-<!--          <user-all-pack></user-all-pack>-->
+          <user-all-pack></user-all-pack>
 <!--          <user-is-pick></user-is-pick>-->
 <!--          <user-no-pick></user-no-pick>-->
-          <router-view />
+<!--          <router-view />-->
         </el-main>
       </el-container>
     </el-container>
@@ -27,36 +27,14 @@
     components: {UserNoPick, UserIsPick, UserAllPack, UserHeader},
     data() {
       return {
-        userCard: '',
-        userName: ''
+        card: '',
+        name: ''
       }
     },
     methods: {
       getUserInfo() {
-        const _this = this
-        this.$axios({
-          method: 'post',
-          url: 'http://localhost:8080/user/getInfo'
-        })
-          .then(function (response) {
-            console.log(response.data)
-            if (response.data.result === 'get info fail') {
-              window.alert("请登录再操作！")
-              _this.$router.push('/loginAndRegister')
-            } else {
-              console.log(response.data.result)
-              _this.$store.dispatch("setUserCard", response.data.result.card)
-              _this.$store.dispatch("setUserName", response.data.result.name)
-              _this.$store.dispatch("setUserPhone", response.data.result.phone)
-              _this.$store.dispatch("setUserAddr", response.data.result.addr)
-              _this.$store.dispatch("setUserCount", response.data.result.count)
-              _this.userCard = _this.$store.state.userCard
-              _this.userName = _this.$store.state.userName
-            }
-          })
-          .catch(function (error) {
-            console.log(error)
-          })
+        this.card = localStorage.getItem("card")
+        this.name = localStorage.getItem("name")
       }
     },
     created() {
