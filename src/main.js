@@ -51,5 +51,27 @@ new Vue({
   router,
   store,
   components: { App },
-  template: '<App/>'
+  template: '<App/>',
+
+  // mounted(){
+  //   this.prevent_back();
+  // },
+  // methods:{
+  //   prevent_back(){
+  //     const _this = this;
+  //     window.pushStateFun = function(){
+  //       let path = '#'+_this.$route.path;;
+  //       console.log(path);
+  //       let state = {
+  //         title: null,
+  //         url: path,
+  //       };
+  //       window.history.pushState(state,null, path);
+  //     }
+  //     window.pushStateFun();
+  //     window.removeEventListener("popstate", window.pushStateFun, false);
+  //     window.addEventListener("popstate", window.pushStateFun, false);
+  //   }
+  //
+  // }
 })

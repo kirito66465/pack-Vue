@@ -11,41 +11,44 @@
           <el-table-column type="expand">
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
-                <el-form-item label="快递单号">
+                <el-form-item label="快递单号: ">
                   <span>{{ props.row.id }}</span>
                 </el-form-item>
-                <el-form-item label="快递公司">
+                <el-form-item label="快递公司: ">
                   <span>{{ props.row.org }}</span>
                 </el-form-item>
-                <el-form-item label="收件人">
+                <el-form-item label="收件人: ">
                   <span>{{ props.row.per_name }}</span>
                 </el-form-item>
-                <el-form-item label="收件手机号">
+                <el-form-item label="收件手机号: ">
                   <span>{{ props.row.per_tel }}</span>
                 </el-form-item>
-                <el-form-item label="收件地址">
+                <el-form-item label="收件地址: ">
                   <span>{{ props.row.per_addr }}</span>
                 </el-form-item>
-                <el-form-item label="所在驿站">
+                <el-form-item label="所在驿站: ">
                   <span>{{ props.row.addr }}</span>
                 </el-form-item>
-                <el-form-item label="取件码">
+                <el-form-item label="取件码: ">
                   <span>{{ props.row.code }}</span>
                 </el-form-item>
-                <el-form-item label="驿站联系人">
+                <el-form-item label="驿站联系人: ">
                   <span>{{ props.row.cont_name }}</span>
                 </el-form-item>
-                <el-form-item label="驿站联系方式">
+                <el-form-item label="驿站联系方式: ">
                   <span>{{ props.row.cont_tel }}</span>
                 </el-form-item>
-                <el-form-item label="快递状态">
+                <el-form-item label="快递状态: ">
                   <span>{{ props.row.status }}</span>
                 </el-form-item>
-                <el-form-item label="入站时间">
+                <el-form-item label="入站时间: ">
                   <span>{{ props.row.start }}</span>
                 </el-form-item>
-                <el-form-item label="取件时间">
+                <el-form-item label="取件时间: ">
                   <span>{{ props.row.end }}</span>
+                </el-form-item>
+                <el-form-item label="签收人: ">
+                  <span>{{ props.row.pick }}</span>
                 </el-form-item>
               </el-form>
             </template>
@@ -157,7 +160,8 @@
           cont_tel: '12345678910',
           status: '未取件',
           start: '2020-12-28 10:24:00',
-          end: ''
+          end: '',
+          pick: ''
         }],
       }
     },
@@ -212,14 +216,23 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getAdminPacksByPage',
+          url: 'http://localhost:8080/pack/getAdminPacksByPage/' + _this.currentPage,
           data: param
         })
           .then(function (response) {
             console.log("收到响应")
             console.log(response.data)
-            _this.total = response.data.total
-            _this.tableData = response.data.list
+            if (response.data.fail === 'get info fail') {
+              _this.$notify({
+                title: '警告',
+                message: '登录状态失效，请重新登录！',
+                type: 'warning'
+              })
+              _this.$router.push('/loginAndRegister')
+            } else {
+              _this.total = response.data.pack_result.total
+              _this.tableData = response.data.pack_result.list
+            }
           })
           .catch(function (error) {
             console.log(error)

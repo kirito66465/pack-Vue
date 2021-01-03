@@ -71,6 +71,9 @@
             console.log(response.data)
             if (response.data === 'exit success') {
               localStorage.removeItem("token")
+              localStorage.removeItem("card")
+              localStorage.removeItem("userCard")
+              localStorage.removeItem("name")
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")

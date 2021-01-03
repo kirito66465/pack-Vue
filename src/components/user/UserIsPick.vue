@@ -47,6 +47,9 @@
                 <el-form-item label="取件时间: ">
                   <span>{{ props.row.end }}</span>
                 </el-form-item>
+                <el-form-item label="签收人: ">
+                  <span>{{ props.row.pick }}</span>
+                </el-form-item>
               </el-form>
             </template>
           </el-table-column>
@@ -106,6 +109,11 @@
             width="250">
           </el-table-column>
           <el-table-column
+            label="签收人"
+            prop="pick"
+            width="20">
+          </el-table-column>
+          <el-table-column
             align="right"
             width="400">
             <template slot="header" slot-scope="scope">
@@ -158,7 +166,8 @@
           cont_tel: '12345678910',
           status: '未取件',
           start: '2020-12-28 10:24:00',
-          end: ''
+          end: '',
+          pick: ''
         }],
       }
     },
@@ -205,14 +214,23 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getUserIsPick',
+          url: 'http://localhost:8080/pack/getUserIsPick/' + _this.currentPage,
           data: param
         })
           .then(function (response) {
             console.log("收到响应")
             console.log(response.data)
-            _this.total = response.data.total
-            _this.tableData = response.data.list
+            if (response.data.fail === 'get info fail') {
+              _this.$notify({
+                title: '警告',
+                message: '登录状态失效，请重新登录！',
+                type: 'warning'
+              })
+              _this.$router.push('/loginAndRegister')
+            } else {
+              _this.total = response.data.pack_result.total
+              _this.tableData = response.data.pack_result.list
+            }
           })
           .catch(function (error) {
             console.log(error)

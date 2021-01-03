@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-button type="text" @click="open">快递入站</el-button>
+    <el-button type="text" @click="addPack">快递入站</el-button>
     <div>
       <!-- 驿站容纳空间百分百:notTotal / maxTotal -->
       <el-badge :value="allTotal" class="item">
@@ -37,7 +37,7 @@
         let _this = this
         // 获取数量的请求
       },
-      open() {
+      addPack() {
         let _this = this
         this.$prompt('请输入快递单号', '快递入站', {
           confirmButtonText: '确定',

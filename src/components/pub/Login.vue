@@ -156,6 +156,16 @@
             console.log(error)
           })
       }
+    },
+    created() {
+      localStorage.removeItem("token")
+      localStorage.removeItem("card")
+      localStorage.removeItem("name")
+    },
+    mounted() {
+      localStorage.removeItem("token")
+      localStorage.removeItem("card")
+      localStorage.removeItem("name")
     }
   }
 </script>
