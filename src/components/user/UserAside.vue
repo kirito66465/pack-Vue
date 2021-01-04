@@ -1,7 +1,6 @@
 <template>
 	<div>
     <el-button type="text" @click="dialogFormVisible = true">我要取件</el-button>
-
     <el-dialog title="我要取件" :visible.sync="dialogFormVisible">
       <el-form :model="pick">
         <el-form-item label="驿站地址" :label-width="formLabelWidth">
@@ -20,10 +19,24 @@
         <el-button type="primary" @click="pickPack">确 定</el-button>
       </div>
     </el-dialog>
+
+    <div>
+      <!-- 驿站容纳空间百分百:notTotal / maxTotal -->
+      <el-badge :value="allTotal" class="item">
+        <el-button size="small">所有快递数量</el-button>
+      </el-badge>
+      <el-badge :value="isTotal" class="item">
+        <el-button size="small">已取快递数量</el-button>
+      </el-badge>
+      <el-badge :value="noTotal" class="item">
+        <el-button size="small">未取快递数量</el-button>
+      </el-badge>
+    </div>
   </div>
 </template>
 
 <script>
+
 	export default {
 		name: "UserAside",
     data() {
@@ -33,7 +46,15 @@
           addr: "",
           code: ""
         },
-        formLabelWidth: '120px'
+        formLabelWidth: '120px',
+        // 所有快递数量，包括已取出和未取出的快递
+        allTotal: 100,
+        // 已取出的快递数量
+        isTotal: 20,
+        // 未取出的快递数量
+        noTotal: 80,
+        // 寄件的快递数量
+        sendTotal: 0,
       }
     },
     methods: {
@@ -53,23 +74,29 @@
             console.log(response.data)
             if (response.data === 'pick up the package success') {
               _this.$notify({
+                showClose: true,
                 title: '成功',
                 message: '取件成功！',
                 type: 'success'
               })
+
             } else if (response.data === 'take over') {
               _this.$message({
+                showClose: true,
                 message: '代取成功!',
                 type: 'success'
               })
+
             } else if (response.data === 'not exist') {
               _this.$notify({
+                showClose: true,
                 title: '警告',
                 message: '该快递不存在！',
                 type: 'warning'
               })
             } else if (response.data === 'please login to operate') {
               _this.$notify({
+                showClose: true,
                 title: '警告',
                 message: '请在登录状态操作',
                 type: 'warning'
@@ -77,6 +104,7 @@
               _this.$router.push('/LoginAndRegister')
             } else {
               _this.$notify.error({
+                showClose: true,
                 title: '错误',
                 message: '服务器错误！请稍后重试！'
               })
@@ -85,16 +113,60 @@
           .catch(function (error) {
             console.log(error)
             _this.$notify.error({
+              showClose: true,
               title: '错误',
               message: '服务器错误！请稍后重试！'
             })
           })
         this.dialogFormVisible = false
-      }
+        this.pick.addr = ""
+        this.pick.code = ""
+      },
+      getTotal() {
+        let _this = this
+        // 获取数量的请求
+        let param = new URLSearchParams()
+        let token = localStorage.getItem("token")
+        param.append("token", token)
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:8080/pack/getUserTotalNum',
+          data: param
+        })
+          .then(function (response) {
+            console.log(response.data)
+            if (response.data.result === 'get info fail') {
+              _this.$notify({
+                showClose: true,
+                title: '警告',
+                message: '登录状态失效！请重新登录！',
+                type: 'warning'
+              })
+            } else {
+              _this.allTotal = response.data.allTotal
+              _this.isTotal = response.data.isTotal
+              _this.noTotal = response.data.noTotal
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
+          })
+      },
+    },
+    mounted() {
+		  this.getTotal()
     }
-	}
+  }
 </script>
 
 <style scoped>
-
+  .item {
+    margin-top: 10px;
+    margin-right: 40px;
+  }
 </style>

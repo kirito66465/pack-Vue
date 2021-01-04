@@ -195,11 +195,13 @@
           type: 'warning'
         }).then(() => {
           this.$message({
+            showClose: true,
             type: 'success',
             message: '删除成功!'
           });
         }).catch(() => {
           this.$message({
+            showClose: true,
             type: 'info',
             message: '已取消删除'
           })
@@ -231,6 +233,7 @@
             console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
+                showClose: true,
                 title: '警告',
                 message: '登录状态失效，请重新登录！',
                 type: 'warning'
@@ -243,6 +246,11 @@
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       },
       indexMethod(index) {

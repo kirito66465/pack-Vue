@@ -6,14 +6,14 @@
       </el-col>
       <el-col :span="8" class="grid-content">
         <el-menu
-          :default-active="activeIndex"
+          :default-active="$route.path"
           class="el-menu-demo"
+          router
           mode="horizontal"
-          @select="handleSelect"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-menu-item index="1">
+          <el-menu-item>
             <div class="bottom">
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="adminName" placement="bottom">
@@ -25,13 +25,18 @@
           <el-menu-item index="2">消息中心</el-menu-item>
           <el-submenu index="3">
             <template slot="title">快递管理</template>
-            <el-menu-item index="3-1">全部快递</el-menu-item>   <!-- 指所有入站快递，包括已取、未取 -->
-            <el-menu-item index="3-2">揽收快递</el-menu-item>
-            <el-menu-item index="3-3">未取快递</el-menu-item>   <!-- 指所有未取快递，无论有无取件码 -->
-            <el-menu-item index="3-4">已取快递</el-menu-item>
-            <el-menu-item index="3-5">货架查看</el-menu-item>
+            <el-menu-item index="/adminHome/allPacks">全部快递</el-menu-item>   <!-- 指所有入站快递，包括已取、未取 -->
+            <el-menu-item>揽收快递</el-menu-item>
+            <el-menu-item>未取快递</el-menu-item>   <!-- 指所有未取快递，无论有无取件码 -->
+            <el-menu-item>已取快递</el-menu-item>
+            <el-menu-item>货架查看</el-menu-item>
           </el-submenu>
-          <el-menu-item index="4">
+          <el-submenu>
+            <template slot="title">个人管理</template>
+            <el-menu-item index="" @click.native="">我的信息</el-menu-item>
+            <el-menu-item index="" @click.native="">修改密码</el-menu-item>
+          </el-submenu>
+          <el-menu-item>
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">
               <el-button type="text" slot="reference">退出</el-button>
             </el-popconfirm>
@@ -47,16 +52,12 @@
 		name: "AdminHeader",
     data() {
       return {
-        activeIndex: '1',
         imgUrl: '',
         adminCard: '',
         adminName: ''
       };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
       exit() {
         const _this = this
         let token = localStorage.getItem("token")
@@ -74,13 +75,28 @@
               localStorage.removeItem("card")
               localStorage.removeItem("userCard")
               localStorage.removeItem("name")
+              _this.$message({
+                showClose: true,
+                message: '退出登录成功！'
+              })
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
+              console.log("退出登录失败！")
+              _this.$message({
+                showClose: true,
+                message: '退出登录失败！',
+                type: 'warning'
+              })
             }
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       },
       getAdminInfo() {

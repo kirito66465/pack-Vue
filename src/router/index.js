@@ -5,6 +5,11 @@ import Index from "../components/pub/Index";
 import ForgetPwd from "../components/pub/ForgetPwd";
 import AdminHome from "../components/admin/AdminHome";
 import UserHome from "../components/user/UserHome";
+import UserAllPack from "../components/user/UserAllPack";
+import UserIsPick from "../components/user/UserIsPick";
+import UserNoPick from "../components/user/UserNoPick";
+import AdminAllPack from "../components/admin/AdminAllPack";
+import UserSend from "../components/user/UserSend";
 
 
 Vue.use(Router)
@@ -30,11 +35,42 @@ export default new Router({
     },
     {
       path: '/userHome',
-      component: UserHome
+      name: 'userHome',
+      component: UserHome,
+      children: [
+        {
+          path: '/userHome/allPacks',
+          name: 'allPacks',
+          component: UserAllPack
+        },
+        {
+          path: '/userHome/isPacks',
+          name: 'isPack',
+          component: UserIsPick
+        },
+        {
+          path: '/userHome/noPacks',
+          name: 'noPack',
+          component: UserNoPick
+        },
+        {
+          path: '/userHome/userSend',
+          name: 'userSend',
+          component: UserSend
+        }
+      ]
     },
     {
       path: '/adminHome',
-      component: AdminHome
+      name: 'adminHome',
+      component: AdminHome,
+      children: [
+        {
+          path: '/adminHome/allPacks',
+          name: 'allPacks',
+          component: AdminAllPack
+        }
+      ]
     }
   ]
 })

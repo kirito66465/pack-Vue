@@ -82,7 +82,6 @@
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
-            console.log("----------register----------")
             this.userRegister()
           } else {
             console.log('error submit!!');
@@ -111,23 +110,33 @@
             if (response.data.register_result === "register success") {
               localStorage.setItem("card", response.data.user.card)
               localStorage.setItem("name", response.data.user.name)
-              _this.$router.push('/userHome')
-            } else if (response.data.register_result === "register fail") {
               _this.$message({
-                message: '注册失败！请稍后再试！',
-                type: 'warning'
+                showClose: true,
+                message: '注册成功！',
+                type: 'success'
               })
+              _this.$router.push('/userHome')
             } else if (response.data.register_result === "is exist") {
               _this.$message({
+                showClose: true,
                 message: '此学号已注册！',
                 type: 'warning'
               })
             } else {
-              _this.$message.error('服务器出错啦！')
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
             }
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       }
     }

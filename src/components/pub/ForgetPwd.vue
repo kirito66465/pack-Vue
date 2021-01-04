@@ -159,17 +159,35 @@
             console.log(response.data.flag)
             if (response.data.flag === 'update password success') {
               console.log("重置密码成功！")
+              _this.$message({
+                showClose: true,
+                message: '重置密码成功！',
+                type: 'success'
+              })
               _this.$router.push('/userHome')
             } else if (response.data.flag === 'not exist') {
               console.log("用户不存在！")
-              alert("用户不存在！")
+              _this.$message({
+                showClose: true,
+                message: '用户不存在！',
+                type: 'warning'
+              })
             } else {
-              console.log("服务器出错！")
-              alert("服务器出错！")
+              console.log("服务器错误！")
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器错误！'
+              })
             }
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器错误！'
+            })
           })
       }
     }

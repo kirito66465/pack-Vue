@@ -6,8 +6,19 @@
       <el-badge :value="allTotal" class="item">
         <el-button size="small">所有快递数量</el-button>
       </el-badge>
-      <div>驿站快递容纳百分比</div>
-      <el-progress type="circle" :percentage="percentage" :status="status" stroke-width="12"></el-progress>
+      <el-badge :value="isTotal" class="item">
+        <el-button size="small">已取快递数量</el-button>
+      </el-badge>
+      <el-badge :value="noTotal" class="item">
+        <el-button size="small">未取快递数量</el-button>
+      </el-badge>
+      <div class="bottom">
+        <div class="block">
+          <el-tooltip class="item" effect="dark" content="驿站快递容纳百分比" placement="right">
+            <el-progress type="circle" :percentage="percentage" :color="colors" stroke-width="12"></el-progress>
+          </el-tooltip>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -29,13 +40,51 @@
         maxTotal: 2400,
         // 百分比
         percentage: 20,
-        status: "success"
+        colors: [
+          {color: '#1989fa', percentage: 30},
+          {color: '#5cb87a', percentage: 60},
+          {color: '#ffd530', percentage: 80},
+          {color: '#ff8839', percentage: 90},
+          {color: '#ee2525', percentage: 100},
+        ]
       }
     },
     methods: {
       getTotal() {
         let _this = this
         // 获取数量的请求
+        let param = new URLSearchParams()
+        let token = localStorage.getItem("token")
+        param.append("token", token)
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:8080/pack/getAdminTotalNum',
+          data: param
+        })
+          .then(function (response) {
+            console.log(response.data)
+            if (response.data.result === 'get info fail') {
+              _this.$notify({
+                showClose: true,
+                title: '警告',
+                message: '登录状态失效！请重新登录！',
+                type: 'warning'
+              })
+            } else {
+              _this.percentage = response.data.percentage
+              _this.allTotal = response.data.allTotal
+              _this.isTotal = response.data.isTotal
+              _this.noTotal = response.data.noTotal
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器错误！'
+            })
+          })
       },
       addPack() {
         let _this = this
@@ -44,7 +93,9 @@
           cancelButtonText: '取消'
         }).then(({ value }) => {
           let param = new URLSearchParams()
+          let token = localStorage.getItem("token")
           param.append('id', value)
+          param.append('token', token)
           _this.$axios({
             method: 'post',
             url: 'http://localhost:8080/pack/addPack',
@@ -54,12 +105,22 @@
               console.log(response.data)
               if (response.data === 'the package enter addr success') {
                 _this.$notify({
+                  showClose: true,
                   title: '成功',
                   message: '快递入站成功！',
                   type: 'success'
                 })
+              } else if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '请在登录状态操作',
+                  type: 'warning'
+                })
+                _this.$router.push('/LoginAndRegister')
               } else {
                 _this.$notify({
+                  showClose: true,
                   title: '警告',
                   message: '快递入站失败！',
                   type: 'warning'
@@ -69,8 +130,9 @@
             .catch(function (error) {
               console.log(error)
               _this.$notify.error({
+                showClose: true,
                 title: '错误',
-                message: '服务器错误！'
+                message: '服务器出错啦！'
               })
             })
         }).catch(() => {
@@ -80,13 +142,26 @@
           })
         })
       }
+    },
+    mounted() {
+		  this.getTotal()
     }
-	}
+  }
 </script>
 
 <style scoped>
   .item {
     margin-top: 10px;
     margin-right: 40px;
+  }
+
+  .right {
+    float: right;
+    width: 60px;
+  }
+
+  .bottom {
+    clear: both;
+    text-align: center;
   }
 </style>

@@ -9,7 +9,7 @@
           <admin-aside></admin-aside>
         </el-aside>
         <el-main>
-          <admin-all-pack></admin-all-pack>
+          <router-view />
         </el-main>
       </el-container>
     </el-container>

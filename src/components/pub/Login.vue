@@ -61,10 +61,13 @@
               localStorage.setItem('card', _this.user.card)
               let token = response.data.token
               localStorage.setItem('token', token)
-              let t = localStorage.getItem('token')
               _this.getUserInfo()
             } else {
-              _this.$message.error('账户或密码输入错误！');
+              _this.$message({
+                showClose: true,
+                message: '账户或密码输入错误！',
+                type: 'error'
+              })
             }
           })
           .catch(function (error) {
@@ -88,10 +91,13 @@
               localStorage.setItem('card', _this.user.card)
               let token = response.data.token
               localStorage.setItem('token', token)
-              let t = localStorage.getItem('token')
               _this.getAdminInfo()
             } else {
-              _this.$message.error('账户或密码输入错误！');
+              _this.$message({
+                showClose: true,
+                message: '账户或密码输入错误！',
+                type: 'error'
+              })
             }
           })
           .catch(function (error) {
@@ -116,7 +122,11 @@
             if (response.data.info_result === 'get info success') {
               localStorage.setItem("card", response.data.user.card)
               localStorage.setItem("name", response.data.user.name)
-              _this.$router.push('/userHome')
+              _this.$message({
+                message: response.data.user.name + ', 登录成功',
+                type: 'success'
+              })
+              _this.$router.push('/userHome/allPacks')
             } else {
               _this.$message({
                 message: '请先登录！',
@@ -143,9 +153,14 @@
             if (response.data.info_result === 'get info success') {
               localStorage.setItem("card", response.data.admin.card)
               localStorage.setItem("name", response.data.admin.name)
-              _this.$router.push('/adminHome')
+              _this.$message({
+                message: response.data.admin.name + ', 登录成功',
+                type: 'success'
+              })
+              _this.$router.push('/adminHome/allPacks')
             } else {
               _this.$message({
+                showClose: true,
                 message: '警告,请登录！',
                 type: 'warning'
               })

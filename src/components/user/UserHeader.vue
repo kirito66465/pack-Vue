@@ -6,14 +6,15 @@
       </el-col>
       <el-col :span="8" class="grid-content">
         <el-menu
-          :default-active="activeIndex"
+          :default-active="$route.path"
           class="el-menu-demo"
+          router
           mode="horizontal"
           @select="handleSelect"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b">
-          <el-menu-item index="1">
+          <el-menu-item>
             <div class="bottom">
               <div class="block">
                 <el-tooltip class="item" effect="dark" :content="name" placement="bottom">
@@ -23,14 +24,19 @@
             </div>
           </el-menu-item>
           <el-menu-item index="2" @click="">消息中心</el-menu-item>
-          <el-submenu index="3">
+          <el-submenu>
             <template slot="title">快递管理</template>
-            <el-menu-item index="3-1" @click.native="">全部快递</el-menu-item>
-            <el-menu-item index="3-1" @click.native="">已取快递</el-menu-item>
-            <el-menu-item index="3-2" @click.native="">未取快递</el-menu-item>
-            <el-menu-item index="3-3" @click.native="">我要寄件</el-menu-item>
+            <el-menu-item index="/userHome/allPacks" @click.native="">全部快递</el-menu-item>
+            <el-menu-item index="/userHome/isPacks" @click.native="">已取快递</el-menu-item>
+            <el-menu-item index="/userHome/noPacks" @click.native="">未取快递</el-menu-item>
+            <el-menu-item index="/userHome/userSend" @click.native="">我要寄件</el-menu-item>
           </el-submenu>
-          <el-menu-item index="4">
+          <el-submenu>
+            <template slot="title">个人管理</template>
+            <el-menu-item index="" @click.native="">我的信息</el-menu-item>
+            <el-menu-item index="" @click.native="">修改密码</el-menu-item>
+          </el-submenu>
+          <el-menu-item>
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">
               <el-button type="text" slot="reference">退出</el-button>
             </el-popconfirm>
@@ -46,7 +52,6 @@
 		name: "UserHeader",
     data() {
       return {
-        activeIndex: '1',
         imgUrl: '',
         card: '',
         name: ''
@@ -73,13 +78,27 @@
               localStorage.removeItem("card")
               localStorage.removeItem("userCard")
               localStorage.removeItem("name")
+              _this.$message({
+                showClose: true,
+                message: '退出登录成功！'
+              })
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
+              _this.$message({
+                showClose: true,
+                message: '退出登录失败！',
+                type: 'warning'
+              })
             }
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       },
       getUserInfo() {
