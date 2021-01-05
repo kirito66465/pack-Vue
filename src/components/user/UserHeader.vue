@@ -10,7 +10,6 @@
           class="el-menu-demo"
           router
           mode="horizontal"
-          @select="handleSelect"
           background-color="#545c64"
           text-color="#fff"
           active-text-color="#ffd04b">
@@ -24,14 +23,15 @@
             </div>
           </el-menu-item>
           <el-menu-item index="2" @click="">消息中心</el-menu-item>
-          <el-submenu>
+          <el-menu-item index="/userHome/userSend" @click="">我要寄件</el-menu-item>
+          <el-submenu index="4">
             <template slot="title">快递管理</template>
             <el-menu-item index="/userHome/allPacks" @click.native="">全部快递</el-menu-item>
             <el-menu-item index="/userHome/isPacks" @click.native="">已取快递</el-menu-item>
             <el-menu-item index="/userHome/noPacks" @click.native="">未取快递</el-menu-item>
-            <el-menu-item index="/userHome/userSend" @click.native="">我要寄件</el-menu-item>
+            <el-menu-item index="/userHome/userSendList" @click.native="">我的寄件</el-menu-item>
           </el-submenu>
-          <el-submenu>
+          <el-submenu index="5">
             <template slot="title">个人管理</template>
             <el-menu-item index="" @click.native="">我的信息</el-menu-item>
             <el-menu-item index="" @click.native="">修改密码</el-menu-item>
@@ -58,9 +58,6 @@
       };
     },
     methods: {
-      handleSelect(key, keyPath) {
-        console.log(key, keyPath);
-      },
       exit() {
         const _this = this
         let token = localStorage.getItem("token")

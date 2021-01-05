@@ -1,7 +1,7 @@
 <template>
   <div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="驿站选择">
+    <el-form ref="form" :model="form" label-width="80px" :rules="rules" status-icon>
+      <el-form-item label="驿站选择" prop="admin" :required="true">
         <el-select v-model="form.admin" placeholder="请选择驿站" clearable>
           <el-option label="中苑" value="中苑"></el-option>
           <el-option label="西苑" value="西苑"></el-option>
@@ -9,17 +9,26 @@
         </el-select>
       </el-form-item>
 
-      <el-form-item label="收件人姓名">
-        <el-input v-model="form.name" clearable></el-input>
+      <el-form-item label="收件人姓名" prop="name" :required="true">
+        <el-input v-model="form.name" clearable placeholder="请输入收件人姓名"></el-input>
       </el-form-item>
-      <el-form-item label="收件人联系方式">
-        <el-input v-model="form.phone" clearable></el-input>
+      <el-form-item label="收件人联系方式" prop="phone" :required="true">
+        <el-input v-model="form.phone" clearable placeholder="请输入收件人联系方式"></el-input>
       </el-form-item>
-      <el-form-item label="收件人地址">
-        <el-input v-model="form.addr" clearable></el-input>
+      <el-form-item label="收件人地址" prop="addr" :required="true">
+        <div class="block">
+          <el-cascader
+            v-model="form.addr"
+            clearable
+            filterable
+            placeholder="请选择收件省市"
+            :options="region"
+            :props="{ expandTrigger: 'hover' }"
+            @change="handleChangeCity"></el-cascader>
+        </div>
       </el-form-item>
 
-      <el-form-item label="物品信息">
+      <el-form-item label="物品信息" prop="info" :required="true">
         <el-select v-model="form.info" placeholder="请选择物品信息" clearable>
           <el-option label="日用品" value="中苑"></el-option>
           <el-option label="食品" value="西苑"></el-option>
@@ -31,8 +40,8 @@
       </el-form-item>
       <el-link type="primary" :underline="false" href="#">了解禁寄物品</el-link>
 
-      <el-form-item label="物品重量">
-        <el-input-number v-model="form.weight" @change="handleChange" :min="1" :max="100" label="物品重量"></el-input-number>
+      <el-form-item label="物品重量" prop="weight" :required="true">
+        <el-input-number v-model="form.weight" @change="handleChangeWeight" :min="1" :max="100" label="物品重量"></el-input-number>
       </el-form-item>
       <el-link type="primary" :underline="false" href="#">了解计费方式</el-link>
 
@@ -52,19 +61,23 @@
       </el-checkbox>
 
       <el-form-item>
-        <el-button type="primary" @click="onSubmit" :disabled="!form.isRead">立即下单</el-button>
+        预估运费￥{{ form.price }}
+        <el-link type="primary" :underline="false" href="#">
+          运费明细
+        </el-link>
       </el-form-item>
 
 
 
-
-      预估运费￥8
-      按{1}公斤内物品预估|运费明细 确认 取消
+      <el-form-item>
+        <el-button type="primary" @click="onSubmit('form')" :disabled="!form.isRead">立即下单</el-button>
+      </el-form-item>
     </el-form>
   </div>
 </template>
 
 <script>
+  import { regionData, CodeToText } from 'element-china-area-data'
 	export default {
 		name: "UserSend",
     data() {
@@ -73,44 +86,100 @@
           admin: '',
           name: '',
           phone: '',
-          addr: '',
+          addr: [],
           info: '',
           weight: 1,
           hasPack: false,
-          isRead: false
+          isRead: false,
+          price: 0
+        },
+        region: regionData,
+        rules: {
+          admin: [
+            { required: true, message: '请选择驿站!', trigger: 'blur' }
+          ],
+          name: [
+            { required: true, message: '请输入收件人姓名!', trigger: 'blur' }
+          ],
+          phone: [
+            { required: true, message: '请输入收件人联系方式!', trigger: 'blur' },
+            { min: 8, max: 11, message: '请正确输入手机号!', trigger: 'blur' }
+          ],
+          addr: [
+            { required: true, message: '请选择收件人地址!', trigger: 'blur' }
+          ],
+          info: [
+            { required: true, message: '请选择物品信息!', trigger: 'blur' }
+          ]
         }
       }
     },
     methods: {
-      onSubmit() {
-        console.log('submit!')
+      onSubmit(formName) {
         const _this = this
-        let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
-        param.append("token", token)
-        this.$axios({
-          method: 'post',
-          url: 'http://localhost:8080/send',
-          data: param
-        })
-          .then(function (response) {
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            if (_this.form.addr[0] === '540000' || _this.form.addr[0] === '710000' ||
+              _this.form.addr[0] === '810000' || _this.form.addr[0] === '820000' ||
+              _this.form.addr[0] === '') {
+              _this.$message({
+                showClose: true,
+                message: '警告哦，无法寄到该收件地址！',
+                type: 'warning'
+              })
+            } else {
+              // TODO：寄件逻辑：
+              // 1、填写寄件信息，点击下单，然后弹出支付弹窗，支付成功之后前端请求后端
+              // 2、后端收到请求，然后返回结果
 
-          })
-          .catch(function (error) {
-            console.log(error)
-            _this.$notify.error({
+              _this.$message({
+                showClose: true,
+                message: '下单成功，请支付！',
+                type: 'success'
+              })
+            }
+          } else {
+            console.log('error submit!!')
+            _this.$message({
               showClose: true,
-              title: '错误',
-              message: '服务器出错啦！'
+              message: '警告哦，请完成寄件信息填写！',
+              type: 'warning'
             })
-          })
+            return false
+          }
+        })
       },
-      // 物品重量计数器值改变时
-      handleChange(value) {
-        console.log(value);
+      handleChangeWeight(value) {
+        console.log(value)
+      },
+      handleChangeCity(value) {
+        console.log(CodeToText[value[0]])       // 省
+        console.log(CodeToText[value[1]])       // 市
+        console.log(CodeToText[value[2]])       // 区
+      },
+      setPrice() {
+        const _this = this
+        if (_this.form.addr[0] === '310000' || _this.form.addr[0] === '320000' || _this.form.addr[0] === '320000') {
+          _this.form.price = 4 + _this.form.weight
+        } else if (_this.form.addr[0] === '110000' || _this.form.addr[0] === '120000' || _this.form.addr[0] === '130000' ||
+          _this.form.addr[0] === '140000' || _this.form.addr[0] === '220000' || _this.form.addr[0] === '350000' ||
+          _this.form.addr[0] === '360000' || _this.form.addr[0] === '370000' || _this.form.addr[0] === '410000' ||
+          _this.form.addr[0] === '420000' || _this.form.addr[0] === '430000' || _this.form.addr[0] === '440000' ||
+          _this.form.addr[0] === '500000' || _this.form.addr[0] === '410000' || _this.form.addr[0] === '520000' ||
+          _this.form.addr[0] === '530000') {
+          _this.form.price = 3 + 10 * _this.form.weight
+        } else if (_this.form.addr[0] === '540000' || _this.form.addr[0] === '710000' || _this.form.addr[0] === '810000' ||
+          _this.form.addr[0] === '820000') {
+          _this.form.price = 0
+        } else {
+          _this.form.price = 5 + 10 * _this.form.weight
+        }
       }
+		},
+    updated() {
+		  this.setPrice()
     }
-	}
+  }
 </script>
 
 <style scoped>

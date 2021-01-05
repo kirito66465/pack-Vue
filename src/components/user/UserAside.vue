@@ -21,7 +21,6 @@
     </el-dialog>
 
     <div>
-      <!-- 驿站容纳空间百分百:notTotal / maxTotal -->
       <el-badge :value="allTotal" class="item">
         <el-button size="small">所有快递数量</el-button>
       </el-badge>

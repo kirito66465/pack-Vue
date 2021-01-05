@@ -10,6 +10,7 @@ import UserIsPick from "../components/user/UserIsPick";
 import UserNoPick from "../components/user/UserNoPick";
 import AdminAllPack from "../components/admin/AdminAllPack";
 import UserSend from "../components/user/UserSend";
+import UserSendList from "../components/user/UserSendList";
 
 
 Vue.use(Router)
@@ -57,6 +58,11 @@ export default new Router({
           path: '/userHome/userSend',
           name: 'userSend',
           component: UserSend
+        },
+        {
+          path: '/userHome/userSendList',
+          name: 'userSendList',
+          component: UserSendList
         }
       ]
     },

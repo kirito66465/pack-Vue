@@ -25,13 +25,13 @@
           <el-menu-item index="2">消息中心</el-menu-item>
           <el-submenu index="3">
             <template slot="title">快递管理</template>
-            <el-menu-item index="/adminHome/allPacks">全部快递</el-menu-item>   <!-- 指所有入站快递，包括已取、未取 -->
+            <el-menu-item index="/adminHome/allPacks">全部快递</el-menu-item>
             <el-menu-item>揽收快递</el-menu-item>
-            <el-menu-item>未取快递</el-menu-item>   <!-- 指所有未取快递，无论有无取件码 -->
+            <el-menu-item>未取快递</el-menu-item>
             <el-menu-item>已取快递</el-menu-item>
             <el-menu-item>货架查看</el-menu-item>
           </el-submenu>
-          <el-submenu>
+          <el-submenu index="4">
             <template slot="title">个人管理</template>
             <el-menu-item index="" @click.native="">我的信息</el-menu-item>
             <el-menu-item index="" @click.native="">修改密码</el-menu-item>
@@ -55,7 +55,7 @@
         imgUrl: '',
         adminCard: '',
         adminName: ''
-      };
+      }
     },
     methods: {
       exit() {

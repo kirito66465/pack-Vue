@@ -25,9 +25,10 @@
   import UserIsPick from "./UserIsPick"
   import UserNoPick from "./UserNoPick"
   import UserAside from "./UserAside"
+  import UserSendList from "./UserSendList"
   export default {
     name: "UserHome",
-    components: {UserNoPick, UserIsPick, UserAllPack, UserHeader, UserAside},
+    components: {UserNoPick, UserIsPick, UserAllPack, UserHeader, UserAside, UserSendList},
     data() {
       return {
         card: '',
