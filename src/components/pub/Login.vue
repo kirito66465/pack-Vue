@@ -119,7 +119,7 @@
           data: param
         })
           .then(function (response) {
-            if (response.data.info_result === 'get info success') {
+            if (response.data.result === 'get info success') {
               localStorage.setItem("card", response.data.user.card)
               localStorage.setItem("name", response.data.user.name)
               _this.$message({

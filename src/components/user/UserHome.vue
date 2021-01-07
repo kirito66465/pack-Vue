@@ -26,9 +26,11 @@
   import UserNoPick from "./UserNoPick"
   import UserAside from "./UserAside"
   import UserSendList from "./UserSendList"
+  import UserInfo from "./UserInfo"
+  import UserUpdatePwd from "./UserUpdatePwd"
   export default {
     name: "UserHome",
-    components: {UserNoPick, UserIsPick, UserAllPack, UserHeader, UserAside, UserSendList},
+    components: {UserNoPick, UserIsPick, UserAllPack, UserHeader, UserAside, UserSendList, UserInfo, UserUpdatePwd},
     data() {
       return {
         card: '',

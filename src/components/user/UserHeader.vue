@@ -33,8 +33,8 @@
           </el-submenu>
           <el-submenu index="5">
             <template slot="title">个人管理</template>
-            <el-menu-item index="" @click.native="">我的信息</el-menu-item>
-            <el-menu-item index="" @click.native="">修改密码</el-menu-item>
+            <el-menu-item index="/userHome/userInfo" @click.native="">我的信息</el-menu-item>
+            <el-menu-item index="/userHome/userUpdatePwd" @click.native="">修改密码</el-menu-item>
           </el-submenu>
           <el-menu-item>
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">

@@ -11,6 +11,8 @@ import UserNoPick from "../components/user/UserNoPick";
 import AdminAllPack from "../components/admin/AdminAllPack";
 import UserSend from "../components/user/UserSend";
 import UserSendList from "../components/user/UserSendList";
+import UserInfo from "../components/user/UserInfo";
+import UserUpdatePwd from "../components/user/UserUpdatePwd";
 
 
 Vue.use(Router)
@@ -63,6 +65,16 @@ export default new Router({
           path: '/userHome/userSendList',
           name: 'userSendList',
           component: UserSendList
+        },
+        {
+          path: '/userHome/userInfo',
+          name: 'userInfo',
+          component: UserInfo
+        },
+        {
+          path: '/userHome/userUpdatePwd',
+          name: 'userUpdatePwd',
+          component: UserUpdatePwd
         }
       ]
     },
