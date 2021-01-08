@@ -27,7 +27,7 @@
   import UserAside from "./UserAside"
   import UserSendList from "./UserSendList"
   import UserInfo from "./UserInfo"
-  import UserUpdatePwd from "./UserUpdatePwd"
+  import UserUpdatePwd from "./UserResetPwd"
   export default {
     name: "UserHome",
     components: {UserNoPick, UserIsPick, UserAllPack, UserHeader, UserAside, UserSendList, UserInfo, UserUpdatePwd},

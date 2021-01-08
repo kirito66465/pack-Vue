@@ -20,9 +20,13 @@
 	import AdminHeader from "./AdminHeader"
   import AdminAllPack from "./AdminAllPack"
   import AdminAside from "./AdminAside";
+  import AdminResetPwd from "./AdminResetPwd"
+  import AdminInfo from "./AdminInfo"
+  import AdminIsPick from "./AdminIsPick"
+  import AdminNoPick from "./AdminNoPick"
   export default {
 		name: "AdminHome",
-    components: {AdminAllPack, AdminHeader, AdminAside},
+    components: {AdminAllPack, AdminHeader, AdminAside, AdminResetPwd, AdminInfo, AdminIsPick, AdminNoPick},
     data() {
       return {
         adminCard: '',

@@ -1,19 +1,22 @@
 import Vue from 'vue'
 import Router from 'vue-router'
-import LoginAndRegister from "../components/pub/LoginAndRegister";
-import Index from "../components/pub/Index";
-import ForgetPwd from "../components/pub/ForgetPwd";
-import AdminHome from "../components/admin/AdminHome";
-import UserHome from "../components/user/UserHome";
-import UserAllPack from "../components/user/UserAllPack";
-import UserIsPick from "../components/user/UserIsPick";
-import UserNoPick from "../components/user/UserNoPick";
-import AdminAllPack from "../components/admin/AdminAllPack";
-import UserSend from "../components/user/UserSend";
-import UserSendList from "../components/user/UserSendList";
-import UserInfo from "../components/user/UserInfo";
-import UserUpdatePwd from "../components/user/UserUpdatePwd";
-
+import LoginAndRegister from "../components/pub/LoginAndRegister"
+import Index from "../components/pub/Index"
+import ForgetPwd from "../components/pub/ForgetPwd"
+import AdminHome from "../components/admin/AdminHome"
+import UserHome from "../components/user/UserHome"
+import UserAllPack from "../components/user/UserAllPack"
+import UserIsPick from "../components/user/UserIsPick"
+import UserNoPick from "../components/user/UserNoPick"
+import AdminAllPack from "../components/admin/AdminAllPack"
+import UserSend from "../components/user/UserSend"
+import UserSendList from "../components/user/UserSendList"
+import UserInfo from "../components/user/UserInfo"
+import UserResetPwd from "../components/user/UserResetPwd"
+import AdminResetPwd from "../components/admin/AdminResetPwd"
+import AdminInfo from "../components/admin/AdminInfo"
+import AdminIsPick from "../components/admin/AdminIsPick";
+import AdminNoPick from "../components/admin/AdminNoPick";
 
 Vue.use(Router)
 
@@ -57,24 +60,24 @@ export default new Router({
           component: UserNoPick
         },
         {
-          path: '/userHome/userSend',
-          name: 'userSend',
+          path: '/userHome/send',
+          name: 'send',
           component: UserSend
         },
         {
-          path: '/userHome/userSendList',
-          name: 'userSendList',
+          path: '/userHome/sendList',
+          name: 'sendList',
           component: UserSendList
         },
         {
-          path: '/userHome/userInfo',
-          name: 'userInfo',
+          path: '/userHome/info',
+          name: 'info',
           component: UserInfo
         },
         {
-          path: '/userHome/userUpdatePwd',
-          name: 'userUpdatePwd',
-          component: UserUpdatePwd
+          path: '/userHome/resetPwd',
+          name: 'resetPwd',
+          component: UserResetPwd
         }
       ]
     },
@@ -87,6 +90,26 @@ export default new Router({
           path: '/adminHome/allPacks',
           name: 'allPacks',
           component: AdminAllPack
+        },
+        {
+          path: '/adminHome/resetPwd',
+          name: 'resetPwd',
+          component: AdminResetPwd
+        },
+        {
+          path: '/adminHome/info',
+          name: 'info',
+          component: AdminInfo
+        },
+        {
+          path: '/adminHome/isPicks',
+          name: 'isPick',
+          component: AdminIsPick
+        },
+        {
+          path: '/adminHome/noPicks',
+          name: 'noPick',
+          component: AdminNoPick
         }
       ]
     }

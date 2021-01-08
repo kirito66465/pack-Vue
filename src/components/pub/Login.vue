@@ -24,6 +24,7 @@
 </template>
 
 <script>
+  import md5 from 'js-md5'
   export default {
     name: "Login",
     data() {
@@ -46,8 +47,9 @@
       },
       userLogin() {
         let param = new URLSearchParams()
+        let pwd = md5(this.user.password)
         param.append('card', this.user.card)
-        param.append('password', this.user.password)
+        param.append('password', pwd)
         const _this = this
         this.$axios({
           method: 'post',
@@ -56,7 +58,7 @@
         })
           .then(function (response) {
             console.log(response.data)
-            if (response.data.login_result === 'login success') {
+            if (response.data.result === 'login success') {
               // 将用户的token存储到本地localstorage中
               localStorage.setItem('card', _this.user.card)
               let token = response.data.token
@@ -76,8 +78,9 @@
       },
       adminLogin() {
         let param = new URLSearchParams()
+        let pwd = md5(this.user.password)
         param.append('card', this.user.card)
-        param.append('password', this.user.password)
+        param.append('password', pwd)
         const _this = this
         this.$axios({
           method: 'post',
@@ -86,7 +89,7 @@
         })
           .then(function (response) {
             console.log(response.data)
-            if (response.data.login_result === 'login success') {
+            if (response.data.result === 'login success') {
               // 将用户的token存储到本地localstorage中
               localStorage.setItem('card', _this.user.card)
               let token = response.data.token
@@ -123,12 +126,14 @@
               localStorage.setItem("card", response.data.user.card)
               localStorage.setItem("name", response.data.user.name)
               _this.$message({
+                showClose: true,
                 message: response.data.user.name + ', 登录成功',
                 type: 'success'
               })
               _this.$router.push('/userHome/allPacks')
             } else {
               _this.$message({
+                showClose: true,
                 message: '请先登录！',
                 type: 'warning'
               })
@@ -150,10 +155,11 @@
           data: param
         })
           .then(function (response) {
-            if (response.data.info_result === 'get info success') {
+            if (response.data.result === 'get info success') {
               localStorage.setItem("card", response.data.admin.card)
               localStorage.setItem("name", response.data.admin.name)
               _this.$message({
+                showClose: true,
                 message: response.data.admin.name + ', 登录成功',
                 type: 'success'
               })

@@ -5,14 +5,13 @@
         <el-input v-model="form.card" disabled></el-input>
       </el-form-item>
       <el-form-item label="手机号">
-        <el-input v-model="form.phone" disabled></el-input>
+        <el-input v-model="form.phone"></el-input>
       </el-form-item>
-      <el-link type="primary" :underline="false">如需更改学号和手机号，请联系管理员操作！</el-link>
       <el-form-item label="姓名">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
       <el-form-item label="地址">
-        <el-input v-model="form.addr"></el-input>
+        <el-input v-model="form.addr" disabled></el-input>
       </el-form-item>
       <el-form-item label="未取快递">
         <el-input v-model="form.count" disabled></el-input>
@@ -26,27 +25,27 @@
 
 <script>
 	export default {
-		name: "UserInfo",
+		name: "AdminInfo",
     data() {
 		  return {
         form: {
-          card: '2120170000',
+          card: '2101',
           phone: '17700000000',
-          name: 'kirito',
+          name: '中苑快递员',
           addr: '中苑',
           count: 0
         }
       }
     },
     methods: {
-		  getUserInfo() {
+		  getAdminInfo() {
         const _this = this
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         param.append("token", token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/getInfo',
+          url: 'http://localhost:8080/admin/getInfo',
           data: param
         })
           .then(function (response) {
@@ -59,11 +58,11 @@
                 type: 'warning'
               })
             } else {
-              _this.form.card = response.data.user.card
-              _this.form.phone = response.data.user.phone
-              _this.form.name = response.data.user.name
-              _this.form.addr = response.data.user.addr
-              _this.form.count = response.data.user.count
+              _this.form.card = response.data.admin.card
+              _this.form.phone = response.data.admin.phone
+              _this.form.name = response.data.admin.name
+              _this.form.addr = response.data.admin.addr
+              _this.form.count = response.data.admin.count
             }
           })
           .catch(function (error) {
@@ -82,10 +81,10 @@
         let token = localStorage.getItem("token")
         param.append("token", token)
         param.append("name", this.form.name)
-        param.append("addr", this.form.addr)
+        param.append("phone", this.form.phone)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/updateInfo',
+          url: 'http://localhost:8080/admin/updateInfo',
           data: param
         })
           .then(function (response) {
@@ -96,7 +95,7 @@
                 message: '信息更新成功',
                 type: 'success'
               })
-              _this.getUserInfo()
+              _this.getAdminInfo()
             } else if (response.data.result === 'please login to operate') {
               _this.$notify({
                 showClose: true,
@@ -125,7 +124,7 @@
       }
     },
     created() {
-		  this.getUserInfo()
+		  this.getAdminInfo()
     }
   }
 </script>

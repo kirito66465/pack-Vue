@@ -78,14 +78,18 @@
                 message: '取件成功！',
                 type: 'success'
               })
-
+              let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+              _this.$router.push(NewPage)
+              _this.$router.go(-1)
             } else if (response.data === 'take over') {
               _this.$message({
                 showClose: true,
                 message: '代取成功!',
                 type: 'success'
               })
-
+              let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+              _this.$router.push(NewPage)
+              _this.$router.go(-1)
             } else if (response.data === 'not exist') {
               _this.$notify({
                 showClose: true,
@@ -97,7 +101,7 @@
               _this.$notify({
                 showClose: true,
                 title: '警告',
-                message: '请在登录状态操作',
+                message: '请在登录状态操作!',
                 type: 'warning'
               })
               _this.$router.push('/LoginAndRegister')

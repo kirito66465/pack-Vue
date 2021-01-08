@@ -72,14 +72,7 @@
             label="快递公司"
             prop="org"
             width="200"
-            :filters="[{ text: '中通', value: '中通' }
-                      , { text: '申通', value: '申通' }
-                      , { text: '圆通', value: '圆通' }
-                      , { text: '京东', value: '京东' }
-                      , { text: '顺丰', value: '顺丰' }
-                      , { text: '韵达', value: '韵达' }
-                      , { text: '天天', value: '天天' }
-                      , { text: 'EMS', value: 'EMS' }]"
+            :filters="filters"
             :filter-method="filterOrg"
             filter-placement="bottom-end">
             <template slot-scope="scope">
@@ -147,7 +140,7 @@
 
 <script>
 	export default {
-		name: "UserIsPack",
+		name: "AdminIsPack",
     data() {
       return {
         currentPage: 1,       // 默认当前页，第一页
@@ -169,6 +162,7 @@
           end: '',
           pick: ''
         }],
+        filters: []
       }
     },
     methods: {
@@ -214,7 +208,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getUserIsPick/' + _this.currentPage,
+          url: 'http://localhost:8080/pack/getAdminIsPick/' + _this.currentPage,
           data: param
         })
           .then(function (response) {
@@ -244,9 +238,29 @@
       },
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      setFilters() {
+        const _this = this
+        let card = localStorage.getItem("card")
+        if (card === '2001') {
+          _this.filters = [{ text: '中通', value: '中通' }
+            , { text: '申通', value: '申通' }
+            , { text: '圆通', value: '圆通' }]
+        } else if (card === '2002') {
+          _this.filters = [{ text: '京东', value: '京东' }
+            , { text: '顺丰', value: '顺丰' }
+            , { text: '韵达', value: '韵达' }]
+        } else {
+          _this.filters = [{ text: '天天', value: '天天' }
+            , { text: 'EMS', value: 'EMS' }]
+        }
       }
     },
+    created() {
+		  this.setFilters()
+    },
     mounted() {
+      this.setFilters()
 		  this.getPacks()
     }
   }

@@ -28,7 +28,8 @@
 </template>
 
 <script>
-  import Schema from 'async-validator';
+  import Schema from 'async-validator'
+  import md5 from "js-md5"
   export default {
     name: "Register",
     data() {
@@ -94,29 +95,32 @@
       },
       userRegister() {
         const _this = this
+        let pwd = md5(this.user.password)
         this.$axios({
           method: 'post',
           url: 'http://localhost:8080/user/register',
           data: {
-            card: this.user.card,
-            password: this.user.password,
-            phone: this.user.tel,
-            name: this.user.name,
-            addr: this.user.addr
+            card: _this.user.card,
+            password: pwd,
+            phone: _this.user.tel,
+            name: _this.user.name,
+            addr: _this.user.addr,
+            count: 0
           }
         })
           .then(function (response) {
             console.log(response.data)
-            if (response.data.register_result === "register success") {
-              localStorage.setItem("card", response.data.user.card)
-              localStorage.setItem("name", response.data.user.name)
+            if (response.data.result === "register success") {
+              localStorage.setItem("card", _this.user.card)
+              localStorage.setItem("name", _this.user.name)
+              localStorage.setItem("token", response.data.token)
               _this.$message({
                 showClose: true,
                 message: '注册成功！',
                 type: 'success'
               })
               _this.$router.push('/userHome')
-            } else if (response.data.register_result === "is exist") {
+            } else if (response.data.result === "is exist") {
               _this.$message({
                 showClose: true,
                 message: '此学号已注册！',
@@ -126,7 +130,7 @@
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
-                message: '服务器出错啦！'
+                message: '注册失败！'
               })
             }
           })

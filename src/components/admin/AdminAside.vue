@@ -110,6 +110,9 @@
                   message: '快递入站成功！',
                   type: 'success'
                 })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
               } else if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,

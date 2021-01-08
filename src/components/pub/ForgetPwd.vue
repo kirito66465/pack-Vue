@@ -30,20 +30,20 @@
               <div class="grid-content">
                 <el-form v-if="active === 0" ref="user" :model="user" :rules="rules">
                   <el-form-item :required="true" label=" " prop="card">
-                    <el-input v-model="user.card" placeholder="username" clearable size="small" type="text" style="width: 200px"></el-input>
+                    <el-input v-model="user.card" placeholder="请输入学号" clearable size="small" type="text" style="width: 200px"></el-input>
                   </el-form-item>
                 </el-form>
                 <el-form v-if="active === 1" ref="user" :model="user" :rules="rules">
                   <el-form-item :required="true" label=" " prop="phone">
-                    <el-input v-model="user.phone" placeholder="telephone" clearable size="small" type="text" style="width: 200px"></el-input>
+                    <el-input v-model="user.phone" placeholder="请输入注册时手机号" clearable size="small" type="text" style="width: 200px"></el-input>
                   </el-form-item>
                 </el-form>
                 <el-form v-if="active === 2" ref="user" :model="user" :rules="rules">
                   <el-form-item :required="true" label=" " prop="password">
-                    <el-input v-model="user.password" placeholder="password" show-password clearable size="small" type="text" style="width: 200px"></el-input>
+                    <el-input v-model="user.password" placeholder="请输入密码" show-password clearable size="small" type="text" style="width: 200px"></el-input>
                   </el-form-item>
                   <el-form-item :required="true" label=" " prop="checkPwd">
-                    <el-input v-model="user.checkPwd" placeholder="password again" show-password clearable size="small" type="text" style="width: 200px"></el-input>
+                    <el-input v-model="user.checkPwd" placeholder="请再次输入密码" show-password clearable size="small" type="text" style="width: 200px"></el-input>
                   </el-form-item>
                 </el-form>
               </div>
@@ -68,7 +68,8 @@
 </template>
 
 <script>
-	export default {
+	import md5 from "js-md5"
+  export default {
 		name: "ForgetPwd",
     data() {
       const validatePass = (rule, value, callback) => {
@@ -146,9 +147,10 @@
       },
       forgetPwd() {
         let param = new URLSearchParams()
+        let pwd = md5(this.user.password)
         param.append('card', this.user.card)
         param.append('phone', this.user.phone)
-        param.append('password', this.user.password)
+        param.append('password', pwd)
         const _this = this
         this.$axios({
           method: 'post',
@@ -156,28 +158,31 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data.flag)
-            if (response.data.flag === 'update password success') {
+            console.log(response.data)
+            if (response.data.result === 'update password success') {
               console.log("重置密码成功！")
               _this.$message({
                 showClose: true,
                 message: '重置密码成功！',
                 type: 'success'
               })
+              localStorage.setItem("token", response.data.token)
+              localStorage.setItem("card", _this.user.card)
+              localStorage.setItem("name", response.data.name)
               _this.$router.push('/userHome')
-            } else if (response.data.flag === 'not exist') {
+            } else if (response.data.result === 'not exist') {
               console.log("用户不存在！")
               _this.$message({
                 showClose: true,
-                message: '用户不存在！',
+                message: '学号/手机号输入错误，或者用户不存在！',
                 type: 'warning'
               })
             } else {
-              console.log("服务器错误！")
+              console.log("重置密码失败！")
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
-                message: '服务器错误！'
+                message: '重置密码失败！'
               })
             }
           })

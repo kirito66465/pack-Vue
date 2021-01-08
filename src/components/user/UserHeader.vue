@@ -22,19 +22,19 @@
               </div>
             </div>
           </el-menu-item>
-          <el-menu-item index="2" @click="">消息中心</el-menu-item>
-          <el-menu-item index="/userHome/userSend" @click="">我要寄件</el-menu-item>
+          <el-menu-item index="2" @click.native="removePic">消息中心</el-menu-item>
+          <el-menu-item index="/userHome/send" @click.native="removePic">我要寄件</el-menu-item>
           <el-submenu index="4">
             <template slot="title">快递管理</template>
-            <el-menu-item index="/userHome/allPacks" @click.native="">全部快递</el-menu-item>
-            <el-menu-item index="/userHome/isPacks" @click.native="">已取快递</el-menu-item>
-            <el-menu-item index="/userHome/noPacks" @click.native="">未取快递</el-menu-item>
-            <el-menu-item index="/userHome/userSendList" @click.native="">我的寄件</el-menu-item>
+            <el-menu-item index="/userHome/allPacks" @click.native="removePic">全部快递</el-menu-item>
+            <el-menu-item index="/userHome/isPacks" @click.native="removePic">已取快递</el-menu-item>
+            <el-menu-item index="/userHome/noPacks" @click.native="removePic">未取快递</el-menu-item>
+            <el-menu-item index="/userHome/sendList" @click.native="removePic">我的寄件</el-menu-item>
           </el-submenu>
           <el-submenu index="5">
             <template slot="title">个人管理</template>
-            <el-menu-item index="/userHome/userInfo" @click.native="">我的信息</el-menu-item>
-            <el-menu-item index="/userHome/userUpdatePwd" @click.native="">修改密码</el-menu-item>
+            <el-menu-item index="/userHome/info" @click.native="removePic">我的信息</el-menu-item>
+            <el-menu-item index="/userHome/resetPwd" @click.native="">修改密码</el-menu-item>
           </el-submenu>
           <el-menu-item>
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">
@@ -79,6 +79,7 @@
                 showClose: true,
                 message: '退出登录成功！'
               })
+              localStorage.removeItem("codePic")
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
@@ -101,6 +102,9 @@
       getUserInfo() {
         this.card = localStorage.getItem("card")
         this.name = localStorage.getItem("name")
+      },
+      removePic() {
+        localStorage.removeItem("codePic")
       }
     },
     created() {
