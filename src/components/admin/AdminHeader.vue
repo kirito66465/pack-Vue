@@ -27,8 +27,8 @@
             <template slot="title">快递管理</template>
             <el-menu-item index="/adminHome/allPacks">全部快递</el-menu-item>
             <el-menu-item>揽收快递</el-menu-item>
-            <el-menu-item index="/adminHome/isPicks">未取快递</el-menu-item>
-            <el-menu-item index="/adminHome/noPicks">已取快递</el-menu-item>
+            <el-menu-item index="/adminHome/noPicks">未取快递</el-menu-item>
+            <el-menu-item index="/adminHome/isPicks">已取快递</el-menu-item>
             <el-menu-item>货架查看</el-menu-item>
           </el-submenu>
           <el-submenu index="4">

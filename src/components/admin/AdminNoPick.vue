@@ -225,7 +225,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getUserNoPick/' + _this.currentPage,
+          url: 'http://localhost:8080/pack/getAdminNoPick/' + _this.currentPage,
           data: param
         })
           .then(function (response) {
