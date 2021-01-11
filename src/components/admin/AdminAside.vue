@@ -19,6 +19,18 @@
           </el-tooltip>
         </div>
       </div>
+      <el-badge :value="sendSubmit" class="item">
+        <el-button size="small">已提交寄件数量</el-button>
+      </el-badge>
+      <el-badge :value="sendConfirm" class="item">
+        <el-button size="small">已确认寄件数量</el-button>
+      </el-badge>
+      <el-badge :value="sendPay" class="item">
+        <el-button size="small">已支付寄件数量</el-button>
+      </el-badge>
+      <el-badge :value="sendOut" class="item">
+        <el-button size="small">已发出寄件数量</el-button>
+      </el-badge>
     </div>
   </div>
 </template>
@@ -46,7 +58,15 @@
           {color: '#ffd530', percentage: 80},
           {color: '#ff8839', percentage: 90},
           {color: '#ee2525', percentage: 100},
-        ]
+        ],
+        // 已提交的寄件数量
+        sendSubmit: 4,
+        // 已确认的寄件数量
+        sendConfirm: 3,
+        // 已支付的寄件数量
+        sendPay: 2,
+        // 已发出的寄件数量
+        sendOut: 1,
       }
     },
     methods: {
@@ -83,6 +103,35 @@
               showClose: true,
               title: '错误',
               message: '服务器错误！'
+            })
+          })
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:8080/send/getTotalByAdmin',
+          data: param
+        })
+          .then(function (response) {
+            console.log(response.data)
+            if (response.data.result === 'get info fail') {
+              _this.$notify({
+                showClose: true,
+                title: '警告',
+                message: '登录状态失效！请重新登录！',
+                type: 'warning'
+              })
+            } else {
+              _this.sendSubmit = response.data.sendSubmit
+              _this.sendConfirm = response.data.sendConfirm
+              _this.sendPay = response.data.sendPay
+              _this.sendOut = response.data.sendOut
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
             })
           })
       },

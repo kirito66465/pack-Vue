@@ -1,6 +1,6 @@
 <template>
   <div>
-    <el-form ref="form" :model="user" label-width="80px">
+    <el-form ref="form" :model="user" label-width="80px" @keydown="onSubmit">
       <el-form-item>
         <el-input v-model="user.card" placeholder="username" clearable size="small" type="text" style="width: 200px"></el-input>
       </el-form-item>
@@ -74,6 +74,11 @@
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       },
       adminLogin() {
@@ -182,6 +187,7 @@
       localStorage.removeItem("token")
       localStorage.removeItem("card")
       localStorage.removeItem("name")
+
     },
     mounted() {
       localStorage.removeItem("token")

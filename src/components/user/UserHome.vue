@@ -9,9 +9,6 @@
           <user-aside></user-aside>
         </el-aside>
         <el-main>
-<!--          <user-all-pack></user-all-pack>-->
-<!--          <user-is-pick></user-is-pick>-->
-<!--          <user-no-pick></user-no-pick>-->
           <router-view />
         </el-main>
       </el-container>

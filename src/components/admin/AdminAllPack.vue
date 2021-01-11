@@ -72,7 +72,7 @@
             label="快递公司"
             prop="org"
             width="200"
-            :filters="[{ text: '中通', value: '中通' }, { text: '申通', value: '申通' }, { text: '圆通', value: '圆通' }]"
+            :filters="filters"
             :filter-method="filterOrg"
             filter-placement="bottom-end">
             <template slot-scope="scope">
@@ -163,6 +163,7 @@
           end: '',
           pick: ''
         }],
+        filters: []
       }
     },
     methods: {
@@ -173,7 +174,7 @@
       // 获取当前页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
-        this.getPacks()
+        // this.getPacks()
       },
       // 单条记录编辑
       handleEdit(index, row) {
@@ -248,10 +249,29 @@
       },
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      setFilters() {
+        const _this = this
+        let card = localStorage.getItem("card")
+        if (card === '2101') {
+          _this.filters = [{ text: '中通', value: '中通' }
+            , { text: '申通', value: '申通' }
+            , { text: '圆通', value: '圆通' }]
+        } else if (card === '2102') {
+          _this.filters = [{ text: '京东', value: '京东' }
+            , { text: '顺丰', value: '顺丰' }
+            , { text: '韵达', value: '韵达' }]
+        } else {
+          _this.filters = [{ text: '天天', value: '天天' }
+            , { text: 'EMS', value: 'EMS' }]
+        }
       }
     },
-
+    created() {
+      this.setFilters()
+    },
     mounted() {
+      this.setFilters()
 		  this.getPacks()
     }
   }

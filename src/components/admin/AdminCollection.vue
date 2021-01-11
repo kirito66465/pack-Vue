@@ -29,9 +29,6 @@
                 <el-form-item label="收件人地址: ">
                   <span>{{ props.row.to_addr }}</span>
                 </el-form-item>
-                <el-form-item label="运费: ">
-                  <span>{{ props.row.price }}</span>
-                </el-form-item>
                 <el-form-item label="快递单号: ">
                   <span>{{ props.row.id }}</span>
                 </el-form-item>
@@ -63,11 +60,6 @@
             width="150">
           </el-table-column>
           <el-table-column
-            label="运费"
-            prop="price"
-            width="150">
-          </el-table-column>
-          <el-table-column
             label="快递单号"
             prop="id"
             width="200">
@@ -75,15 +67,8 @@
           <el-table-column
             label="快递公司"
             prop="org"
-            width="200"
-            :filters="[{ text: '中通', value: '中通' }
-                      , { text: '申通', value: '申通' }
-                      , { text: '圆通', value: '圆通' }
-                      , { text: '京东', value: '京东' }
-                      , { text: '顺丰', value: '顺丰' }
-                      , { text: '韵达', value: '韵达' }
-                      , { text: '天天', value: '天天' }
-                      , { text: 'EMS', value: 'EMS' }]"
+            width="150"
+            :filters="filters"
             :filter-method="filterOrg"
             filter-placement="bottom-end">
             <template slot-scope="scope">
@@ -96,10 +81,8 @@
             label="快递状态"
             prop="status"
             width="100"
-            :filters="[{ text: '已提交', value: '已提交' }
-              , { text: '已支付', value: '已支付' }
-              , { text: '已确认', value: '已确认' }
-              , { text: '已发出', value: '已发出' }]"
+            :filters="[{ text: '已提交', value: '已提交' }, { text: '已确认', value: '已确认' }
+              , { text: '已支付', value: '已支付' }, { text: '已发出', value: '已发出' }]"
             :filter-method="filterStatus"
             filter-placement="bottom-end">
             <template slot-scope="scope">
@@ -125,11 +108,11 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handlePay(scope.$index, scope.row)">支付</el-button>
+                @click="handleConfirm(scope.$index, scope.row)">确认</el-button>
               <el-button
                 size="mini"
                 type="danger"
-                @click="handleCancel(scope.$index, scope.row)">取消</el-button>
+                @click="handleOut(scope.$index, scope.row)">发出</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -150,7 +133,7 @@
 
 <script>
 	export default {
-		name: "UserSendList",
+		name: "AdminCollection",
     data() {
       return {
         currentPage: 1,       // 默认当前页，第一页
@@ -164,12 +147,12 @@
           to_name: '王杰',
           to_tel: '17751773079',
           to_addr: '',
-          price: 10,
           id: '75422907315890',
           org: '中通',
           status: '已提交',
           dt: '2021-01-05 16:45:00',
         }],
+        filters: []
       }
     },
     methods: {
@@ -182,12 +165,12 @@
         console.log(`当前页: ${val}`)
         this.getPacks()
       },
-      // 单条记录支付
-      handlePay(index, row) {
+      // 单条记录确认
+      handleConfirm(index, row) {
         console.log(index, row)
         const _this = this
-        if (_this.tableData[index].status === '已确认') {
-          let msg = '将支付' + _this.tableData[index].price + '元运费, 是否继续?'
+        if (_this.tableData[index].status === '已提交') {
+          let msg = '将确认此寄件, 是否继续?'
           _this.$confirm(msg, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
@@ -199,7 +182,7 @@
             param.append('token', token)
             _this.$axios({
               method: 'post',
-              url: 'http://localhost:8080/send/pay',
+              url: 'http://localhost:8080/send/confirm',
               data: param
             })
               .then(function (response) {
@@ -216,14 +199,14 @@
                   _this.$notify({
                     showClose: true,
                     title: '警告',
-                    message: '支付失败！',
+                    message: '确认失败！',
                     type: 'warning'
                   })
                 } else {
                   _this.$message({
                     showClose: true,
                     type: 'success',
-                    message: '支付成功!'
+                    message: '确认成功!'
                   })
                   let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
                   _this.$router.push(NewPage)
@@ -242,37 +225,26 @@
             _this.$message({
               showClose: true,
               type: 'info',
-              message: '已取消支付'
+              message: '已取消确认'
             })
           })
-        } else if (_this.tableData[index].status === '已支付' || _this.tableData[index].status === '已发出') {
+        } else if (_this.tableData[index].status === '已确认' || _this.tableData[index].status === '已支付'
+          || _this.tableData[index].status === '已发出') {
           _this.$notify({
             showClose: true,
             title: '警告',
-            message: '该寄件已支付!',
-            type: 'warning'
-          })
-        } else if (_this.tableData[index].status === '已提交') {
-          _this.$notify({
-            showClose: true,
-            title: '警告',
-            message: '请等待驿站管理员确认后再支付!',
+            message: '该寄件已确认!',
             type: 'warning'
           })
         }
       },
-      // 单条记录删除
-      handleCancel(index, row) {
+      // 单条记录发出
+      handleOut(index, row) {
         console.log(index, row)
         const _this = this
-        if (_this.tableData[index].status === '已发出') {
-          _this.$notify.error({
-            showClose: true,
-            title: '错误',
-            message: '此寄件已发出，无法取消！'
-          })
-        } else {
-          this.$confirm('将取消此寄件, 是否继续?', '提示', {
+        if (_this.tableData[index].status === '已支付') {
+          let msg = '将确认此寄件, 是否继续?'
+          _this.$confirm(msg, '提示', {
             confirmButtonText: '确定',
             cancelButtonText: '取消',
             type: 'warning'
@@ -283,7 +255,7 @@
             param.append('token', token)
             _this.$axios({
               method: 'post',
-              url: 'http://localhost:8080/send/cancel',
+              url: 'http://localhost:8080/send/out',
               data: param
             })
               .then(function (response) {
@@ -300,14 +272,14 @@
                   _this.$notify({
                     showClose: true,
                     title: '警告',
-                    message: '取消失败！',
+                    message: '发出失败！',
                     type: 'warning'
                   })
                 } else {
                   _this.$message({
                     showClose: true,
                     type: 'success',
-                    message: '取消成功!'
+                    message: '发出成功!'
                   })
                   let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
                   _this.$router.push(NewPage)
@@ -323,11 +295,25 @@
                 })
               })
           }).catch(() => {
-            this.$message({
+            _this.$message({
               showClose: true,
               type: 'info',
-              message: '已取消删除'
+              message: '已取消发出'
             })
+          })
+        } else if (_this.tableData[index].status === '已发出') {
+          _this.$notify({
+            showClose: true,
+            title: '警告',
+            message: '该寄件已发出!',
+            type: 'warning'
+          })
+        } else if (_this.tableData[index].status === '已提交' || _this.tableData[index].status === '已确认') {
+          _this.$notify({
+            showClose: true,
+            title: '警告',
+            message: '请等待用户支付后再发出!',
+            type: 'warning'
           })
         }
       },
@@ -349,7 +335,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/send/getSendByUser/' + _this.currentPage,
+          url: 'http://localhost:8080/send/getSendByAdmin/' + _this.currentPage,
           data: param
         })
           .then(function (response) {
@@ -379,13 +365,30 @@
       },
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      setFilters() {
+        const _this = this
+        let card = localStorage.getItem("card")
+        if (card === '2101') {
+          _this.filters = [{ text: '中通', value: '中通' }
+            , { text: '申通', value: '申通' }
+            , { text: '圆通', value: '圆通' }]
+        } else if (card === '2102') {
+          _this.filters = [{ text: '京东', value: '京东' }
+            , { text: '顺丰', value: '顺丰' }
+            , { text: '韵达', value: '韵达' }]
+        } else {
+          _this.filters = [{ text: '天天', value: '天天' }
+            , { text: 'EMS', value: 'EMS' }]
+        }
       }
     },
     created() {
+		  this.setFilters()
 		  this.getPacks()
     },
     mounted() {
-
+      this.setFilters()
     },
     updated() {
 

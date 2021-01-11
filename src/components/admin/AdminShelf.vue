@@ -1,5 +1,32 @@
 <template>
-	<div>
+  <div>
+    <div>
+      <el-form :inline="true" :model="formInline" class="demo-form-inline">
+        <el-form-item label="货架:">
+          <el-select v-model="formInline.shelf" placeholder="请选择货架" clearable filterable>
+            <el-option
+              v-for="item in options1"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item label="层数:">
+          <el-select v-model="formInline.layer" placeholder="请选择层数" clearable filterable>
+            <el-option
+              v-for="item in options2"
+              :key="item.value"
+              :label="item.label"
+              :value="item.value">
+            </el-option>
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="getPacks">查询</el-button>
+        </el-form-item>
+      </el-form>
+    </div>
     <div class="block">
       <div>
         <el-table
@@ -23,38 +50,18 @@
                 <el-form-item label="收件手机号: ">
                   <span>{{ props.row.per_tel }}</span>
                 </el-form-item>
-                <el-form-item label="收件地址: ">
-                  <span>{{ props.row.per_addr }}</span>
-                </el-form-item>
-                <el-form-item label="所在驿站: ">
-                  <span>{{ props.row.addr }}</span>
-                </el-form-item>
                 <el-form-item label="取件码: ">
                   <span>{{ props.row.code }}</span>
                 </el-form-item>
-                <el-form-item label="驿站联系人: ">
-                  <span>{{ props.row.cont_name }}</span>
-                </el-form-item>
-                <el-form-item label="驿站联系方式: ">
-                  <span>{{ props.row.cont_tel }}</span>
-                </el-form-item>
-                <el-form-item label="快递状态: ">
-                  <span>{{ props.row.status }}</span>
-                </el-form-item>
                 <el-form-item label="入站时间: ">
                   <span>{{ props.row.start }}</span>
-                </el-form-item>
-                <el-form-item label="取件时间: ">
-                  <span>{{ props.row.end }}</span>
-                </el-form-item>
-                <el-form-item label="签收人: ">
-                  <span>{{ props.row.pick }}</span>
                 </el-form-item>
               </el-form>
             </template>
           </el-table-column>
           <!-- 未展开时显示内容 -->
           <el-table-column
+            fixed
             type="index"
             :index="indexMethod"
             width="50">
@@ -66,12 +73,12 @@
           <el-table-column
             label="快递单号"
             prop="id"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="快递公司"
             prop="org"
-            width="200"
+            width="100"
             :filters="filters"
             :filter-method="filterOrg"
             filter-placement="bottom-end">
@@ -84,27 +91,22 @@
           <el-table-column
             label="收件人"
             prop="per_name"
+            width="100">
+          </el-table-column>
+          <el-table-column
+            label="收件手机号"
+            prop="per_tel"
             width="200">
           </el-table-column>
           <el-table-column
             label="取件码"
             prop="code"
-            width="250">
+            width="150">
           </el-table-column>
           <el-table-column
             label="入站时间"
             prop="start"
-            width="250">
-          </el-table-column>
-          <el-table-column
-            label="取件时间"
-            prop="end"
-            width="250">
-          </el-table-column>
-          <el-table-column
-            label="签收人"
-            prop="pick"
-            width="20">
+            width="200">
           </el-table-column>
           <el-table-column
             align="right"
@@ -118,62 +120,131 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
+                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
+              <el-button
+                size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
           </el-table-column>
         </el-table>
-        <el-pagination
-          background
-          :hide-on-single-page="value"
-          @size-change="handleSizeChange"
-          @current-change="handleCurrentChange"
-          :current-page.sync="currentPage"
-          :page-size="pageSize"
-          layout="total, prev, pager, next"
-          :total="total">
-        </el-pagination>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-	export default {
-		name: "AdminIsPack",
+  export default {
+    name: "AdminShelf",
     data() {
       return {
-        currentPage: 1,       // 默认当前页，第一页
-        total: 21,            // 总记录条数
-        pageSize: 10,         // 每一页的记录条数
         search: '',
         tableData: [{
           id: '12987122',
           org: '中通',
           per_name: 'user1',
           per_tel: '12345678900',
-          per_addr: '中苑',
-          addr: '中苑',
           code: '1-1-16',
-          cont_name: '中苑快递员',
-          cont_tel: '12345678910',
-          status: '未取件',
           start: '2020-12-28 10:24:00',
-          end: '',
-          pick: ''
+        }, {
+          id: '12987123',
+          org: '中通',
+          per_name: 'user2',
+          per_tel: '12345678901',
+          code: '1-1-17',
+          start: '2020-12-28 10:25:00',
         }],
-        filters: []
+        filters: [],
+        formInline: {
+          shelf: '1-',
+          layer: '1'
+        },
+        options1: [{
+          label: '1',
+          value: '1-'
+        }, {
+          label: '2',
+          value: '2-'
+        }, {
+          label: '3',
+          value: '3-'
+        }, {
+          label: '4',
+          value: '4-'
+        }, {
+          label: '5',
+          value: '5-'
+        }, {
+          label: '6',
+          value: '6-'
+        }, {
+          label: '7',
+          value: '7-'
+        }, {
+          label: '8',
+          value: '8-'
+        }, {
+          label: '9',
+          value: '9-'
+        }, {
+          label: '10',
+          value: '10-'
+        }, {
+          label: '11',
+          value: '11-'
+        }, {
+          label: '12',
+          value: '12-'
+        }, {
+          label: '13',
+          value: '13-'
+        }, {
+          label: '14',
+          value: '14-'
+        }, {
+          label: '15',
+          value: '15-'
+        }, {
+          label: '16',
+          value: '16-'
+        }, {
+          label: '17',
+          value: '17-'
+        }, {
+          label: '18',
+          value: '18-'
+        }, {
+          label: '19',
+          value: '19-'
+        }, {
+          label: '20',
+          value: '20-'
+        }],
+        options2: [{
+          label: '1',
+          value: '1'
+        }, {
+          label: '2',
+          value: '2'
+        }, {
+          label: '3',
+          value: '3'
+        }, {
+          label: '4',
+          value: '4'
+        }, {
+          label: '5',
+          value: '5'
+        }, {
+          label: '6',
+          value: '6'
+        }]
       }
     },
     methods: {
-		  // 获取每页记录条数
-      handleSizeChange(val) {
-        console.log(`每页 ${val} 条`)
-      },
-      // 获取当前页数
-      handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
-        this.getPacks()
+      // 单条记录编辑
+      handleEdit(index, row) {
+        console.log(index, row)
       },
       // 单条记录删除
       handleDelete(index, row) {
@@ -184,11 +255,13 @@
           type: 'warning'
         }).then(() => {
           this.$message({
+            showClose: true,
             type: 'success',
             message: '删除成功!'
           });
         }).catch(() => {
           this.$message({
+            showClose: true,
             type: 'info',
             message: '已取消删除'
           })
@@ -199,20 +272,19 @@
         return row.org === value
       },
       getPacks() {
+        const _this = this
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
-        param.append('currentPage', this.currentPage)
-        param.append('pageSize', this.pageSize)
+        let choice = this.formInline.shelf + this.formInline.layer
+        console.log("货架: " + choice)
         param.append('token', token)
-        const _this = this
-        console.log("准备发出请求")
+        param.append('shelf', choice)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getAdminIsPick/' + _this.currentPage,
+          url: 'http://localhost:8080/pack/getShelfPack',
           data: param
         })
           .then(function (response) {
-            console.log("收到响应")
             console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
@@ -223,8 +295,7 @@
               })
               _this.$router.push('/loginAndRegister')
             } else {
-              _this.total = response.data.pack_result.total
-              _this.tableData = response.data.pack_result.list
+              _this.tableData = response.data.packs
             }
           })
           .catch(function (error) {
@@ -237,7 +308,7 @@
           })
       },
       indexMethod(index) {
-        return (this.currentPage - 1) * this.pageSize + index + 1
+        return index + 1
       },
       setFilters() {
         const _this = this
@@ -257,11 +328,11 @@
       }
     },
     created() {
-		  this.setFilters()
+      this.setFilters()
     },
     mounted() {
       this.setFilters()
-		  this.getPacks()
+      this.getPacks()
     }
   }
 </script>
@@ -269,14 +340,11 @@
 <style scoped>
   .demo-table-expand {
     font-size: 0;
-    font-weight: bold;
   }
-
   .demo-table-expand label {
     width: 90px;
     color: #99a9bf;
   }
-
   .demo-table-expand .el-form-item {
     margin-right: 0;
     margin-bottom: 0;

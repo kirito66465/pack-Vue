@@ -15,8 +15,10 @@ import UserInfo from "../components/user/UserInfo"
 import UserResetPwd from "../components/user/UserResetPwd"
 import AdminResetPwd from "../components/admin/AdminResetPwd"
 import AdminInfo from "../components/admin/AdminInfo"
-import AdminIsPick from "../components/admin/AdminIsPick";
-import AdminNoPick from "../components/admin/AdminNoPick";
+import AdminIsPick from "../components/admin/AdminIsPick"
+import AdminNoPick from "../components/admin/AdminNoPick"
+import AdminShelf from "../components/admin/AdminShelf"
+import AdminCollection from "../components/admin/AdminCollection"
 
 Vue.use(Router)
 
@@ -110,6 +112,16 @@ export default new Router({
           path: '/adminHome/noPicks',
           name: 'noPick',
           component: AdminNoPick
+        },
+        {
+          path: '/adminHome/shelf',
+          name: 'shelf',
+          component: AdminShelf
+        },
+        {
+          path: '/adminHome/collection',
+          name: 'collection',
+          component: AdminCollection
         }
       ]
     }

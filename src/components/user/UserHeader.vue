@@ -22,16 +22,15 @@
               </div>
             </div>
           </el-menu-item>
-          <el-menu-item index="2" @click.native="removePic">消息中心</el-menu-item>
           <el-menu-item index="/userHome/send" @click.native="removePic">我要寄件</el-menu-item>
-          <el-submenu index="4">
+          <el-submenu index="1">
             <template slot="title">快递管理</template>
             <el-menu-item index="/userHome/allPacks" @click.native="removePic">全部快递</el-menu-item>
             <el-menu-item index="/userHome/isPacks" @click.native="removePic">已取快递</el-menu-item>
             <el-menu-item index="/userHome/noPacks" @click.native="removePic">未取快递</el-menu-item>
             <el-menu-item index="/userHome/sendList" @click.native="removePic">我的寄件</el-menu-item>
           </el-submenu>
-          <el-submenu index="5">
+          <el-submenu index="2">
             <template slot="title">个人管理</template>
             <el-menu-item index="/userHome/info" @click.native="removePic">我的信息</el-menu-item>
             <el-menu-item index="/userHome/resetPwd" @click.native="">修改密码</el-menu-item>

@@ -30,6 +30,18 @@
       <el-badge :value="noTotal" class="item">
         <el-button size="small">未取快递数量</el-button>
       </el-badge>
+      <el-badge :value="sendSubmit" class="item">
+        <el-button size="small">已提交寄件数量</el-button>
+      </el-badge>
+      <el-badge :value="sendConfirm" class="item">
+        <el-button size="small">已确认寄件数量</el-button>
+      </el-badge>
+      <el-badge :value="sendPay" class="item">
+        <el-button size="small">已支付寄件数量</el-button>
+      </el-badge>
+      <el-badge :value="sendOut" class="item">
+        <el-button size="small">已发出寄件数量</el-button>
+      </el-badge>
     </div>
   </div>
 </template>
@@ -52,8 +64,14 @@
         isTotal: 20,
         // 未取出的快递数量
         noTotal: 80,
-        // 寄件的快递数量
-        sendTotal: 0,
+        // 已提交的寄件数量
+        sendSubmit: 4,
+        // 已确认的寄件数量
+        sendConfirm: 3,
+        // 已支付的寄件数量
+        sendPay: 2,
+        // 已发出的寄件数量
+        sendOut: 1,
       }
     },
     methods: {
@@ -149,6 +167,35 @@
               _this.allTotal = response.data.allTotal
               _this.isTotal = response.data.isTotal
               _this.noTotal = response.data.noTotal
+            }
+          })
+          .catch(function (error) {
+            console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
+          })
+        this.$axios({
+          method: 'post',
+          url: 'http://localhost:8080/send/getTotalByUser',
+          data: param
+        })
+          .then(function (response) {
+            console.log(response.data)
+            if (response.data.result === 'get info fail') {
+              _this.$notify({
+                showClose: true,
+                title: '警告',
+                message: '登录状态失效！请重新登录！',
+                type: 'warning'
+              })
+            } else {
+              _this.sendSubmit = response.data.sendSubmit
+              _this.sendConfirm = response.data.sendConfirm
+              _this.sendPay = response.data.sendPay
+              _this.sendOut = response.data.sendOut
             }
           })
           .catch(function (error) {

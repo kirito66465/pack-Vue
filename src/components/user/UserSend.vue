@@ -77,6 +77,7 @@
 </template>
 
 <script>
+  import qs from 'qs'
   import { regionData, CodeToText } from 'element-china-area-data'
 	export default {
 		name: "UserSend",
@@ -128,15 +129,60 @@
                 type: 'warning'
               })
             } else {
-              // TODO：寄件逻辑：
-              // 1、填写寄件信息，点击下单，然后弹出支付弹窗，支付成功之后前端请求后端
-              // 2、后端收到请求，然后返回结果
-
-              _this.$message({
-                showClose: true,
-                message: '下单成功，请支付！',
-                type: 'success'
+              let token = localStorage.getItem('token')
+              let addr = CodeToText[_this.form.addr[0]] + CodeToText[_this.form.addr[1]] + CodeToText[_this.form.addr[2]]
+              _this.$axios({
+                method: 'post',
+                url: 'http://localhost:8080/send/getSendInfo',
+                data: {
+                  admin: _this.form.admin,
+                  name: _this.form.name,
+                  phone: _this.form.phone,
+                  addr: addr,
+                  info: _this.form.info,
+                  weight: _this.form.weight,
+                  price: _this.form.price,
+                  token: token
+                }
               })
+                .then(function (response) {
+                  console.log(response.data)
+                  if (response.data.result === 'do success') {
+                    _this.$message({
+                      showClose: true,
+                      message: '下单成功，请支付！',
+                      type: 'success'
+                    })
+                    let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                    _this.$router.push(NewPage)
+                    _this.$router.go(-1)
+                  } else if (response.data.result === 'do fail') {
+                    _this.$notify({
+                      showClose: true,
+                      title: '警告',
+                      message: '寄件下单失败！',
+                      type: 'warning'
+                    })
+                  } else if (response.data.result === 'please login to operate') {
+                    _this.$notify({
+                      showClose: true,
+                      title: '警告',
+                      message: '请在登录状态操作',
+                      type: 'warning'
+                    })
+                    _this.$router.push('/LoginAndRegister')
+                  }
+                })
+                .catch(function (error) {
+                  console.log(error)
+                  _this.$notify.error({
+                    showClose: true,
+                    title: '错误',
+                    message: '服务器出错啦！'
+                  })
+                })
+
+
             }
           } else {
             console.log('error submit!!')
