@@ -66,12 +66,12 @@
           <el-table-column
             label="快递单号"
             prop="id"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="快递公司"
             prop="org"
-            width="200"
+            width="150"
             :filters="filters"
             :filter-method="filterOrg"
             filter-placement="bottom-end">
@@ -84,42 +84,37 @@
           <el-table-column
             label="收件人"
             prop="per_name"
-            width="200">
+            width="150">
           </el-table-column>
           <el-table-column
             label="取件码"
             prop="code"
-            width="250">
+            width="150">
           </el-table-column>
           <el-table-column
             label="入站时间"
             prop="start"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="取件时间"
             prop="end"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="签收人"
             prop="pick"
-            width="20">
+            width="100">
           </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
-            </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                placeholder="输入签收人关键字搜索"
+                @keyup.enter.native="searchPacks" />
             </template>
           </el-table-column>
         </el-table>
@@ -174,25 +169,6 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
         this.getPacks()
-      },
-      // 单条记录删除
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.$confirm('将删除此件快递, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
       },
       // 快递所属公司过滤
       filterOrg(value, row) {
@@ -254,10 +230,14 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
+      },
+      searchPacks() {
+        alert(this.search)
       }
     },
     created() {
 		  this.setFilters()
+      this.getPacks()
     },
     mounted() {
       this.setFilters()

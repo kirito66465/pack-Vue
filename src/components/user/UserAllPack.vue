@@ -131,9 +131,6 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handlePick(scope.$index, scope.row)">取件</el-button>
-              <el-button
-                size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -192,23 +189,60 @@
         console.log(`当前页: ${val}`)
         this.getPacks()
       },
-      // 单条记录编辑
-      handlePick(index, row) {
-        console.log(index, row)
-      },
       // 单条记录删除
       handleDelete(index, row) {
         console.log(index, row)
+        const _this = this
         this.$confirm('将删除此件快递, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            showClose: true,
-            type: 'success',
-            message: '删除成功!'
-          });
+          let param = new URLSearchParams()
+          param.append('id', _this.tableData[index].id)
+          let token = localStorage.getItem('token')
+          param.append('token', token)
+          _this.$axios({
+            method: 'post',
+            url: 'http://localhost:8080/pack/deletePack',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data.result === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '登录状态失效，请重新登录！',
+                  type: 'warning'
+                })
+                _this.$router.push('/loginAndRegister')
+              } else if (response.data.result === 'do fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '删除失败！',
+                  type: 'warning'
+                })
+              } else if (response.data.result === 'do success') {
+                _this.$message({
+                  showClose: true,
+                  type: 'success',
+                  message: '删除成功!'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
         }).catch(() => {
           this.$message({
             showClose: true,
@@ -275,7 +309,7 @@
 		  this.getPacks()
     },
     mounted() {
-
+      this.getPacks()
     },
     updated() {
 

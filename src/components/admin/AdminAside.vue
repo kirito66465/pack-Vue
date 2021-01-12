@@ -102,7 +102,7 @@
             _this.$notify.error({
               showClose: true,
               title: '错误',
-              message: '服务器错误！'
+              message: '服务器出错啦！'
             })
           })
         this.$axios({
@@ -153,9 +153,8 @@
             .then(function (response) {
               console.log(response.data)
               if (response.data === 'the package enter addr success') {
-                _this.$notify({
+                _this.$message({
                   showClose: true,
-                  title: '成功',
                   message: '快递入站成功！',
                   type: 'success'
                 })

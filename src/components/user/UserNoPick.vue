@@ -123,9 +123,6 @@
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handlePick(scope.$index, scope.row)">取件</el-button>
-              <el-button
-                size="mini"
                 type="danger"
                 @click="handleDelete(scope.$index, scope.row)">删除</el-button>
             </template>
@@ -181,10 +178,6 @@
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
         this.getPacks()
-      },
-      // 单条记录编辑
-      handlePick(index, row) {
-        console.log(index, row)
       },
       // 单条记录删除
       handleDelete(index, row) {
@@ -256,6 +249,9 @@
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
       }
+    },
+    created() {
+      this.getPacks()
     },
     mounted() {
 		  this.getPacks()

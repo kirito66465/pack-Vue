@@ -181,8 +181,6 @@
                     message: '服务器出错啦！'
                   })
                 })
-
-
             }
           } else {
             console.log('error submit!!')

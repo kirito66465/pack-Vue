@@ -13,6 +13,15 @@
       <el-form-item prop="tel" :required="true" label="手机">
         <el-input v-model="user.tel" placeholder="telephone" clearable size="small" type="text" style="width: 200px"></el-input>
       </el-form-item>
+
+      <el-form-item
+        prop="mail"
+        label="邮箱"
+        :rules="[{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+        { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]">
+        <el-input v-model="user.mail" placeholder="email" clearable size="small" type="text" style="width: 200px"></el-input>
+      </el-form-item>
+
       <el-form-item label="姓名">
         <el-input v-model="user.name" placeholder="name" clearable size="small" type="text" style="width: 200px"></el-input>
       </el-form-item>
@@ -58,6 +67,7 @@
           password: '',
           checkPwd: '',
           tel: '',
+          mail: '',
           name: '',
           addr: ''
         },
@@ -105,7 +115,8 @@
             phone: _this.user.tel,
             name: _this.user.name,
             addr: _this.user.addr,
-            count: 0
+            count: 0,
+            mail: _this.user.mail
           }
         })
           .then(function (response) {

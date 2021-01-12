@@ -110,6 +110,11 @@
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       },
       forgetPwd() {
@@ -147,6 +152,11 @@
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       },
       getAdminInfo() {
@@ -180,6 +190,11 @@
           })
           .catch(function (error) {
             console.log(error)
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
           })
       }
     },

@@ -246,16 +246,14 @@
             })
           })
         } else if (_this.tableData[index].status === '已支付' || _this.tableData[index].status === '已发出') {
-          _this.$notify({
+          _this.$message({
             showClose: true,
-            title: '警告',
             message: '该寄件已支付!',
             type: 'warning'
           })
         } else if (_this.tableData[index].status === '已提交') {
-          _this.$notify({
+          _this.$message({
             showClose: true,
-            title: '警告',
             message: '请等待驿站管理员确认后再支付!',
             type: 'warning'
           })
@@ -385,7 +383,7 @@
 		  this.getPacks()
     },
     mounted() {
-
+      this.getPacks()
     },
     updated() {
 

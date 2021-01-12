@@ -108,25 +108,7 @@
             prop="start"
             width="200">
           </el-table-column>
-          <el-table-column
-            align="right"
-            width="400">
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入关键字搜索"/>
-            </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
-          </el-table-column>
+
         </el-table>
       </div>
     </div>
@@ -138,7 +120,6 @@
     name: "AdminShelf",
     data() {
       return {
-        search: '',
         tableData: [{
           id: '12987122',
           org: '中通',
@@ -329,6 +310,7 @@
     },
     created() {
       this.setFilters()
+      this.getPacks()
     },
     mounted() {
       this.setFilters()

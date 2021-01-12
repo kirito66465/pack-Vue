@@ -90,9 +90,8 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data === 'pick up the package success') {
-              _this.$notify({
+              _this.$message({
                 showClose: true,
-                title: '成功',
                 message: '取件成功！',
                 type: 'success'
               })
@@ -109,9 +108,8 @@
               _this.$router.push(NewPage)
               _this.$router.go(-1)
             } else if (response.data === 'not exist') {
-              _this.$notify({
+              _this.$message({
                 showClose: true,
-                title: '警告',
                 message: '该快递不存在！',
                 type: 'warning'
               })
@@ -124,10 +122,11 @@
               })
               _this.$router.push('/LoginAndRegister')
             } else {
-              _this.$notify.error({
+              _this.$notify({
                 showClose: true,
-                title: '错误',
-                message: '服务器错误！请稍后重试！'
+                title: '警告',
+                message: '取件失败！',
+                type: 'warning'
               })
             }
           })

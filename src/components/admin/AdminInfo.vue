@@ -107,9 +107,9 @@
             } else {
               _this.$notify({
                 showClose: true,
-                title: '错误',
+                title: '警告',
                 message: '信息更新失败！',
-                type: 'error'
+                type: 'warning'
               })
             }
           })

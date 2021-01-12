@@ -111,17 +111,10 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchPacks" />
             </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleEdit(scope.$index, scope.row)">编辑</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
-            </template>
+
           </el-table-column>
         </el-table>
         <el-pagination
@@ -176,31 +169,6 @@
         console.log(`当前页: ${val}`)
         // this.getPacks()
       },
-      // 单条记录编辑
-      handleEdit(index, row) {
-        console.log(index, row)
-      },
-      // 单条记录删除
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.$confirm('将删除此件快递, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          this.$message({
-            showClose: true,
-            type: 'success',
-            message: '删除成功!'
-          });
-        }).catch(() => {
-          this.$message({
-            showClose: true,
-            type: 'info',
-            message: '已取消删除'
-          })
-        })
-      },
       // 快递所属公司过滤
       filterOrg(value, row) {
         return row.org === value
@@ -216,14 +184,12 @@
         param.append('pageSize', this.pageSize)
         param.append('token', token)
         const _this = this
-        console.log("准备发出请求")
         this.$axios({
           method: 'post',
           url: 'http://localhost:8080/pack/getAdminPacksByPage/' + _this.currentPage,
           data: param
         })
           .then(function (response) {
-            console.log("收到响应")
             console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
@@ -265,14 +231,22 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
+      },
+      searchPacks() {
+        alert(this.search)
       }
     },
     created() {
       this.setFilters()
+      const _this = this
+      // 轮询获取接口数据
+      window.setInterval(() => {
+        setTimeout(_this.getPacks(), 0);
+      }, 3000);
+
     },
     mounted() {
       this.setFilters()
-		  this.getPacks()
     }
   }
 </script>

@@ -82,8 +82,9 @@
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
-              _this.$message({
+              _this.$notify({
                 showClose: true,
+                title: '警告',
                 message: '退出登录失败！',
                 type: 'warning'
               })

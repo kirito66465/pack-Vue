@@ -66,12 +66,12 @@
           <el-table-column
             label="快递单号"
             prop="id"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="快递公司"
             prop="org"
-            width="200"
+            width="150"
             :filters="[{ text: '中通', value: '中通' }
                       , { text: '申通', value: '申通' }
                       , { text: '圆通', value: '圆通' }
@@ -91,31 +91,31 @@
           <el-table-column
             label="收件人"
             prop="per_name"
-            width="200">
+            width="150">
           </el-table-column>
           <el-table-column
             label="取件码"
             prop="code"
-            width="250">
+            width="150">
           </el-table-column>
           <el-table-column
             label="入站时间"
             prop="start"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="取件时间"
             prop="end"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="签收人"
             prop="pick"
-            width="20">
+            width="50">
           </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
@@ -245,6 +245,9 @@
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
       }
+    },
+    created() {
+      this.getPacks()
     },
     mounted() {
 		  this.getPacks()

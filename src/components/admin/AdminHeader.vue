@@ -76,12 +76,11 @@
               localStorage.removeItem("name")
               _this.$message({
                 showClose: true,
-                message: '退出登录成功！'
+                message: '退出登录成功！',
+                type: 'success'
               })
               _this.$router.push('/')
             } else {
-              console.log("退出登录失败！")
-              console.log("退出登录失败！")
               _this.$message({
                 showClose: true,
                 message: '退出登录失败！',

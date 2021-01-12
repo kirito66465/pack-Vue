@@ -103,7 +103,8 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchPacks" />
             </template>
             <template slot-scope="scope">
               <el-button
@@ -230,9 +231,8 @@
           })
         } else if (_this.tableData[index].status === '已确认' || _this.tableData[index].status === '已支付'
           || _this.tableData[index].status === '已发出') {
-          _this.$notify({
+          _this.$message({
             showClose: true,
-            title: '警告',
             message: '该寄件已确认!',
             type: 'warning'
           })
@@ -302,16 +302,14 @@
             })
           })
         } else if (_this.tableData[index].status === '已发出') {
-          _this.$notify({
+          _this.$message({
             showClose: true,
-            title: '警告',
             message: '该寄件已发出!',
             type: 'warning'
           })
         } else if (_this.tableData[index].status === '已提交' || _this.tableData[index].status === '已确认') {
-          _this.$notify({
+          _this.$message({
             showClose: true,
-            title: '警告',
             message: '请等待用户支付后再发出!',
             type: 'warning'
           })
@@ -381,6 +379,9 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
+      },
+      searchPacks() {
+        alert(this.search)
       }
     },
     created() {
@@ -389,6 +390,7 @@
     },
     mounted() {
       this.setFilters()
+      this.getPacks()
     },
     updated() {
 

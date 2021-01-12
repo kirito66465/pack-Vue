@@ -77,25 +77,23 @@
               })
               _this.$router.push('/LoginAndRegister')
             } else if (response.data.result === 'check code is wrong') {
-              _this.$notify({
+              _this.$message({
                 showClose: true,
-                title: '错误',
                 message: '验证码输入错误！',
                 type: 'error'
               })
             } else if (response.data.result === 'password not same') {
-              _this.$notify({
+              _this.$message({
                 showClose: true,
-                title: '错误',
                 message: '原密码输入错误！',
                 type: 'error'
               })
             } else {
               _this.$notify({
                 showClose: true,
-                title: '错误',
+                title: '警告',
                 message: '修改密码失败！',
-                type: 'error'
+                type: 'warning'
               })
             }
             _this.form.oldPwd = ''

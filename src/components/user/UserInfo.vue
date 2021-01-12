@@ -11,6 +11,13 @@
       <el-form-item label="姓名">
         <el-input v-model="form.name"></el-input>
       </el-form-item>
+      <el-form-item
+        prop="mail"
+        label="邮箱"
+        :rules="[{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+        { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]">
+        <el-input v-model="form.mail"></el-input>
+      </el-form-item>
       <el-form-item label="地址">
         <el-input v-model="form.addr"></el-input>
       </el-form-item>
@@ -33,6 +40,7 @@
           card: '2120170000',
           phone: '17700000000',
           name: 'kirito',
+          mail: '1204505357@qq.com',
           addr: '中苑',
           count: 0
         }
@@ -64,6 +72,7 @@
               _this.form.name = response.data.user.name
               _this.form.addr = response.data.user.addr
               _this.form.count = response.data.user.count
+              _this.form.mail = response.data.user.mail
             }
           })
           .catch(function (error) {
@@ -83,6 +92,7 @@
         param.append("token", token)
         param.append("name", this.form.name)
         param.append("addr", this.form.addr)
+        param.append("mail", this.form.mail)
         this.$axios({
           method: 'post',
           url: 'http://localhost:8080/user/updateInfo',
@@ -108,9 +118,9 @@
             } else {
               _this.$notify({
                 showClose: true,
-                title: '错误',
+                title: '警告',
                 message: '信息更新失败！',
-                type: 'error'
+                type: 'warning'
               })
             }
           })

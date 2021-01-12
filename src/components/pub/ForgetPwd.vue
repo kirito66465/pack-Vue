@@ -122,13 +122,11 @@
         const _this = this
         this.$refs['user'].validate((valid) => {
           if (valid) {
-            console.log(_this.active)
             _this.active++
             if (_this.active > 2) {
               _this.active = 0
             }
           } else {
-            console.log('error submit!!');
             return false
           }
         })
@@ -137,10 +135,8 @@
         const _this = this
         this.$refs['user'].validate((valid) => {
           if (valid) {
-            console.log("----------忘记密码----------")
             _this.forgetPwd()
           } else {
-            console.log('请正确输入内容!!!');
             return false
           }
         })
@@ -160,7 +156,6 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data.result === 'update password success') {
-              console.log("重置密码成功！")
               _this.$message({
                 showClose: true,
                 message: '重置密码成功！',
@@ -171,18 +166,17 @@
               localStorage.setItem("name", response.data.name)
               _this.$router.push('/userHome')
             } else if (response.data.result === 'not exist') {
-              console.log("用户不存在！")
               _this.$message({
                 showClose: true,
                 message: '学号/手机号输入错误，或者用户不存在！',
                 type: 'warning'
               })
             } else {
-              console.log("重置密码失败！")
-              _this.$notify.error({
+              _this.$notify({
                 showClose: true,
-                title: '错误',
-                message: '重置密码失败！'
+                title: '警告',
+                message: '重置密码失败！',
+                type: 'warning'
               })
             }
           })

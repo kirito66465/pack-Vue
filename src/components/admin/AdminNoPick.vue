@@ -111,16 +111,14 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchPacks" />
             </template>
             <template slot-scope="scope">
               <el-button
                 size="mini"
-                @click="handlePick(scope.$index, scope.row)">取件</el-button>
-              <el-button
-                size="mini"
                 type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+                @click="handleNotice(scope.$index, scope.row)">邮件通知</el-button>
             </template>
           </el-table-column>
         </el-table>
@@ -176,28 +174,68 @@
         console.log(`当前页: ${val}`)
         this.getPacks()
       },
-      // 单条记录编辑
-      handlePick(index, row) {
+      // 单条记录短信通知
+      handleNotice(index, row) {
         console.log(index, row)
-      },
-      // 单条记录删除
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.$confirm('将删除此件快递, 是否继续?', '提示', {
+        const _this = this
+        this.$confirm('将邮件通知收件人此件快递已到站, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            showClose: true,
-            type: 'success',
-            message: '删除成功!'
-          });
+          let param = new URLSearchParams()
+          let token = localStorage.getItem("token")
+          param.append('id', _this.tableData[index].id)
+          param.append('token', token)
+          _this.$axios({
+            method: 'post',
+            url: 'http://localhost:8080/mail/notice',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data.result === 'do success') {
+                _this.$message({
+                  showClose: true,
+                  type: 'success',
+                  message: '邮件通知成功!'
+                })
+              } else if (response.data.result === 'do fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '错误',
+                  message: '邮件通知失败！',
+                  type: 'warning'
+                })
+              } else if (response.data.result === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '登录状态失效，请重新登录！',
+                  type: 'warning'
+                })
+                _this.$router.push('/loginAndRegister')
+              } else if (response.data.result === 'not exist') {
+                _this.$message({
+                  showClose: true,
+                  message: '该用户未填写邮箱信息，无法邮件通知！',
+                  type: 'warning'
+                })
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
         }).catch(() => {
           this.$message({
             showClose: true,
             type: 'info',
-            message: '已取消删除'
+            message: '已取消邮件通知'
           })
         })
       },
@@ -265,10 +303,14 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
+      },
+      searchPacks() {
+        alert(this.search)
       }
     },
     created() {
       this.setFilters()
+      this.getPacks()
     },
     mounted() {
       this.setFilters()
