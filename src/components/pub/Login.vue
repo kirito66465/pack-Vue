@@ -25,10 +25,12 @@
 
 <script>
   import md5 from 'js-md5'
+  import Constant from "./Constant"
   export default {
     name: "Login",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         user: {
           card: '',
           password: '',
@@ -53,7 +55,7 @@
         const _this = this
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/login',
+          url: _this.baseUrl + '/user/login',
           data: param
         })
           .then(function (response) {
@@ -89,7 +91,7 @@
         const _this = this
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/admin/login',
+          url: _this.baseUrl + '/admin/login',
           data: param
         })
           .then(function (response) {
@@ -128,7 +130,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/getInfo',
+          url: _this.baseUrl + '/user/getInfo',
           data: param
         })
           .then(function (response) {
@@ -166,7 +168,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/admin/getInfo',
+          url: _this.baseUrl + '/admin/getInfo',
           data: param
         })
           .then(function (response) {

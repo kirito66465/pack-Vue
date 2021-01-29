@@ -32,10 +32,12 @@
 </template>
 
 <script>
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "UserInfo",
     data() {
 		  return {
+		    baseUrl: Constant.data.baseUrl,
         form: {
           card: '2120170000',
           phone: '17700000000',
@@ -54,7 +56,7 @@
         param.append("token", token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/getInfo',
+          url: _this.baseUrl + '/user/getInfo',
           data: param
         })
           .then(function (response) {
@@ -95,7 +97,7 @@
         param.append("mail", this.form.mail)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/updateInfo',
+          url: _this.baseUrl + '/user/updateInfo',
           data: param
         })
           .then(function (response) {

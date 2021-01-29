@@ -116,10 +116,12 @@
 </template>
 
 <script>
+  import Constant from "../pub/Constant"
   export default {
     name: "AdminShelf",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         tableData: [{
           id: '12987122',
           org: '中通',
@@ -262,7 +264,7 @@
         param.append('shelf', choice)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getShelfPack',
+          url: _this.baseUrl + '/pack/getShelfPack',
           data: param
         })
           .then(function (response) {

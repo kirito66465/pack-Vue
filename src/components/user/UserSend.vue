@@ -90,10 +90,12 @@
 <script>
   import qs from 'qs'
   import { regionData, CodeToText } from 'element-china-area-data'
+  import Constant from "../pub/Constant"
 	export default {
 		name: "UserSend",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         form: {
           admin: '',
           name: '',
@@ -186,7 +188,7 @@
               let addr = CodeToText[_this.form.addr[0]] + CodeToText[_this.form.addr[1]] + CodeToText[_this.form.addr[2]]
               _this.$axios({
                 method: 'post',
-                url: 'http://localhost:8080/send/getSendInfo',
+                url: _this.baseUrl + '/send/getSendInfo',
                 data: {
                   admin: _this.form.admin,
                   name: _this.form.name,

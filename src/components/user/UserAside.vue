@@ -47,11 +47,12 @@
 </template>
 
 <script>
-
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "UserAside",
     data() {
 		  return {
+		    baseUrl: Constant.data.baseUrl,
         dialogFormVisible: false,
         pick: {
           addr: "",
@@ -84,7 +85,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/pickPackByUser',
+          url: _this.baseUrl + '/pack/pickPackByUser',
           data: param
         })
           .then(function (response) {
@@ -150,7 +151,7 @@
         param.append("token", token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getUserTotalNum',
+          url: _this.baseUrl + '/pack/getUserTotalNum',
           data: param
         })
           .then(function (response) {
@@ -178,7 +179,7 @@
           })
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/send/getTotalByUser',
+          url: _this.baseUrl + '/send/getTotalByUser',
           data: param
         })
           .then(function (response) {

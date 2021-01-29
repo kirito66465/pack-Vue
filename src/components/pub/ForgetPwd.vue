@@ -69,6 +69,7 @@
 
 <script>
 	import md5 from "js-md5"
+  import Constant from "./Constant"
   export default {
 		name: "ForgetPwd",
     data() {
@@ -92,6 +93,7 @@
         }
       }
 		  return {
+        baseUrl: Constant.data.baseUrl,
         active: 0,
         user: {
           card: '',
@@ -150,7 +152,7 @@
         const _this = this
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/forgetPwd',
+          url: _this.baseUrl + 'http://localhost:8080/user/forgetPwd',
           data: param
         })
           .then(function (response) {

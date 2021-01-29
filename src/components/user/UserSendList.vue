@@ -149,10 +149,12 @@
 </template>
 
 <script>
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "UserSendList",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         currentPage: 1,       // 默认当前页，第一页
         total: 21,            // 总记录条数
         pageSize: 10,         // 每一页的记录条数
@@ -199,7 +201,7 @@
             param.append('token', token)
             _this.$axios({
               method: 'post',
-              url: 'http://localhost:8080/send/pay',
+              url: _this.baseUrl + '/send/pay',
               data: param
             })
               .then(function (response) {
@@ -281,7 +283,7 @@
             param.append('token', token)
             _this.$axios({
               method: 'post',
-              url: 'http://localhost:8080/send/cancel',
+              url: _this.baseUrl + '/send/cancel',
               data: param
             })
               .then(function (response) {
@@ -347,7 +349,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/send/getSendByUser/' + _this.currentPage,
+          url: _this.baseUrl + '/send/getSendByUser/' + _this.currentPage,
           data: param
         })
           .then(function (response) {

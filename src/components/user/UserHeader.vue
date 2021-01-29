@@ -47,10 +47,12 @@
 </template>
 
 <script>
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "UserHeader",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         imgUrl: '',
         card: '',
         name: ''
@@ -64,7 +66,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/exit',
+          url: _this.baseUrl + '/user/exit',
           data: param
         })
           .then(function (response) {

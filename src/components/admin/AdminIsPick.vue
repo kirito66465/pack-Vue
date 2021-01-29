@@ -134,10 +134,12 @@
 </template>
 
 <script>
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "AdminIsPack",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         currentPage: 1,       // 默认当前页，第一页
         total: 21,            // 总记录条数
         pageSize: 10,         // 每一页的记录条数
@@ -184,7 +186,7 @@
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getAdminIsPick/' + _this.currentPage,
+          url: _this.baseUrl + '/pack/getAdminIsPick/' + _this.currentPage,
           data: param
         })
           .then(function (response) {

@@ -47,10 +47,12 @@
 </template>
 
 <script>
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "AdminHeader",
     data() {
       return {
+        baseUrl: Constant.data.baseUrl,
         imgUrl: '',
         adminCard: '',
         adminName: ''
@@ -64,7 +66,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/admin/exit',
+          url: _this.baseUrl + '/admin/exit',
           data: param
         })
           .then(function (response) {

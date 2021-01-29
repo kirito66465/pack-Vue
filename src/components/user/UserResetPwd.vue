@@ -28,10 +28,12 @@
 
 <script>
   import md5 from 'js-md5'
+  import Constant from "../pub/Constant"
 	export default {
 		name: "UserResetPwd",
     data() {
 		  return {
+		    baseUrl: Constant.data.baseUrl,
 		    form: {
 		      oldPwd: '',
           newPwd: '',
@@ -58,7 +60,7 @@
         param.append('checkCode', this.form.code)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/resetPwd',
+          url: _this.baseUrl + '/user/resetPwd',
           data: param
         })
           .then(function (response) {
@@ -120,7 +122,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/getCheckCode',
+          url: _this.baseUrl + '/getCheckCode',
           data: param
         })
           .then(function (response) {

@@ -39,6 +39,7 @@
 <script>
   import Schema from 'async-validator'
   import md5 from "js-md5"
+  import Constant from "./Constant"
   export default {
     name: "Register",
     data() {
@@ -62,6 +63,7 @@
         }
       }
       return {
+        baseUrl: Constant.data.baseUrl,
         user: {
           card: '',
           password: '',
@@ -108,7 +110,7 @@
         let pwd = md5(this.user.password)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/user/register',
+          url: _this.baseUrl + '/user/register',
           data: {
             card: _this.user.card,
             password: pwd,

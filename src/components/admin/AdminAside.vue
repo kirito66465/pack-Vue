@@ -36,10 +36,12 @@
 </template>
 
 <script>
-	export default {
+	import Constant from "../pub/Constant"
+  export default {
 		name: "AdminAside",
     data() {
 		  return {
+		    baseUrl: Constant.data.baseUrl,
         // 所有快递数量，包括已取出和未取出的快递
         allTotal: 100,
         // 已取出的快递数量
@@ -78,7 +80,7 @@
         param.append("token", token)
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/pack/getAdminTotalNum',
+          url: _this.baseUrl + '/pack/getAdminTotalNum',
           data: param
         })
           .then(function (response) {
@@ -107,7 +109,7 @@
           })
         this.$axios({
           method: 'post',
-          url: 'http://localhost:8080/send/getTotalByAdmin',
+          url: _this.baseUrl + '/send/getTotalByAdmin',
           data: param
         })
           .then(function (response) {
@@ -147,7 +149,7 @@
           param.append('token', token)
           _this.$axios({
             method: 'post',
-            url: 'http://localhost:8080/pack/addPack',
+            url: _this.baseUrl + '/pack/addPack',
             data: param
           })
             .then(function (response) {
