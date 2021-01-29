@@ -90,6 +90,12 @@
                 message: '原密码输入错误！',
                 type: 'error'
               })
+            } else if (response.data.result === 'code has expired') {
+              _this.$message({
+                showClose: true,
+                message: '验证码已过期！',
+                type: 'info'
+              })
             } else {
               _this.$notify({
                 showClose: true,

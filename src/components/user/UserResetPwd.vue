@@ -84,6 +84,12 @@
                 message: '验证码输入错误！',
                 type: 'warning'
               })
+            } else if (response.data.result === 'code has expired') {
+              _this.$message({
+                showClose: true,
+                message: '验证码已过期！',
+                type: 'info'
+              })
             } else if (response.data.result === 'password not same') {
               _this.$message({
                 showClose: true,
