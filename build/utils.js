@@ -47,7 +47,9 @@ exports.cssLoaders = function (options) {
     if (options.extract) {
       return ExtractTextPlugin.extract({
         use: loaders,
-        fallback: 'vue-style-loader'
+        fallback: 'vue-style-loader',
+        // elementUI 字体图标显示为框框，加上下面语句
+        publicPath: '../../'
       })
     } else {
       return ['vue-style-loader'].concat(loaders)

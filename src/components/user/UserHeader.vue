@@ -66,7 +66,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/user/exit',
+          url: _this.baseUrl + '/user/logout',
           data: param
         })
           .then(function (response) {

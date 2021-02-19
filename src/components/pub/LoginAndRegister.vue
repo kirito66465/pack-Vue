@@ -32,9 +32,12 @@
       }
     },
     methods: {
+      /*
+      // 标签页点击处理
       handleClick(tab, event) {
         console.log(tab, event);
       }
+       */
     }
   }
 </script>

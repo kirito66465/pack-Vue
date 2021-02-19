@@ -1,33 +1,36 @@
 <template>
 	<div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="学号">
-        <el-input v-model="form.card" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="手机号">
-        <el-input v-model="form.phone" disabled></el-input>
-      </el-form-item>
-      <el-link type="primary" :underline="false">如需更改学号和手机号，请联系管理员操作！</el-link>
-      <el-form-item label="姓名">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
-      <el-form-item
-        prop="mail"
-        label="邮箱"
-        :rules="[{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
+    <el-row>
+      <el-col :span="8" :offset="8">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item label="学号">
+            <el-input v-model="form.card" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="手机号">
+            <el-input v-model="form.phone" disabled></el-input>
+          </el-form-item>
+          <el-link type="primary" :underline="false">如需更改学号和手机号，请联系管理员操作！</el-link>
+          <el-form-item label="姓名">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item
+            prop="mail"
+            label="邮箱"
+            :rules="[{ required: true, message: '请输入邮箱地址', trigger: 'blur' },
         { type: 'email', message: '请输入正确的邮箱地址', trigger: ['blur', 'change'] }]">
-        <el-input v-model="form.mail"></el-input>
-      </el-form-item>
-      <el-form-item label="地址">
-        <el-input v-model="form.addr"></el-input>
-      </el-form-item>
-      <el-form-item label="未取快递">
-        <el-input v-model="form.count" disabled></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">修改信息</el-button>
-      </el-form-item>
-    </el-form>
+            <el-input v-model="form.mail"></el-input>
+          </el-form-item>
+          <el-form-item label="地址">
+            <el-input v-model="form.addr"></el-input>
+          </el-form-item>
+          <el-form-item label="未取快递">
+            <el-input v-model="form.count" disabled></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="onSubmit">修改信息</el-button>
+        </el-form>
+      </el-col>
+    </el-row>
+
   </div>
 </template>
 

@@ -1,18 +1,30 @@
 <template>
 	<div>
-    <el-button type="text" @click="dialogFormVisible = true">我要取件</el-button>
+    <el-row><br></el-row>
+    <el-row><br></el-row>
+    <el-row>
+      <el-button type="text" @click="dialogFormVisible = true">我要取件</el-button>
+    </el-row>
     <el-dialog title="我要取件" :visible.sync="dialogFormVisible">
       <el-form :model="pick">
-        <el-form-item label="驿站地址" :label-width="formLabelWidth">
-          <el-select v-model="pick.addr" placeholder="请选择驿站">
-            <el-option label="中苑" value="中苑"></el-option>
-            <el-option label="西苑" value="西苑"></el-option>
-            <el-option label="北苑" value="北苑"></el-option>
-          </el-select>
-        </el-form-item>
-        <el-form-item label="取件码" :label-width="formLabelWidth">
-          <el-input v-model="pick.code" autocomplete="off" placeholder="请输入取件码"></el-input>
-        </el-form-item>
+        <el-row>
+          <el-col :span="10" :offset="6">
+            <el-form-item label="驿站地址" :label-width="formLabelWidth">
+              <el-select v-model="pick.addr" placeholder="请选择驿站">
+                <el-option label="中苑" value="中苑"></el-option>
+                <el-option label="西苑" value="西苑"></el-option>
+                <el-option label="北苑" value="北苑"></el-option>
+              </el-select>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="10" :offset="6">
+            <el-form-item label="取件码" :label-width="formLabelWidth">
+              <el-input v-model="pick.code" autocomplete="off" placeholder="请输入取件码" style="width: 220px"></el-input>
+            </el-form-item>
+          </el-col>
+        </el-row>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialogFormVisible = false">取 消</el-button>
@@ -21,27 +33,41 @@
     </el-dialog>
 
     <div>
-      <el-badge :value="allTotal" class="item">
-        <el-button size="small">所有快递数量</el-button>
-      </el-badge>
-      <el-badge :value="isTotal" class="item">
-        <el-button size="small">已取快递数量</el-button>
-      </el-badge>
-      <el-badge :value="noTotal" class="item">
-        <el-button size="small">未取快递数量</el-button>
-      </el-badge>
-      <el-badge :value="sendSubmit" class="item">
-        <el-button size="small">已提交寄件数量</el-button>
-      </el-badge>
-      <el-badge :value="sendConfirm" class="item">
-        <el-button size="small">已确认寄件数量</el-button>
-      </el-badge>
-      <el-badge :value="sendPay" class="item">
-        <el-button size="small">已支付寄件数量</el-button>
-      </el-badge>
-      <el-badge :value="sendOut" class="item">
-        <el-button size="small">已发出寄件数量</el-button>
-      </el-badge>
+      <el-row>
+        <el-badge :value="allTotal" class="item">
+          <el-button size="small">所有快递数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="isTotal" class="item">
+          <el-button size="small">已取快递数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="noTotal" class="item">
+          <el-button size="small">未取快递数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendSubmit" class="item">
+          <el-button size="small">已提交寄件数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendConfirm" class="item">
+          <el-button size="small">已确认寄件数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendPay" class="item">
+          <el-button size="small">已支付寄件数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendOut" class="item">
+          <el-button size="small">已发出寄件数量</el-button>
+        </el-badge>
+      </el-row>
     </div>
   </div>
 </template>

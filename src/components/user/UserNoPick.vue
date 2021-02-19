@@ -18,13 +18,13 @@
                   <span>{{ props.row.org }}</span>
                 </el-form-item>
                 <el-form-item label="收件人: ">
-                  <span>{{ props.row.per_name }}</span>
+                  <span>{{ props.row.perName }}</span>
                 </el-form-item>
                 <el-form-item label="收件手机号: ">
-                  <span>{{ props.row.per_tel }}</span>
+                  <span>{{ props.row.perTel }}</span>
                 </el-form-item>
                 <el-form-item label="收件地址: ">
-                  <span>{{ props.row.per_addr }}</span>
+                  <span>{{ props.row.perAddr }}</span>
                 </el-form-item>
                 <el-form-item label="所在驿站: ">
                   <span>{{ props.row.addr }}</span>
@@ -33,10 +33,10 @@
                   <span>{{ props.row.code }}</span>
                 </el-form-item>
                 <el-form-item label="驿站联系人: ">
-                  <span>{{ props.row.cont_name }}</span>
+                  <span>{{ props.row.contName }}</span>
                 </el-form-item>
                 <el-form-item label="驿站联系方式: ">
-                  <span>{{ props.row.cont_tel }}</span>
+                  <span>{{ props.row.contTel }}</span>
                 </el-form-item>
                 <el-form-item label="快递状态: ">
                   <span>{{ props.row.status }}</span>
@@ -90,7 +90,7 @@
           </el-table-column>
           <el-table-column
             label="收件人"
-            prop="per_name"
+            prop="perName"
             width="200">
           </el-table-column>
           <el-table-column
@@ -121,6 +121,9 @@
                 placeholder="输入关键字搜索"/>
             </template>
             <template slot-scope="scope">
+              <el-button
+                size="mini"
+                @click="handlePick(scope.$index, scope.row)">取件</el-button>
               <el-button
                 size="mini"
                 type="danger"
@@ -157,13 +160,13 @@
         tableData: [{
           id: '12987122',
           org: '中通',
-          per_name: 'user1',
-          per_tel: '12345678900',
-          per_addr: '中苑',
+          perName: 'user1',
+          perTel: '12345678900',
+          perAddr: '中苑',
           addr: '中苑',
           code: '1-1-16',
-          cont_name: '中苑快递员',
-          cont_tel: '12345678910',
+          contName: '中苑快递员',
+          contTel: '12345678910',
           status: '未取件',
           start: '2020-12-28 10:24:00',
           end: '',
@@ -184,21 +187,132 @@
       // 单条记录删除
       handleDelete(index, row) {
         console.log(index, row)
+        const _this = this
         this.$confirm('将删除此件快递, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            showClose: true,
-            type: 'success',
-            message: '删除成功!'
-          });
+          let param = new URLSearchParams()
+          param.append('id', _this.tableData[index].id)
+          let token = localStorage.getItem('token')
+          param.append('token', token)
+          _this.$axios({
+            method: 'post',
+            url: _this.baseUrl + '/pack/deletePack',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '登录状态失效，请重新登录！',
+                  type: 'warning'
+                })
+                _this.$router.push('/loginAndRegister')
+              } else if (response.data === 'do fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '删除失败！',
+                  type: 'warning'
+                })
+              } else if (response.data === 'do success') {
+                _this.$message({
+                  showClose: true,
+                  type: 'success',
+                  message: '删除成功!'
+                })
+                console.log("11111111111")
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                console.log(NewPage)
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
         }).catch(() => {
           this.$message({
             showClose: true,
             type: 'info',
             message: '已取消删除'
+          })
+        })
+      },
+      // 单件包裹取件
+      handlePick(index, row) {
+        console.log(index, row)
+        const _this = this
+        this.$confirm('将取件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = new URLSearchParams()
+          let token = localStorage.getItem("token")
+          param.append('id', _this.tableData[index].id)
+          param.append('token', token)
+          _this.$axios({
+            method: 'post',
+            url: _this.baseUrl + '/pack/pickById',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'pick up the package success') {
+                _this.$message({
+                  showClose: true,
+                  message: '取件成功！',
+                  type: 'success'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              } else if (response.data === 'not exist') {
+                _this.$message({
+                  showClose: true,
+                  message: '该快递不存在！',
+                  type: 'warning'
+                })
+              } else if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '请在登录状态操作!',
+                  type: 'warning'
+                })
+                _this.$router.push('/LoginAndRegister')
+              } else {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '取件失败！',
+                  type: 'warning'
+                })
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
+        }).catch(() => {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '已取消取件'
           })
         })
       },

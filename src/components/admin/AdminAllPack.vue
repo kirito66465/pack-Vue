@@ -18,13 +18,13 @@
                   <span>{{ props.row.org }}</span>
                 </el-form-item>
                 <el-form-item label="收件人: ">
-                  <span>{{ props.row.per_name }}</span>
+                  <span>{{ props.row.perName }}</span>
                 </el-form-item>
                 <el-form-item label="收件手机号: ">
-                  <span>{{ props.row.per_tel }}</span>
+                  <span>{{ props.row.perTel }}</span>
                 </el-form-item>
                 <el-form-item label="收件地址: ">
-                  <span>{{ props.row.per_addr }}</span>
+                  <span>{{ props.row.perAddr }}</span>
                 </el-form-item>
                 <el-form-item label="所在驿站: ">
                   <span>{{ props.row.addr }}</span>
@@ -33,10 +33,10 @@
                   <span>{{ props.row.code }}</span>
                 </el-form-item>
                 <el-form-item label="驿站联系人: ">
-                  <span>{{ props.row.cont_name }}</span>
+                  <span>{{ props.row.contName }}</span>
                 </el-form-item>
                 <el-form-item label="驿站联系方式: ">
-                  <span>{{ props.row.cont_tel }}</span>
+                  <span>{{ props.row.contTel }}</span>
                 </el-form-item>
                 <el-form-item label="快递状态: ">
                   <span>{{ props.row.status }}</span>
@@ -83,7 +83,7 @@
           </el-table-column>
           <el-table-column
             label="收件人"
-            prop="per_name"
+            prop="perName"
             width="200">
           </el-table-column>
           <el-table-column
@@ -146,13 +146,13 @@
         tableData: [{
           id: '12987122',
           org: '中通',
-          per_name: 'user1',
-          per_tel: '12345678900',
-          per_addr: '中苑',
+          perName: 'user1',
+          perTel: '12345678900',
+          perAddr: '中苑',
           addr: '中苑',
           code: '1-1-16',
-          cont_name: '中苑快递员',
-          cont_tel: '12345678910',
+          contName: '中苑快递员',
+          contTel: '12345678910',
           status: '未取件',
           start: '2020-12-28 10:24:00',
           end: '',
@@ -240,12 +240,12 @@
     },
     created() {
       this.setFilters()
-      const _this = this
-      // 轮询获取接口数据
-      window.setInterval(() => {
-        setTimeout(_this.getPacks(), 0);
-      }, 3000);
-
+      this.getPacks()
+      // const _this = this
+      // // 轮询获取接口数据
+      // window.setInterval(() => {
+      //   setTimeout(_this.getPacks(), 0);
+      // }, 3000);
     },
     mounted() {
       this.setFilters()
@@ -256,6 +256,7 @@
 <style scoped>
   .demo-table-expand {
     font-size: 0;
+    font-weight: bold;
   }
   .demo-table-expand label {
     width: 90px;

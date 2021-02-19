@@ -1,25 +1,27 @@
 <template>
 	<div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="学号">
-        <el-input v-model="form.card" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="手机号">
-        <el-input v-model="form.phone"></el-input>
-      </el-form-item>
-      <el-form-item label="姓名">
-        <el-input v-model="form.name"></el-input>
-      </el-form-item>
-      <el-form-item label="地址">
-        <el-input v-model="form.addr" disabled></el-input>
-      </el-form-item>
-      <el-form-item label="未取快递">
-        <el-input v-model="form.count" disabled></el-input>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit">修改信息</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <el-col :span="8" :offset="8">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item label="学号">
+            <el-input v-model="form.card" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="手机号">
+            <el-input v-model="form.phone"></el-input>
+          </el-form-item>
+          <el-form-item label="姓名">
+            <el-input v-model="form.name"></el-input>
+          </el-form-item>
+          <el-form-item label="地址">
+            <el-input v-model="form.addr" disabled></el-input>
+          </el-form-item>
+          <el-form-item label="未取快递">
+            <el-input v-model="form.count" disabled></el-input>
+          </el-form-item>
+          <el-button type="primary" @click="onSubmit">修改信息</el-button>
+        </el-form>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

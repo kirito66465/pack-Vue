@@ -1,17 +1,28 @@
 <template>
   <div>
-    <el-button type="text" @click="addPack">快递入站</el-button>
+    <el-row><br></el-row>
+    <el-row><br></el-row>
+    <el-row>
+      <el-button type="text" @click="addPack">快递入站</el-button>
+    </el-row>
+
     <div>
       <!-- 驿站容纳空间百分百:notTotal / maxTotal -->
-      <el-badge :value="allTotal" class="item">
-        <el-button size="small">所有快递数量</el-button>
-      </el-badge>
-      <el-badge :value="isTotal" class="item">
-        <el-button size="small">已取快递数量</el-button>
-      </el-badge>
-      <el-badge :value="noTotal" class="item">
-        <el-button size="small">未取快递数量</el-button>
-      </el-badge>
+      <el-row>
+        <el-badge :value="allTotal" class="item">
+          <el-button size="small">所有快递数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="isTotal" class="item">
+          <el-button size="small">已取快递数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="noTotal" class="item">
+          <el-button size="small">未取快递数量</el-button>
+        </el-badge>
+      </el-row>
       <div class="bottom">
         <div class="block">
           <el-tooltip class="item" effect="dark" content="驿站快递容纳百分比" placement="right">
@@ -19,18 +30,26 @@
           </el-tooltip>
         </div>
       </div>
-      <el-badge :value="sendSubmit" class="item">
-        <el-button size="small">已提交寄件数量</el-button>
-      </el-badge>
-      <el-badge :value="sendConfirm" class="item">
-        <el-button size="small">已确认寄件数量</el-button>
-      </el-badge>
-      <el-badge :value="sendPay" class="item">
-        <el-button size="small">已支付寄件数量</el-button>
-      </el-badge>
-      <el-badge :value="sendOut" class="item">
-        <el-button size="small">已发出寄件数量</el-button>
-      </el-badge>
+      <el-row>
+        <el-badge :value="sendSubmit" class="item">
+          <el-button size="small">已提交寄件数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendConfirm" class="item">
+          <el-button size="small">已确认寄件数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendPay" class="item">
+          <el-button size="small">已支付寄件数量</el-button>
+        </el-badge>
+      </el-row>
+      <el-row>
+        <el-badge :value="sendOut" class="item">
+          <el-button size="small">已发出寄件数量</el-button>
+        </el-badge>
+      </el-row>
     </div>
   </div>
 </template>

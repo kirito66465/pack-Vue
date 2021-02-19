@@ -1,28 +1,30 @@
 <template>
 	<div>
-    <el-form ref="form" :model="form" label-width="80px">
-      <el-form-item label="原密码">
-        <el-input v-model="form.oldPwd" placeholder="请输入原密码" show-password clearable type="password"></el-input>
-      </el-form-item>
-      <el-form-item label="新密码">
-        <el-input v-model="form.newPwd" placeholder="请输入新密码" show-password clearable type="password"></el-input>
-      </el-form-item>
-      <el-form-item label="新密码">
-        <el-input v-model="form.newPwdAgain" placeholder="请再次输入新密码" show-password clearable type="password"></el-input>
-      </el-form-item>
-      <el-form-item label="验证码">
-        <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
-        <el-image
-          style="width: 100px; height: 100px"
-          :src="url"
-          :fit="fit"
-          @click="getCheckCode">
-        </el-image>
-      </el-form-item>
-      <el-form-item>
-        <el-button type="primary" @click="onSubmit" :disabled="form.code === ''">修改密码</el-button>
-      </el-form-item>
-    </el-form>
+    <el-row>
+      <el-col :span="8" :offset="8">
+        <el-form ref="form" :model="form" label-width="80px">
+          <el-form-item label="原密码">
+            <el-input v-model="form.oldPwd" placeholder="请输入原密码" show-password clearable type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="新密码">
+            <el-input v-model="form.newPwd" placeholder="请输入新密码" show-password clearable type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="新密码">
+            <el-input v-model="form.newPwdAgain" placeholder="请再次输入新密码" show-password clearable type="password"></el-input>
+          </el-form-item>
+          <el-form-item label="验证码">
+            <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
+            <el-image
+              style="width: 100px; height: 100px"
+              :src="url"
+              :fit="fit"
+              @click="getCheckCode">
+            </el-image>
+          </el-form-item>
+          <el-button type="primary" @click="onSubmit" :disabled="form.code === ''">修改密码</el-button>
+        </el-form>
+      </el-col>
+    </el-row>
   </div>
 </template>
 

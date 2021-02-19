@@ -61,7 +61,7 @@
   }
 
   #toLogin {
-    margin-left: 96%;
+    margin-left: 94%;
   }
 
   body {
