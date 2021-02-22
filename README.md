@@ -55,15 +55,32 @@ newSource = vmContext.HTML_WEBPACK_PLUGIN_RESULT;
 > 找到本地的 `xxx/build/utils.js`，找到内容修改为以下：
 ```javascript
 if (options.extract) {
-      return ExtractTextPlugin.extract({
+    return ExtractTextPlugin.extract({
         use: loaders,
         fallback: 'vue-style-loader',
         // elementUI 字体图标显示为框框，加上下面语句
         publicPath: '../../'
-      })
-    } else {
-      return ['vue-style-loader'].concat(loaders)
+    })
+} else {
+    return ['vue-style-loader'].concat(loaders)
+}
+```
+3. 多列筛选过滤问题
+> 解决方法：
+> filters.列名 未有值时为 defined 而非 null
+```javascript
+// 条件过滤
+handleFilter(filters) {
+    if (filters.addr !== undefined) {
+        this.addrFilter = filters.addr
+        console.log("addr: " + this.addrFilter)
     }
+    if (filters.org !== undefined) {
+        this.orgFilter = filters.org
+        console.log("org: " + this.orgFilter)
+    }
+    this.getPacks(this.orgFilter, this.addrFilter)
+}
 ```
 
 ## 存在问题

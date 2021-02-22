@@ -316,7 +316,7 @@
     },
     mounted() {
       this.setFilters()
-      this.getPacks()
+      // this.getPacks()
     }
   }
 </script>

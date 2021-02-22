@@ -328,8 +328,8 @@
           || _this.form.addr[0] === '140000' || _this.form.addr[0] === '220000' || _this.form.addr[0] === '350000'
           || _this.form.addr[0] === '360000' || _this.form.addr[0] === '370000' || _this.form.addr[0] === '410000'
           || _this.form.addr[0] === '420000' || _this.form.addr[0] === '430000' || _this.form.addr[0] === '440000'
-          || _this.form.addr[0] === '500000' || _this.form.addr[0] === '410000' || _this.form.addr[0] === '520000'
-          || _this.form.addr[0] === '530000') {
+          || _this.form.addr[0] === '500000' || _this.form.addr[0] === '410000' || _this.form.addr[0] === '510000'
+          || _this.form.addr[0] === '520000' || _this.form.addr[0] === '530000') {
           _this.form.price = 3 + 10 * _this.form.weight
           _this.price.base = 13
           _this.price.weight = 10

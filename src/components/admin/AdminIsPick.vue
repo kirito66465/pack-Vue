@@ -5,6 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
+          @filter-change="filterOrg"
           stripe
           style="width: 100%"
           height="750">
@@ -73,7 +74,7 @@
             prop="org"
             width="150"
             :filters="filters"
-            :filter-method="filterOrg"
+            column-key="org"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -159,7 +160,8 @@
           end: '',
           pick: ''
         }],
-        filters: []
+        filters: [],
+        orgFilter: ''
       }
     },
     methods: {
@@ -170,18 +172,26 @@
       // 获取当前页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
-        this.getPacks()
+        this.getPacks(this.orgFilter)
       },
       // 快递所属公司过滤
-      filterOrg(value, row) {
-        return row.org === value
+      filterOrg(filters) {
+        let org = filters.org
+        console.log(org)   // 中通，申通，圆通
+        this.orgFilter = org
+        if (org === '' || org === null) {
+          this.getPacks("")
+        } else {
+          this.getPacks(org)
+        }
       },
-      getPacks() {
+      getPacks(org) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         param.append('currentPage', this.currentPage)
         param.append('pageSize', this.pageSize)
         param.append('token', token)
+        param.append('org', org)
         const _this = this
         console.log("准备发出请求")
         this.$axios({
@@ -239,11 +249,11 @@
     },
     created() {
 		  this.setFilters()
-      this.getPacks()
+      this.getPacks("")
     },
     mounted() {
       this.setFilters()
-		  this.getPacks()
+		  // this.getPacks()
     }
   }
 </script>

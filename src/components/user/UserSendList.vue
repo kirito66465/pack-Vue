@@ -5,6 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
+          @filter-change="filterOrg"
           stripe
           style="width: 100%"
           height="750">
@@ -29,7 +30,7 @@
                 <el-form-item label="收件人地址: ">
                   <span>{{ props.row.to_addr }}</span>
                 </el-form-item>
-                <el-form-item label="运费: ">
+                <el-form-item label="运费: ￥">
                   <span>{{ props.row.price }}</span>
                 </el-form-item>
                 <el-form-item label="快递单号: ">
@@ -63,7 +64,7 @@
             width="150">
           </el-table-column>
           <el-table-column
-            label="运费"
+            label="运费（￥）"
             prop="price"
             width="150">
           </el-table-column>
@@ -77,14 +78,9 @@
             prop="org"
             width="200"
             :filters="[{ text: '中通', value: '中通' }
-                      , { text: '申通', value: '申通' }
-                      , { text: '圆通', value: '圆通' }
-                      , { text: '京东', value: '京东' }
-                      , { text: '顺丰', value: '顺丰' }
                       , { text: '韵达', value: '韵达' }
-                      , { text: '天天', value: '天天' }
                       , { text: 'EMS', value: 'EMS' }]"
-            :filter-method="filterOrg"
+            column-key="org"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -172,6 +168,7 @@
           status: '已提交',
           dt: '2021-01-05 16:45:00',
         }],
+        orgFilter: ''
       }
     },
     methods: {
@@ -332,19 +329,27 @@
         }
       },
       // 快递所属公司过滤
-      filterOrg(value, row) {
-        return row.org === value
+      filterOrg(filters) {
+        let org = filters.org
+        console.log(org)   // 中通，申通，圆通
+        this.orgFilter = org
+        if (org === '' || org === null) {
+          this.getPacks("")
+        } else {
+          this.getPacks(org)
+        }
       },
       // 快递状态过滤
       filterStatus(value, row) {
         return row.status === value
       },
-      getPacks() {
+      getPacks(org) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         param.append('currentPage', this.currentPage)
         param.append('pageSize', this.pageSize)
         param.append('token', token)
+        param.append('org', org)
         const _this = this
         console.log("准备发出请求")
         this.$axios({
@@ -382,10 +387,10 @@
       }
     },
     created() {
-		  this.getPacks()
+		  this.getPacks("")
     },
     mounted() {
-      this.getPacks()
+      // this.getPacks()
     },
     updated() {
 

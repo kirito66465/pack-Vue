@@ -5,6 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
+          @filter-change="handleFilter"
           stripe
           style="width: 100%"
           height="750">
@@ -80,7 +81,7 @@
                       , { text: '韵达', value: '韵达' }
                       , { text: '天天', value: '天天' }
                       , { text: 'EMS', value: 'EMS' }]"
-            :filter-method="filterOrg"
+            column-key="org"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -93,7 +94,7 @@
             prop="addr"
             width="200"
             :filters="[{ text: '中苑', value: '中苑' }, { text: '西苑', value: '西苑' }, { text: '北苑', value: '北苑' }]"
-            :filter-method="filterAddr"
+            column-key="addr"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -177,7 +178,8 @@
           end: '',
           pick: ''
         }],
-
+        orgFilter: '',
+        addrFilter: ''
       }
     },
     methods: {
@@ -188,7 +190,7 @@
       // 获取当前页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
-        this.getPacks()
+        this.getPacks(this.orgFilter, this.addrFilter)
       },
       // 单条记录删除
       handleDelete(index, row) {
@@ -254,24 +256,30 @@
           })
         })
       },
-      // 快递所属公司过滤
-      filterOrg(value, row) {
-        return row.org === value
+      // 条件过滤
+      handleFilter(filters) {
+        if (filters.addr !== undefined) {
+          this.addrFilter = filters.addr
+          console.log("addr: " + this.addrFilter)
+        }
+        if (filters.org !== undefined) {
+          this.orgFilter = filters.org
+          console.log("org: " + this.orgFilter)
+        }
+        this.getPacks(this.orgFilter, this.addrFilter)
       },
       // 快递状态过滤
       filterStatus(value, row) {
         return row.status === value
       },
-      // 快递所在驿站过滤
-      filterAddr(value, row) {
-        return row.addr === value
-      },
-      getPacks() {
+      getPacks(org, addr) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         param.append('currentPage', this.currentPage)
         param.append('pageSize', this.pageSize)
         param.append('token', token)
+        param.append('org', org)
+        param.append('addr', addr)
         const _this = this
         console.log("准备发出请求")
         this.$axios({
@@ -309,10 +317,10 @@
       }
     },
     created() {
-		  this.getPacks()
+		  this.getPacks("", "")
     },
     mounted() {
-      this.getPacks()
+      // this.getPacks()
     },
     updated() {
 

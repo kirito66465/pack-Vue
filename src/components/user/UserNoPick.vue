@@ -5,6 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
+          @filter-change="filterOrg"
           stripe
           style="width: 100%"
           height="750">
@@ -80,7 +81,7 @@
                       , { text: '韵达', value: '韵达' }
                       , { text: '天天', value: '天天' }
                       , { text: 'EMS', value: 'EMS' }]"
-            :filter-method="filterOrg"
+            column-key="org"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -102,7 +103,7 @@
             label="快递状态"
             prop="status"
             width="100"
-            :filters="[{ text: '已取出', value: '已取出' }, { text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
+            :filters="[{ text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
             :filter-method="filterStatus"
             filter-placement="bottom-end">
             <template slot-scope="scope">
@@ -172,6 +173,7 @@
           end: '',
           pick: ''
         }],
+        orgFilter: ''
       }
     },
     methods: {
@@ -182,7 +184,7 @@
       // 获取当前页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
-        this.getPacks()
+        this.getPacks(this.orgFilter)
       },
       // 单条记录删除
       handleDelete(index, row) {
@@ -317,19 +319,27 @@
         })
       },
       // 快递所属公司过滤
-      filterOrg(value, row) {
-        return row.org === value
+      filterOrg(filters) {
+        let org = filters.org
+        console.log(org)   // 中通，申通，圆通
+        this.orgFilter = org
+        if (org === '' || org === null) {
+          this.getPacks("")
+        } else {
+          this.getPacks(org)
+        }
       },
       // 快递状态过滤
       filterStatus(value, row) {
         return row.status === value
       },
-      getPacks() {
+      getPacks(org) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         param.append('currentPage', this.currentPage)
         param.append('pageSize', this.pageSize)
         param.append('token', token)
+        param.append('org', org)
         const _this = this
         console.log("准备发出请求")
         this.$axios({
@@ -367,10 +377,10 @@
       }
     },
     created() {
-      this.getPacks()
+      this.getPacks("")
     },
     mounted() {
-		  this.getPacks()
+		  // this.getPacks()
     }
   }
 </script>
