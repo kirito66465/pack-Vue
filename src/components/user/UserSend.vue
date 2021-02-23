@@ -371,7 +371,7 @@
 
 <style rel="stylesheet/scss" lang="scss">
 
-  /* el-drawer内部添加滚动条 */
+  /* el-drawer 内部添加滚动条 */
   .el-drawer.rtl {
     overflow: scroll;
   }
