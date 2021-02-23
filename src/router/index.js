@@ -18,7 +18,6 @@ import AdminInfo from "../components/admin/AdminInfo"
 import AdminIsPick from "../components/admin/AdminIsPick"
 import AdminNoPick from "../components/admin/AdminNoPick"
 import AdminShelf from "../components/admin/AdminShelf"
-import AdminCollection from "../components/admin/AdminCollection"
 
 Vue.use(Router)
 
@@ -117,11 +116,6 @@ export default new Router({
           path: '/adminHome/shelf',
           name: 'shelf',
           component: AdminShelf
-        },
-        {
-          path: '/adminHome/collection',
-          name: 'collection',
-          component: AdminCollection
         }
       ]
     }

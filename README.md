@@ -26,11 +26,6 @@ For a detailed explanation on how things work, check out the [guide](http://vuej
 3. 复制 `dist` 目录下的 `index.js` 内容到 `index.html` 中；
 4. 复制 `dist` 目录下所有内容到 `SpringBoot` 项目的 `resources/static` 目录下。
 
-TODO:
-1. 去除大部分的 `console.log()` 内容；
-2. 修改 `baseUrl` 为空；
-3. SpringBoot 项目去除 `@CrossOrigin`。
-
 ## 问题记录
 1. 打包报错 `Error: The loader "xxx/node_modules/html-webpack-plugin/lib/loader.js!xxx/index.html" didn't return html.`
 > 解决方法：
@@ -82,7 +77,3 @@ handleFilter(filters) {
     this.getPacks(this.orgFilter, this.addrFilter)
 }
 ```
-
-## 存在问题
-1. 页面布局未占满
-2. 搜索功能

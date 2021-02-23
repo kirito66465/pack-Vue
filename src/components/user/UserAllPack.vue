@@ -58,7 +58,7 @@
           <el-table-column
             type="index"
             :index="indexMethod"
-            width="50">
+            width="100">
           </el-table-column>
           <el-table-column
             type="selection"
@@ -92,7 +92,7 @@
           <el-table-column
             label="所在驿站"
             prop="addr"
-            width="200"
+            width="150"
             :filters="[{ text: '中苑', value: '中苑' }, { text: '西苑', value: '西苑' }, { text: '北苑', value: '北苑' }]"
             column-key="addr"
             filter-placement="bottom-end">
@@ -105,12 +105,12 @@
           <el-table-column
             label="取件码"
             prop="code"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="快递状态"
             prop="status"
-            width="100"
+            width="150"
             :filters="[{ text: '已取出', value: '已取出' }, { text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
             :filter-method="filterStatus"
             filter-placement="bottom-end">
@@ -127,7 +127,8 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchHandler"/>
             </template>
             <template slot-scope="scope">
               <el-button
@@ -144,7 +145,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-size="pageSize"
-          layout="total, prev, pager, next"
+          layout="total, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>
@@ -256,6 +257,14 @@
           })
         })
       },
+      // 搜索
+      searchHandler() {
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '暂未实现！'
+        })
+      },
       // 条件过滤
       handleFilter(filters) {
         if (filters.addr !== undefined) {
@@ -275,16 +284,19 @@
       getPacks(org, addr) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
-        param.append('currentPage', this.currentPage)
-        param.append('pageSize', this.pageSize)
-        param.append('token', token)
-        param.append('org', org)
-        param.append('addr', addr)
+        let jsonParam = {
+          "currentPage" : this.currentPage,
+          "pageSize" : this.pageSize,
+          "token" : token,
+          "org" : org,
+          "addr" : addr
+        }
+        param.append('json', JSON.stringify(jsonParam))
         const _this = this
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserPackByPage/' + _this.currentPage,
+          url: _this.baseUrl + '/pack/getUserPackByPage',
           data: param
         })
           .then(function (response) {

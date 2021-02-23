@@ -104,7 +104,7 @@
                 v-model="search"
                 size="mini"
                 placeholder="输入关键字搜索"
-                @keyup.enter.native="searchPacks" />
+                @keyup.enter.native="searchHandler"/>
             </template>
             <template slot-scope="scope">
               <el-button
@@ -124,7 +124,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-size="pageSize"
-          layout="total, prev, pager, next"
+          layout="total, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>
@@ -317,6 +317,14 @@
           })
         }
       },
+      // 搜索
+      searchHandler() {
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '暂未实现！'
+        })
+      },
       // 快递所属公司过滤
       filterOrg(value, row) {
         return row.org === value
@@ -381,9 +389,6 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
-      },
-      searchPacks() {
-        alert(this.search)
       }
     },
     created() {

@@ -58,7 +58,7 @@
           <el-table-column
             type="index"
             :index="indexMethod"
-            width="50">
+            width="70">
           </el-table-column>
           <el-table-column
             type="selection"
@@ -92,7 +92,7 @@
           <el-table-column
             label="收件人"
             prop="perName"
-            width="150">
+            width="130">
           </el-table-column>
           <el-table-column
             label="取件码"
@@ -121,7 +121,8 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchHandler"/>
             </template>
             <template slot-scope="scope">
               <el-button
@@ -138,7 +139,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-size="pageSize"
-          layout="total, prev, pager, next"
+          layout="total, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>
@@ -226,9 +227,7 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                console.log("11111111111")
                 let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                console.log(NewPage)
                 _this.$router.push(NewPage)
                 _this.$router.go(-1)
               }
@@ -249,6 +248,14 @@
           })
         })
       },
+      // 搜索
+      searchHandler() {
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '暂未实现！'
+        })
+      },
       // 快递所属公司过滤
       filterOrg(filters) {
         let org = filters.org
@@ -263,15 +270,18 @@
       getPacks(org) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
-        param.append('currentPage', this.currentPage)
-        param.append('pageSize', this.pageSize)
-        param.append('token', token)
-        param.append('org', org)
+        let jsonParam = {
+          "currentPage" : this.currentPage,
+          "pageSize" : this.pageSize,
+          "token" : token,
+          "org" : org
+        }
+        param.append('json', JSON.stringify(jsonParam))
         const _this = this
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserIsPick/' + _this.currentPage,
+          url: _this.baseUrl + '/pack/getUserIsPick',
           data: param
         })
           .then(function (response) {

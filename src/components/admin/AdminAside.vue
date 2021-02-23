@@ -112,7 +112,8 @@
                 type: 'warning'
               })
             } else {
-              _this.percentage = response.data.percentage
+              // 四舍五入保留小数点后两位
+              _this.percentage = response.data.percentage.toFixed(2)
               _this.allTotal = response.data.allTotal
               _this.isTotal = response.data.isTotal
               _this.noTotal = response.data.noTotal

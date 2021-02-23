@@ -108,7 +108,6 @@
             prop="start"
             width="200">
           </el-table-column>
-
         </el-table>
       </div>
     </div>

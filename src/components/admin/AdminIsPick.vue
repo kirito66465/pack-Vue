@@ -58,7 +58,7 @@
           <el-table-column
             type="index"
             :index="indexMethod"
-            width="50">
+            width="100">
           </el-table-column>
           <el-table-column
             type="selection"
@@ -67,7 +67,7 @@
           <el-table-column
             label="快递单号"
             prop="id"
-            width="200">
+            width="170">
           </el-table-column>
           <el-table-column
             label="快递公司"
@@ -115,7 +115,7 @@
                 v-model="search"
                 size="mini"
                 placeholder="输入签收人关键字搜索"
-                @keyup.enter.native="searchPacks" />
+                @keyup.enter.native="searchHandler"/>
             </template>
           </el-table-column>
         </el-table>
@@ -126,7 +126,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-size="pageSize"
-          layout="total, prev, pager, next"
+          layout="total, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>
@@ -174,6 +174,14 @@
         console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter)
       },
+      // 搜索
+      searchHandler() {
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '暂未实现！'
+        })
+      },
       // 快递所属公司过滤
       filterOrg(filters) {
         let org = filters.org
@@ -188,15 +196,18 @@
       getPacks(org) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
-        param.append('currentPage', this.currentPage)
-        param.append('pageSize', this.pageSize)
-        param.append('token', token)
-        param.append('org', org)
+        let jsonParam = {
+          "currentPage" : this.currentPage,
+          "pageSize" : this.pageSize,
+          "token" : token,
+          "org" : org
+        }
+        param.append('json', JSON.stringify(jsonParam))
         const _this = this
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getAdminIsPick/' + _this.currentPage,
+          url: _this.baseUrl + '/pack/getAdminIsPick',
           data: param
         })
           .then(function (response) {
@@ -242,9 +253,6 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
-      },
-      searchPacks() {
-        alert(this.search)
       }
     },
     created() {

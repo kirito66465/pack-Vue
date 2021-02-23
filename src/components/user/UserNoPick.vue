@@ -5,7 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
-          @filter-change="filterOrg"
+          @filter-change="handleFilter"
           stripe
           style="width: 100%"
           height="750">
@@ -58,7 +58,7 @@
           <el-table-column
             type="index"
             :index="indexMethod"
-            width="50">
+            width="100">
           </el-table-column>
           <el-table-column
             type="selection"
@@ -90,19 +90,27 @@
             </template>
           </el-table-column>
           <el-table-column
-            label="收件人"
-            prop="perName"
-            width="200">
+            label="所在驿站"
+            prop="addr"
+            width="150"
+            :filters="[{ text: '中苑', value: '中苑' }, { text: '西苑', value: '西苑' }, { text: '北苑', value: '北苑' }]"
+            column-key="addr"
+            filter-placement="bottom-end">
+            <template slot-scope="scope">
+              <el-tag
+                :type="scope.row.addr === '中苑' ? 'primary' : 'success'"
+                disable-transitions>{{scope.row.addr}}</el-tag>
+            </template>
           </el-table-column>
           <el-table-column
             label="取件码"
             prop="code"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="快递状态"
             prop="status"
-            width="100"
+            width="150"
             :filters="[{ text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
             :filter-method="filterStatus"
             filter-placement="bottom-end">
@@ -119,7 +127,8 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchHandler"/>
             </template>
             <template slot-scope="scope">
               <el-button
@@ -139,7 +148,7 @@
           @current-change="handleCurrentChange"
           :current-page.sync="currentPage"
           :page-size="pageSize"
-          layout="total, prev, pager, next"
+          layout="total, prev, pager, next, jumper"
           :total="total">
         </el-pagination>
       </div>
@@ -173,7 +182,8 @@
           end: '',
           pick: ''
         }],
-        orgFilter: ''
+        orgFilter: '',
+        addrFilter: ''
       }
     },
     methods: {
@@ -184,7 +194,7 @@
       // 获取当前页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
-        this.getPacks(this.orgFilter)
+        this.getPacks(this.orgFilter, this.addrFilter)
       },
       // 单条记录删除
       handleDelete(index, row) {
@@ -227,9 +237,7 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                console.log("11111111111")
                 let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                console.log(NewPage)
                 _this.$router.push(NewPage)
                 _this.$router.go(-1)
               }
@@ -254,97 +262,119 @@
       handlePick(index, row) {
         console.log(index, row)
         const _this = this
-        this.$confirm('将取件, 是否继续?', '提示', {
-          confirmButtonText: '确定',
-          cancelButtonText: '取消',
-          type: 'warning'
-        }).then(() => {
-          let param = new URLSearchParams()
-          let token = localStorage.getItem("token")
-          param.append('id', _this.tableData[index].id)
-          param.append('token', token)
-          _this.$axios({
-            method: 'post',
-            url: _this.baseUrl + '/pack/pickById',
-            data: param
-          })
-            .then(function (response) {
-              console.log(response.data)
-              if (response.data === 'pick up the package success') {
-                _this.$message({
-                  showClose: true,
-                  message: '取件成功！',
-                  type: 'success'
-                })
-                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                _this.$router.push(NewPage)
-                _this.$router.go(-1)
-              } else if (response.data === 'not exist') {
-                _this.$message({
-                  showClose: true,
-                  message: '该快递不存在！',
-                  type: 'warning'
-                })
-              } else if (response.data === 'please login to operate') {
-                _this.$notify({
-                  showClose: true,
-                  title: '警告',
-                  message: '请在登录状态操作!',
-                  type: 'warning'
-                })
-                _this.$router.push('/LoginAndRegister')
-              } else {
-                _this.$notify({
-                  showClose: true,
-                  title: '警告',
-                  message: '取件失败！',
-                  type: 'warning'
-                })
-              }
-            })
-            .catch(function (error) {
-              console.log(error)
-              _this.$notify.error({
-                showClose: true,
-                title: '错误',
-                message: '服务器出错啦！'
-              })
-            })
-        }).catch(() => {
-          this.$message({
+        if (row.status === '未有取件码') {
+          _this.$notify({
             showClose: true,
-            type: 'info',
-            message: '已取消取件'
+            title: '警告',
+            message: '目前未有取件码，请联系驿站管理员!',
+            type: 'warning'
           })
+        } else {
+          this.$confirm('将取件, 是否继续?', '提示', {
+            confirmButtonText: '确定',
+            cancelButtonText: '取消',
+            type: 'warning'
+          }).then(() => {
+            let param = new URLSearchParams()
+            let token = localStorage.getItem("token")
+            param.append('id', _this.tableData[index].id)
+            param.append('token', token)
+            _this.$axios({
+              method: 'post',
+              url: _this.baseUrl + '/pack/pickById',
+              data: param
+            })
+              .then(function (response) {
+                console.log(response.data)
+                if (response.data === 'pick up the package success') {
+                  _this.$message({
+                    showClose: true,
+                    message: '取件成功！',
+                    type: 'success'
+                  })
+                  let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                  _this.$router.push(NewPage)
+                  _this.$router.go(-1)
+                } else if (response.data === 'not exist') {
+                  _this.$message({
+                    showClose: true,
+                    message: '该快递不存在！',
+                    type: 'warning'
+                  })
+                } else if (response.data === 'please login to operate') {
+                  _this.$notify({
+                    showClose: true,
+                    title: '警告',
+                    message: '请在登录状态操作!',
+                    type: 'warning'
+                  })
+                  _this.$router.push('/LoginAndRegister')
+                } else {
+                  _this.$notify({
+                    showClose: true,
+                    title: '警告',
+                    message: '取件失败！',
+                    type: 'warning'
+                  })
+                }
+              })
+              .catch(function (error) {
+                console.log(error)
+                _this.$notify.error({
+                  showClose: true,
+                  title: '错误',
+                  message: '服务器出错啦！'
+                })
+              })
+          }).catch(() => {
+            this.$message({
+              showClose: true,
+              type: 'info',
+              message: '已取消取件'
+            })
+          })
+        }
+      },
+      // 搜索
+      searchHandler() {
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '暂未实现！'
         })
       },
-      // 快递所属公司过滤
-      filterOrg(filters) {
-        let org = filters.org
-        console.log(org)   // 中通，申通，圆通
-        this.orgFilter = org
-        if (org === '' || org === null) {
-          this.getPacks("")
-        } else {
-          this.getPacks(org)
+      // 条件过滤
+      handleFilter(filters) {
+        if (filters.addr !== undefined) {
+          this.addrFilter = filters.addr
+          console.log("addr: " + this.addrFilter)
         }
+        if (filters.org !== undefined) {
+          this.orgFilter = filters.org
+          console.log("org: " + this.orgFilter)
+        }
+        this.getPacks(this.orgFilter, this.addrFilter)
       },
       // 快递状态过滤
       filterStatus(value, row) {
         return row.status === value
       },
-      getPacks(org) {
+      getPacks(org, addr) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
-        param.append('currentPage', this.currentPage)
-        param.append('pageSize', this.pageSize)
-        param.append('token', token)
-        param.append('org', org)
+        let jsonParam = {
+          "currentPage" : this.currentPage,
+          "pageSize" : this.pageSize,
+          "token" : token,
+          "org" : org,
+          "addr" : addr
+        }
+        param.append('json', JSON.stringify(jsonParam))
         const _this = this
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserNoPick/' + _this.currentPage,
+          url: _this.baseUrl + '/pack/getUserNoPick',
           data: param
         })
           .then(function (response) {
@@ -377,7 +407,7 @@
       }
     },
     created() {
-      this.getPacks("")
+      this.getPacks("", "")
     },
     mounted() {
 		  // this.getPacks()
