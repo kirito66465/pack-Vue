@@ -234,9 +234,7 @@
                   type: 'success',
                   message: '删除成功!'
                 })
-                console.log("11111111111")
                 let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                console.log(NewPage)
                 _this.$router.push(NewPage)
                 _this.$router.go(-1)
               }
