@@ -5,7 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
-          @filter-change="filterOrg"
+          @filter-change="handleFilter"
           stripe
           style="width: 100%"
           height="750">
@@ -96,8 +96,8 @@
             label="快递状态"
             prop="status"
             width="150"
-            :filters="[{ text: '已取出', value: '已取出' }, { text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
-            :filter-method="filterStatus"
+            :filters="[{ text: '已取出', value: 0 }, { text: '未取出', value: 1 }, { text: '无取件码', value: -1 }]"
+            column-key="status"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -160,7 +160,8 @@
           pick: ''
         }],
         filters: [],
-        orgFilter: ''
+        orgFilter: '',
+        statusFilter: 2
       }
     },
     methods: {
@@ -182,28 +183,26 @@
         })
       },
       // 快递所属公司过滤
-      filterOrg(filters) {
-        let org = filters.org
-        console.log(org)   // 中通，申通，圆通
-        this.orgFilter = org
-        if (org === '' || org === null) {
-          this.getPacks("")
-        } else {
-          this.getPacks(org)
+      handleFilter(filters) {
+        if (filters.org !== undefined) {
+          this.orgFilter = filters.org
+          console.log("org: " + this.orgFilter)
         }
+        if (filters.status !== undefined) {
+          this.statusFilter = filters.status
+          console.log("status: " + this.statusFilter)
+        }
+        this.getPacks(this.orgFilter, this.statusFilter)
       },
-      // 快递状态过滤
-      filterStatus(value, row) {
-        return row.status === value
-      },
-      getPacks(org) {
+      getPacks(org, status) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
           "token" : token,
-          "org" : org
+          "org" : org,
+          "status" : status
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
@@ -258,7 +257,7 @@
     },
     created() {
       this.setFilters()
-      this.getPacks("")
+      this.getPacks("", 2)
       // const _this = this
       // // 轮询获取接口数据
       // window.setInterval(() => {

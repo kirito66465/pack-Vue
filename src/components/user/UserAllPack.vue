@@ -111,8 +111,8 @@
             label="快递状态"
             prop="status"
             width="150"
-            :filters="[{ text: '已取出', value: '已取出' }, { text: '未取出', value: '未取出' }, { text: '无取件码', value: '无取件码' }]"
-            :filter-method="filterStatus"
+            :filters="[{ text: '已取出', value: 0 }, { text: '未取出', value: 1 }, { text: '无取件码', value: -1 }]"
+            column-key="status"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -180,7 +180,8 @@
           pick: ''
         }],
         orgFilter: '',
-        addrFilter: ''
+        addrFilter: '',
+        statusFilter: 2
       }
     },
     methods: {
@@ -273,13 +274,13 @@
           this.orgFilter = filters.org
           console.log("org: " + this.orgFilter)
         }
-        this.getPacks(this.orgFilter, this.addrFilter)
+        if (filters.status !== undefined) {
+          this.statusFilter = filters.status
+          console.log("status: " + this.statusFilter)
+        }
+        this.getPacks(this.orgFilter, this.addrFilter, this.statusFilter)
       },
-      // 快递状态过滤
-      filterStatus(value, row) {
-        return row.status === value
-      },
-      getPacks(org, addr) {
+      getPacks(org, addr, status) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
         let jsonParam = {
@@ -287,7 +288,8 @@
           "pageSize" : this.pageSize,
           "token" : token,
           "org" : org,
-          "addr" : addr
+          "addr" : addr,
+          "status" : status
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
@@ -327,7 +329,7 @@
       }
     },
     created() {
-		  this.getPacks("", "")
+		  this.getPacks("", "", 2)
     },
     mounted() {
       // this.getPacks()

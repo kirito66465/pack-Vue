@@ -26,14 +26,15 @@
           <el-submenu index="1">
             <template slot="title">快递管理</template>
             <el-menu-item index="/adminHome/allPacks" @click.native="">全部快递</el-menu-item>
-            <el-menu-item index="/adminHome/noPicks" @click.native="">未取快递</el-menu-item>
             <el-menu-item index="/adminHome/isPicks" @click.native="">已取快递</el-menu-item>
+            <el-menu-item index="/adminHome/noPicks" @click.native="">未取快递</el-menu-item>
             <el-menu-item index="/adminHome/collection" @click.native="">揽收快递</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">个人管理</template>
             <el-menu-item index="/adminHome/info" @click.native="">我的信息</el-menu-item>
             <el-menu-item index="/adminHome/resetPwd" @click.native="">修改密码</el-menu-item>
+            <el-menu-item index="/adminHome/packId" @click.native="">快递单号</el-menu-item>
           </el-submenu>
           <el-menu-item>
             <el-popconfirm title="确定退出登录吗？" @confirm="exit">

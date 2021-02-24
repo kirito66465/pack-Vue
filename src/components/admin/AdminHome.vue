@@ -26,9 +26,10 @@
   import AdminNoPick from "./AdminNoPick"
   import AdminShelf from "./AdminShelf"
   import AdminCollection from "./AdminCollection"
+  import PackId from "./PackId"
   export default {
 		name: "AdminHome",
-    components: {AdminAllPack, AdminHeader, AdminAside, AdminResetPwd, AdminInfo, AdminIsPick, AdminNoPick, AdminShelf, AdminCollection},
+    components: {AdminAllPack, AdminHeader, AdminAside, AdminResetPwd, AdminInfo, AdminIsPick, AdminNoPick, AdminShelf, AdminCollection, PackId},
     data() {
       return {
         adminCard: '',
