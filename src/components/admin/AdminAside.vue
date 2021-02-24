@@ -157,6 +157,7 @@
             })
           })
       },
+      // 快递入站
       addPack() {
         let _this = this
         this.$prompt('请输入快递单号', '快递入站', {

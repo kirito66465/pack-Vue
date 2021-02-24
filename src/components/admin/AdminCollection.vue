@@ -5,6 +5,7 @@
         <el-table
           ref="filterTable"
           :data="tableData"
+          @filter-change="filterStatus"
           stripe
           style="width: 100%"
           height="750">
@@ -67,15 +68,7 @@
           <el-table-column
             label="快递公司"
             prop="org"
-            width="150"
-            :filters="filters"
-            :filter-method="filterOrg"
-            filter-placement="bottom-end">
-            <template slot-scope="scope">
-              <el-tag
-                :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
-            </template>
+            width="150">
           </el-table-column>
           <el-table-column
             label="快递状态"
@@ -83,7 +76,7 @@
             width="100"
             :filters="[{ text: '已提交', value: '已提交' }, { text: '已确认', value: '已确认' }
               , { text: '已支付', value: '已支付' }, { text: '已发出', value: '已发出' }]"
-            :filter-method="filterStatus"
+            column-key="status"
             filter-placement="bottom-end">
             <template slot-scope="scope">
               <el-tag
@@ -155,7 +148,7 @@
           status: '已提交',
           dt: '2021-01-05 16:45:00',
         }],
-        filters: []
+        statusFilter: ''
       }
     },
     methods: {
@@ -166,7 +159,7 @@
       // 获取当前页数
       handleCurrentChange(val) {
         console.log(`当前页: ${val}`)
-        this.getPacks()
+        this.getPacks(this.statusFilter)
       },
       // 单条记录确认
       handleConfirm(index, row) {
@@ -325,25 +318,29 @@
           message: '暂未实现！'
         })
       },
-      // 快递所属公司过滤
-      filterOrg(value, row) {
-        return row.org === value
-      },
       // 快递状态过滤
-      filterStatus(value, row) {
-        return row.status === value
+      filterStatus(filters) {
+        if (filters.status !== undefined) {
+          this.statusFilter = filters.status
+          console.log("status: " + this.statusFilter)
+        }
+        this.getPacks(this.statusFilter)
       },
-      getPacks() {
+      getPacks(status) {
         let param = new URLSearchParams()
         let token = localStorage.getItem("token")
-        param.append('currentPage', this.currentPage)
-        param.append('pageSize', this.pageSize)
-        param.append('token', token)
+        let jsonParam = {
+          "currentPage" : this.currentPage,
+          "pageSize" : this.pageSize,
+          "token" : token,
+          "status" : status
+        }
+        param.append('json', JSON.stringify(jsonParam))
         const _this = this
         console.log("准备发出请求")
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/send/getSendByAdmin/' + _this.currentPage,
+          url: _this.baseUrl + '/send/getSendByAdmin',
           data: param
         })
           .then(function (response) {
@@ -373,31 +370,13 @@
       },
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
-      },
-      setFilters() {
-        const _this = this
-        let card = localStorage.getItem("card")
-        if (card === '2101') {
-          _this.filters = [{ text: '中通', value: '中通' }
-            , { text: '申通', value: '申通' }
-            , { text: '圆通', value: '圆通' }]
-        } else if (card === '2102') {
-          _this.filters = [{ text: '京东', value: '京东' }
-            , { text: '顺丰', value: '顺丰' }
-            , { text: '韵达', value: '韵达' }]
-        } else {
-          _this.filters = [{ text: '天天', value: '天天' }
-            , { text: 'EMS', value: 'EMS' }]
-        }
       }
     },
     created() {
-		  this.setFilters()
-		  this.getPacks()
+		  this.getPacks("")
     },
     mounted() {
-      this.setFilters()
-      this.getPacks()
+
     },
     updated() {
 
