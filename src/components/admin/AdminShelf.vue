@@ -85,7 +85,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
+                disable-transitions>{{ scope.row.org }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -108,6 +108,23 @@
             prop="start"
             width="200">
           </el-table-column>
+          <el-table-column
+            align="right"
+            width="400">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchHandler"/>
+            </template>
+            <template slot-scope="scope">
+              <el-button
+                size="medium"
+                type="primary"
+                @click="handlePick(scope.$index, scope.row)">取件</el-button>
+            </template>
+          </el-table-column>
         </el-table>
       </div>
     </div>
@@ -121,6 +138,7 @@
     data() {
       return {
         baseUrl: Constant.data.baseUrl,
+        search: '',
         tableData: [{
           id: '12987122',
           org: '中通',
@@ -224,39 +242,91 @@
       }
     },
     methods: {
-      // 单条记录编辑
-      handleEdit(index, row) {
+      // 取件 TODO
+      handlePick(index, row) {
         console.log(index, row)
-      },
-      // 单条记录删除
-      handleDelete(index, row) {
-        console.log(index, row)
-        this.$confirm('将删除此件快递, 是否继续?', '提示', {
+        const _this = this
+        this.$confirm('将取件, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
-          this.$message({
-            showClose: true,
-            type: 'success',
-            message: '删除成功!'
-          });
+          let param = new URLSearchParams()
+          let token = sessionStorage.getItem("token")
+          param.append('id', _this.tableData[index].id)
+          param.append('token', token)
+          _this.$axios({
+            method: 'put',
+            url: _this.baseUrl + '/pack/pickPackByAdmin',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'pick up the package success') {
+                _this.$message({
+                  showClose: true,
+                  message: '取件成功！',
+                  type: 'success'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              } else if (response.data === 'not exist') {
+                _this.$message({
+                  showClose: true,
+                  message: '该快递不存在！',
+                  type: 'warning'
+                })
+              } else if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '请在登录状态操作!',
+                  type: 'warning'
+                })
+                _this.$router.push('/LoginAndRegister')
+              } else {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '取件失败！',
+                  type: 'warning'
+                })
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
         }).catch(() => {
           this.$message({
             showClose: true,
             type: 'info',
-            message: '已取消删除'
+            message: '已取消取件'
           })
+        })
+      },
+      // 搜索
+      searchHandler() {
+        this.$message({
+          showClose: true,
+          type: 'info',
+          message: '暂未实现！'
         })
       },
       // 快递所属公司过滤
       filterOrg(value, row) {
         return row.org === value
       },
+      // 获取货架快递结果集
       getPacks() {
         const _this = this
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let choice = this.formInline.shelf + this.formInline.layer
         console.log("货架: " + choice)
         param.append('token', token)
@@ -289,12 +359,14 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return index + 1
       },
+      // 设置快递公司筛选选项
       setFilters() {
         const _this = this
-        let card = localStorage.getItem("card")
+        let card = sessionStorage.getItem("card")
         if (card === '2101') {
           _this.filters = [{ text: '中通', value: '中通' }
             , { text: '申通', value: '申通' }
@@ -315,7 +387,6 @@
     },
     mounted() {
       this.setFilters()
-      // this.getPacks()
     }
   }
 </script>

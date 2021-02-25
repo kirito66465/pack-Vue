@@ -39,14 +39,15 @@
       }
     },
     methods: {
+      // 点击登录按钮
       onSubmit() {
-        console.log('----------login----------');
         if (this.user.radio === 1) {
           this.userLogin()
         } else {
           this.adminLogin()
         }
       },
+      // 学生登录
       userLogin() {
         let param = new URLSearchParams()
         let pwd = md5(this.user.password)
@@ -61,10 +62,10 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data.result === 'login success') {
-              // 将用户的token存储到本地localstorage中
-              localStorage.setItem('card', _this.user.card)
+              // 将用户的 token 存储到本地 sessionStorage 中
+              sessionStorage.setItem('card', _this.user.card)
               let token = response.data.token
-              localStorage.setItem('token', token)
+              sessionStorage.setItem('token', token)
               _this.getUserInfo()
             } else {
               _this.$message({
@@ -83,6 +84,7 @@
             })
           })
       },
+      // 管理员登录
       adminLogin() {
         let param = new URLSearchParams()
         let pwd = md5(this.user.password)
@@ -97,10 +99,10 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data.result === 'login success') {
-              // 将用户的token存储到本地localstorage中
-              localStorage.setItem('card', _this.user.card)
+              // 将用户的 token 存储到本地 sessionStorage 中
+              sessionStorage.setItem('card', _this.user.card)
               let token = response.data.token
-              localStorage.setItem('token', token)
+              sessionStorage.setItem('token', token)
               _this.getAdminInfo()
             } else {
               _this.$message({
@@ -119,14 +121,15 @@
             })
           })
       },
+      // 忘记密码跳转
       forgetPwd() {
-        console.log("忘记密码")
         this.$router.push('/forgetPwd')
       },
+      // 获取学生信息
       getUserInfo() {
         const _this = this
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append('token', token)
         this.$axios({
           method: 'post',
@@ -135,8 +138,8 @@
         })
           .then(function (response) {
             if (response.data.result === 'get info success') {
-              localStorage.setItem("card", response.data.user.card)
-              localStorage.setItem("name", response.data.user.name)
+              sessionStorage.setItem("card", response.data.user.card)
+              sessionStorage.setItem("name", response.data.user.name)
               _this.$message({
                 showClose: true,
                 message: response.data.user.name + ', 登录成功',
@@ -161,10 +164,11 @@
             })
           })
       },
+      // 获取管理员信息
       getAdminInfo() {
         const _this = this
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append('token', token)
         this.$axios({
           method: 'post',
@@ -173,8 +177,8 @@
         })
           .then(function (response) {
             if (response.data.result === 'get info success') {
-              localStorage.setItem("card", response.data.admin.card)
-              localStorage.setItem("name", response.data.admin.name)
+              sessionStorage.setItem("card", response.data.admin.card)
+              sessionStorage.setItem("name", response.data.admin.name)
               _this.$message({
                 showClose: true,
                 message: response.data.admin.name + ', 登录成功',
@@ -201,15 +205,15 @@
       }
     },
     created() {
-      localStorage.removeItem("token")
-      localStorage.removeItem("card")
-      localStorage.removeItem("name")
+      sessionStorage.removeItem("token")
+      sessionStorage.removeItem("card")
+      sessionStorage.removeItem("name")
 
     },
     mounted() {
-      localStorage.removeItem("token")
-      localStorage.removeItem("card")
-      localStorage.removeItem("name")
+      sessionStorage.removeItem("token")
+      sessionStorage.removeItem("card")
+      sessionStorage.removeItem("name")
     }
   }
 </script>

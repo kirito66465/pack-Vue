@@ -67,7 +67,7 @@
           <el-table-column
             label="快递单号"
             prop="id"
-            width="250">
+            width="200">
           </el-table-column>
           <el-table-column
             label="快递公司"
@@ -79,7 +79,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
+                disable-transitions>{{ scope.row.org }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -90,7 +90,7 @@
           <el-table-column
             label="取件码"
             prop="code"
-            width="200">
+            width="150">
           </el-table-column>
           <el-table-column
             label="快递状态"
@@ -102,7 +102,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.status === '已取件' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
+                disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -115,11 +115,27 @@
                 placeholder="输入关键字搜索"
                 @keyup.enter.native="searchHandler"/>
             </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleNotice(scope.$index, scope.row)">邮件通知</el-button>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <!-- 取件 -->
+              <el-tooltip class="item" effect="dark" content="取件" placement="top">
+                <el-button
+                  size="medium"
+                  type="success"
+                  icon="el-icon-edit"
+                  circle
+                  @click="pickSelection"></el-button>
+              </el-tooltip>
+              <!-- 邮件通知 -->
+              <el-tooltip class="item" effect="dark" content="邮件通知" placement="top">
+                <el-button
+                  size="medium"
+                  type="info"
+                  icon="el-icon-message"
+                  circle
+                  @click="noticeSelection"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -178,18 +194,17 @@
         console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter)
       },
-      // 单条记录短信通知
-      handleNotice(index, row) {
-        console.log(index, row)
+      // 邮件通知
+      handleNotice(ids) {
         const _this = this
-        this.$confirm('将邮件通知收件人此件快递已到站, 是否继续?', '提示', {
+        this.$confirm('将邮件通知收件人快递已到站, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let param = new URLSearchParams()
-          let token = localStorage.getItem("token")
-          param.append('id', _this.tableData[index].id)
+          let token = sessionStorage.getItem("token")
+          param.append('ids', ids)
           param.append('token', token)
           _this.$axios({
             method: 'post',
@@ -219,10 +234,10 @@
                   type: 'warning'
                 })
                 _this.$router.push('/loginAndRegister')
-              } else if (response.data.result === 'not exist') {
+              } else {
                 _this.$message({
                   showClose: true,
-                  message: '该用户未填写邮箱信息，无法邮件通知！',
+                  message: response.data.result,
                   type: 'warning'
                 })
               }
@@ -240,6 +255,73 @@
             showClose: true,
             type: 'info',
             message: '已取消邮件通知'
+          })
+        })
+      },
+      // 取件
+      handlePick(ids) {
+        const _this = this
+        this.$confirm('将取件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = new URLSearchParams()
+          let token = sessionStorage.getItem("token")
+          param.append('ids', ids)
+          param.append('token', token)
+          _this.$axios({
+            method: 'put',
+            url: _this.baseUrl + '/pack/pickPackByAdmin',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'pick up the package success') {
+                _this.$message({
+                  showClose: true,
+                  message: '取件成功！',
+                  type: 'success'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              } else if (response.data === 'pick up the package fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '取件失败！',
+                  type: 'warning'
+                })
+              } else if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '请在登录状态操作!',
+                  type: 'warning'
+                })
+                _this.$router.push('/LoginAndRegister')
+              } else {
+                _this.$message({
+                  showClose: true,
+                  message: response.data,
+                  type: 'warning'
+                })
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
+        }).catch(() => {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '已取消取件'
           })
         })
       },
@@ -263,9 +345,10 @@
         }
         this.getPacks(this.orgFilter, this.statusFilter)
       },
+      // 获取未取快递结果集
       getPacks(org, status) {
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
@@ -306,12 +389,14 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
       },
+      // 设置快递公司筛选选项
       setFilters() {
         const _this = this
-        let card = localStorage.getItem("card")
+        let card = sessionStorage.getItem("card")
         if (card === '2101') {
           _this.filters = [{ text: '中通', value: '中通' }
             , { text: '申通', value: '申通' }
@@ -324,6 +409,40 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
+      },
+      // 处理取件多选
+      pickSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+          }
+          this.handlePick(ids)
+        }
+      },
+      // 处理邮件通知多选
+      noticeSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+          }
+          this.handleNotice(ids)
+        }
       }
     },
     created() {
@@ -332,7 +451,6 @@
     },
     mounted() {
       this.setFilters()
-		  // this.getPacks()
     }
   }
 </script>

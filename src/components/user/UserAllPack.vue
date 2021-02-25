@@ -86,7 +86,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
+                disable-transitions>{{ scope.row.org }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -99,7 +99,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.addr === '中苑' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.addr}}</el-tag>
+                disable-transitions>{{ scope.row.addr }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -117,12 +117,12 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.status === '已取件' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
+                disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
@@ -130,11 +130,18 @@
                 placeholder="输入关键字搜索"
                 @keyup.enter.native="searchHandler"/>
             </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <!-- 删除 -->
+              <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                <el-button
+                  size="medium"
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="deleteSelection"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -194,22 +201,21 @@
         console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter, this.addrFilter)
       },
-      // 单条记录删除
-      handleDelete(index, row) {
-        console.log(index, row)
+      // 删除快递
+      handleDelete(ids) {
         const _this = this
-        this.$confirm('将删除此件快递, 是否继续?', '提示', {
+        this.$confirm('将删除选中的快递, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let param = new URLSearchParams()
-          param.append('id', _this.tableData[index].id)
-          let token = localStorage.getItem('token')
+          param.append('ids', ids)
+          let token = sessionStorage.getItem('token')
           param.append('token', token)
           _this.$axios({
-            method: 'post',
-            url: _this.baseUrl + '/pack/deletePack',
+            method: 'delete',
+            url: _this.baseUrl + '/pack/deletePacks',
             data: param
           })
             .then(function (response) {
@@ -280,9 +286,10 @@
         }
         this.getPacks(this.orgFilter, this.addrFilter, this.statusFilter)
       },
+      // 获取全部快递结果集
       getPacks(org, addr, status) {
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
@@ -324,15 +331,33 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      // 处理删除多选
+      deleteSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+          }
+          this.handleDelete(ids)
+        }
       }
     },
     created() {
 		  this.getPacks("", "", 2)
     },
     mounted() {
-      // this.getPacks()
+
     },
     updated() {
 

@@ -73,7 +73,7 @@
           <el-table-column
             label="快递状态"
             prop="status"
-            width="100"
+            width="150"
             :filters="[{ text: '已提交', value: '已提交' }, { text: '已确认', value: '已确认' }
               , { text: '已支付', value: '已支付' }, { text: '已发出', value: '已发出' }]"
             column-key="status"
@@ -81,7 +81,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.status === '已提交' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
+                disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -91,7 +91,7 @@
           </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
@@ -99,14 +99,27 @@
                 placeholder="输入关键字搜索"
                 @keyup.enter.native="searchHandler"/>
             </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handleConfirm(scope.$index, scope.row)">确认</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleOut(scope.$index, scope.row)">发出</el-button>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <!-- 确认 -->
+              <el-tooltip class="item" effect="dark" content="确认" placement="top">
+                <el-button
+                  size="medium"
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                  @click="confirmSelection"></el-button>
+              </el-tooltip>
+              <!-- 发出 -->
+              <el-tooltip class="item" effect="dark" content="发出" placement="top">
+                <el-button
+                  size="medium"
+                  type="success"
+                  icon="el-icon-check"
+                  circle
+                  @click="outSelection"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -161,69 +174,75 @@
         console.log(`当前页: ${val}`)
         this.getPacks(this.statusFilter)
       },
-      // 单条记录确认
-      handleConfirm(index, row) {
-        console.log(index, row)
+      // 寄件确认
+      handleConfirm(ids, count) {
         const _this = this
-        if (_this.tableData[index].status === '已提交') {
-          let msg = '将确认此寄件, 是否继续?'
-          _this.$confirm(msg, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
+        if (count > 0) {
+          this.$message({
+            showClose: true,
+            message: '有' + count + '件寄件无法确认，因为其已确认!',
             type: 'warning'
-          }).then(() => {
-            let param = new URLSearchParams()
-            let token = localStorage.getItem("token")
-            param.append('id', _this.tableData[index].id)
-            param.append('token', token)
-            _this.$axios({
-              method: 'post',
-              url: _this.baseUrl + '/send/confirm',
-              data: param
-            })
-              .then(function (response) {
-                console.log(response.data)
-                if (response.data.result === 'please login to operate') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '登录状态失效，请重新登录！',
-                    type: 'warning'
-                  })
-                  _this.$router.push('/loginAndRegister')
-                } else if (response.data.result === 'do fail') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '确认失败！',
-                    type: 'warning'
-                  })
-                } else {
-                  _this.$message({
-                    showClose: true,
-                    type: 'success',
-                    message: '确认成功!'
-                  })
-                  let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                  _this.$router.push(NewPage)
-                  _this.$router.go(-1)
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-                _this.$notify.error({
-                  showClose: true,
-                  title: '错误',
-                  message: '服务器出错啦！'
-                })
-              })
-          }).catch(() => {
-            _this.$message({
-              showClose: true,
-              type: 'info',
-              message: '已取消确认'
-            })
           })
+        }
+        this.$confirm('将确认选中的寄件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = new URLSearchParams()
+          let token = sessionStorage.getItem("token")
+          param.append('ids', ids)
+          param.append('token', token)
+          _this.$axios({
+            method: 'put',
+            url: _this.baseUrl + '/send/confirm',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '登录状态失效，请重新登录！',
+                  type: 'warning'
+                })
+                _this.$router.push('/loginAndRegister')
+              } else if (response.data === 'do fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '确认失败！',
+                  type: 'warning'
+                })
+              } else {
+                _this.$message({
+                  showClose: true,
+                  type: 'success',
+                  message: '确认成功!'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
+        }).catch(() => {
+          _this.$message({
+            showClose: true,
+            type: 'info',
+            message: '已取消确认'
+          })
+        })
+        if (_this.tableData[index].status === '已提交') {
+
         } else if (_this.tableData[index].status === '已确认' || _this.tableData[index].status === '已支付'
           || _this.tableData[index].status === '已发出') {
           _this.$message({
@@ -233,82 +252,80 @@
           })
         }
       },
-      // 单条记录发出
-      handleOut(index, row) {
-        console.log(index, row)
+      // 寄件发出
+      handleOut(ids, outCount, payCount) {
         const _this = this
-        if (_this.tableData[index].status === '已支付') {
-          let msg = '将确认此寄件, 是否继续?'
-          _this.$confirm(msg, '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let param = new URLSearchParams()
-            let token = localStorage.getItem("token")
-            param.append('id', _this.tableData[index].id)
-            param.append('token', token)
-            _this.$axios({
-              method: 'post',
-              url: _this.baseUrl + '/send/out',
-              data: param
-            })
-              .then(function (response) {
-                console.log(response.data)
-                if (response.data.result === 'please login to operate') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '登录状态失效，请重新登录！',
-                    type: 'warning'
-                  })
-                  _this.$router.push('/loginAndRegister')
-                } else if (response.data.result === 'do fail') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '发出失败！',
-                    type: 'warning'
-                  })
-                } else {
-                  _this.$message({
-                    showClose: true,
-                    type: 'success',
-                    message: '发出成功!'
-                  })
-                  let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                  _this.$router.push(NewPage)
-                  _this.$router.go(-1)
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-                _this.$notify.error({
-                  showClose: true,
-                  title: '错误',
-                  message: '服务器出错啦！'
-                })
-              })
-          }).catch(() => {
-            _this.$message({
-              showClose: true,
-              type: 'info',
-              message: '已取消发出'
-            })
-          })
-        } else if (_this.tableData[index].status === '已发出') {
-          _this.$message({
+        if (outCount > 0) {
+          this.$message({
             showClose: true,
-            message: '该寄件已发出!',
-            type: 'warning'
-          })
-        } else if (_this.tableData[index].status === '已提交' || _this.tableData[index].status === '已确认') {
-          _this.$message({
-            showClose: true,
-            message: '请等待用户支付后再发出!',
+            message: '有' + outCount + '件寄件无法发出，因为其已发出!',
             type: 'warning'
           })
         }
+        if (payCount > 0) {
+          this.$message({
+            showClose: true,
+            message: '有' + payCount + '寄件寄件无法发出，请等待学生支付后再发出!',
+            type: 'warning'
+          })
+        }
+        this.$confirm('将发出选中的寄件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = new URLSearchParams()
+          let token = sessionStorage.getItem("token")
+          param.append('ids', ids)
+          param.append('token', token)
+          _this.$axios({
+            method: 'put',
+            url: _this.baseUrl + '/send/out',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '登录状态失效，请重新登录！',
+                  type: 'warning'
+                })
+                _this.$router.push('/loginAndRegister')
+              } else if (response.data === 'do fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '发出失败！',
+                  type: 'warning'
+                })
+              } else {
+                _this.$message({
+                  showClose: true,
+                  type: 'success',
+                  message: '发出成功!'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
+        }).catch(() => {
+          _this.$message({
+            showClose: true,
+            type: 'info',
+            message: '已取消发出'
+          })
+        })
       },
       // 搜索
       searchHandler() {
@@ -326,9 +343,10 @@
         }
         this.getPacks(this.statusFilter)
       },
+      // 获取寄件结果集
       getPacks(status) {
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
@@ -368,8 +386,55 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      // 处理确认多选
+      confirmSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          let count = 0
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+            if (_this.$refs.filterTable.selection[i].status === '已确认') {
+              count++
+            }
+          }
+          this.handleConfirm(ids, count)
+        }
+      },
+      // 处理发出多选
+      outSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          let outCount = 0
+          let payCount = 0
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+            if (_this.$refs.filterTable.selection[i].status === '已发出') {
+              outCount++
+            }
+            if (_this.$refs.filterTable.selection[i].status === '已提交' || _this.$refs.filterTable.selection[i].status === '已确认') {
+              payCount++
+            }
+          }
+          this.handleConfirm(ids, outCount, payCount)
+        }
       }
     },
     created() {

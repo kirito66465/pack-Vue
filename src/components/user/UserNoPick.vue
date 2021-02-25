@@ -86,7 +86,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
+                disable-transitions>{{ scope.row.org }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -99,7 +99,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.addr === '中苑' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.addr}}</el-tag>
+                disable-transitions>{{ scope.row.addr }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -117,12 +117,12 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.status === '已取件' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
+                disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
@@ -130,14 +130,27 @@
                 placeholder="输入关键字搜索"
                 @keyup.enter.native="searchHandler"/>
             </template>
-            <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handlePick(scope.$index, scope.row)">取件</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleDelete(scope.$index, scope.row)">删除</el-button>
+          </el-table-column>
+          <el-table-column>
+            <template slot="header" slot-scope="scope">
+              <!-- 取件 -->
+              <el-tooltip class="item" effect="dark" content="取件" placement="top">
+                <el-button
+                  size="medium"
+                  type="success"
+                  icon="el-icon-check"
+                  circle
+                  @click="pickSelection"></el-button>
+              </el-tooltip>
+              <!-- 删除 -->
+              <el-tooltip class="item" effect="dark" content="删除" placement="top">
+                <el-button
+                  size="medium"
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="deleteSelection"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -197,22 +210,21 @@
         console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter, this.addrFilter)
       },
-      // 单条记录删除
-      handleDelete(index, row) {
-        console.log(index, row)
+      // 删除快递
+      handleDelete(ids) {
         const _this = this
-        this.$confirm('将删除此件快递, 是否继续?', '提示', {
+        this.$confirm('将删除选中的快递, 是否继续?', '提示', {
           confirmButtonText: '确定',
           cancelButtonText: '取消',
           type: 'warning'
         }).then(() => {
           let param = new URLSearchParams()
-          param.append('id', _this.tableData[index].id)
-          let token = localStorage.getItem('token')
+          param.append('ids', ids)
+          let token = sessionStorage.getItem('token')
           param.append('token', token)
           _this.$axios({
-            method: 'post',
-            url: _this.baseUrl + '/pack/deletePack',
+            method: 'delete',
+            url: _this.baseUrl + '/pack/deletePacks',
             data: param
           })
             .then(function (response) {
@@ -259,82 +271,80 @@
           })
         })
       },
-      // 单件包裹取件
-      handlePick(index, row) {
-        console.log(index, row)
+      // 取件
+      handlePick(ids, count) {
         const _this = this
-        if (row.status === '未有取件码') {
+        if (count > 0) {
           _this.$notify({
             showClose: true,
             title: '警告',
-            message: '目前未有取件码，请联系驿站管理员!',
+            message: count + '件快递还未有取件码，请联系驿站管理员!',
             type: 'warning'
-          })
-        } else {
-          this.$confirm('将取件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let param = new URLSearchParams()
-            let token = localStorage.getItem("token")
-            param.append('id', _this.tableData[index].id)
-            param.append('token', token)
-            _this.$axios({
-              method: 'post',
-              url: _this.baseUrl + '/pack/pickById',
-              data: param
-            })
-              .then(function (response) {
-                console.log(response.data)
-                if (response.data === 'pick up the package success') {
-                  _this.$message({
-                    showClose: true,
-                    message: '取件成功！',
-                    type: 'success'
-                  })
-                  let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                  _this.$router.push(NewPage)
-                  _this.$router.go(-1)
-                } else if (response.data === 'not exist') {
-                  _this.$message({
-                    showClose: true,
-                    message: '该快递不存在！',
-                    type: 'warning'
-                  })
-                } else if (response.data === 'please login to operate') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '请在登录状态操作!',
-                    type: 'warning'
-                  })
-                  _this.$router.push('/LoginAndRegister')
-                } else {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '取件失败！',
-                    type: 'warning'
-                  })
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-                _this.$notify.error({
-                  showClose: true,
-                  title: '错误',
-                  message: '服务器出错啦！'
-                })
-              })
-          }).catch(() => {
-            this.$message({
-              showClose: true,
-              type: 'info',
-              message: '已取消取件'
-            })
           })
         }
+        this.$confirm('将取件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = new URLSearchParams()
+          let token = sessionStorage.getItem("token")
+          param.append('ids', ids)
+          param.append('token', token)
+          _this.$axios({
+            method: 'put',
+            url: _this.baseUrl + '/pack/pickById',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'pick up the package success') {
+                _this.$message({
+                  showClose: true,
+                  message: '取件成功！',
+                  type: 'success'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              } else if (response.data === 'pick up the package fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '取件失败！',
+                  type: 'warning'
+                })
+              } else if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '请在登录状态操作!',
+                  type: 'warning'
+                })
+                _this.$router.push('/LoginAndRegister')
+              } else {
+                _this.$message({
+                  showClose: true,
+                  message: response.data,
+                  type: 'warning'
+                })
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
+        }).catch(() => {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '已取消取件'
+          })
+        })
       },
       // 搜索
       searchHandler() {
@@ -360,9 +370,10 @@
         }
         this.getPacks(this.orgFilter, this.addrFilter, this.statusFilter)
       },
+      // 获取未取快递结果集
       getPacks(org, addr, status) {
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
@@ -404,15 +415,54 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      // 处理删除多选
+      deleteSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+          }
+          this.handleDelete(ids)
+        }
+      },
+      // 处理取件多选
+      pickSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          let count = 0
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+            if (_this.$refs.filterTable.selection[i].status === -1) {
+              count++
+            }
+          }
+          this.handlePick(ids, count)
+        }
       }
     },
     created() {
       this.getPacks("", "", 2)
     },
     mounted() {
-		  // this.getPacks()
+
     }
   }
 </script>

@@ -37,7 +37,7 @@
             <el-menu-item index="/adminHome/packId" @click.native="">快递单号</el-menu-item>
           </el-submenu>
           <el-menu-item>
-            <el-popconfirm title="确定退出登录吗？" @confirm="exit">
+            <el-popconfirm title="确定退出登录吗？" @confirm="logout">
               <el-button type="text" slot="reference">退出</el-button>
             </el-popconfirm>
           </el-menu-item>
@@ -60,9 +60,10 @@
       }
     },
     methods: {
-      exit() {
+		  // 退出
+      logout() {
         const _this = this
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let param = new URLSearchParams()
         param.append('token', token)
         this.$axios({
@@ -73,10 +74,10 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data === 'exit success') {
-              localStorage.removeItem("token")
-              localStorage.removeItem("card")
-              localStorage.removeItem("userCard")
-              localStorage.removeItem("name")
+              sessionStorage.removeItem("token")
+              sessionStorage.removeItem("card")
+              sessionStorage.removeItem("userCard")
+              sessionStorage.removeItem("name")
               _this.$message({
                 showClose: true,
                 message: '退出登录成功！',
@@ -100,9 +101,10 @@
             })
           })
       },
+      // 获取驿站信息
       getAdminInfo() {
-        this.adminCard = localStorage.getItem("card")
-        this.adminName = localStorage.getItem("name")
+        this.adminCard = sessionStorage.getItem("card")
+        this.adminName = sessionStorage.getItem("name")
       },
     },
     created() {

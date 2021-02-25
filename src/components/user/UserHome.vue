@@ -35,9 +35,10 @@
       }
     },
     methods: {
+      // 获取学生信息
       getUserInfo() {
-        this.card = localStorage.getItem("card")
-        this.name = localStorage.getItem("name")
+        this.card = sessionStorage.getItem("card")
+        this.name = sessionStorage.getItem("name")
       }
     },
     created() {

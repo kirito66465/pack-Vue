@@ -48,11 +48,11 @@
       }
     },
     methods: {
+		  // 修改密码提交
       onSubmit() {
-        console.log('submit!')
         const _this = this
-        let token = localStorage.getItem("token")
-        let card = localStorage.getItem("card")
+        let token = sessionStorage.getItem("token")
+        let card = sessionStorage.getItem("card")
         let oldPwd = md5(this.form.oldPwd)
         let newPwd = md5(this.form.newPwd)
         let param = new URLSearchParams()
@@ -62,7 +62,7 @@
         param.append('newPwd', newPwd)
         param.append('checkCode', this.form.code)
         this.$axios({
-          method: 'post',
+          method: 'put',
           url: _this.baseUrl + '/user/resetPwd',
           data: param
         })
@@ -112,7 +112,7 @@
             _this.form.newPwdAgain = ''
             _this.form.code = ''
             _this.getCheckCode()
-            let codePic = localStorage.getItem("codePic")
+            let codePic = sessionStorage.getItem("codePic")
             _this.url = 'data:image/png;base64,' + codePic
           })
           .catch(function (error) {
@@ -124,9 +124,10 @@
             })
           })
       },
+      // 获取验证码图片
       getCheckCode() {
         const _this = this
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let param = new URLSearchParams()
         param.append('token', token)
         this.$axios({
@@ -137,7 +138,7 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data.result === 'get info success') {
-              localStorage.setItem("codePic", response.data.codePic)
+              sessionStorage.setItem("codePic", response.data.codePic)
               let codePic = response.data.codePic
               _this.url = 'data:image/png;base64,' + codePic
             } else if (response.data.result === 'please login to operate') {
@@ -168,7 +169,7 @@
     },
     created() {
 		  this.getCheckCode()
-		  let codePic = localStorage.getItem("codePic")
+		  let codePic = sessionStorage.getItem("codePic")
 		  this.url = 'data:image/png;base64,' + codePic
     }
   }

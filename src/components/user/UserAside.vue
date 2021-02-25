@@ -102,15 +102,16 @@
       }
     },
     methods: {
+		  // 取件
 		  pickPack() {
         let _this = this
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append('addr', this.pick.addr)
         param.append('code', this.pick.code)
         param.append('token', token)
         this.$axios({
-          method: 'post',
+          method: 'put',
           url: _this.baseUrl + '/pack/pickPackByUser',
           data: param
         })
@@ -169,11 +170,11 @@
         this.pick.addr = ""
         this.pick.code = ""
       },
+      // 获取数量信息
       getTotal() {
         let _this = this
-        // 获取数量的请求
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append("token", token)
         this.$axios({
           method: 'post',

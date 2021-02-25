@@ -52,10 +52,11 @@
       }
     },
     methods: {
+		  // 获取学生信息
 		  getUserInfo() {
         const _this = this
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append("token", token)
         this.$axios({
           method: 'post',
@@ -89,17 +90,17 @@
             })
           })
       },
+      // 更新提交
       onSubmit() {
-        console.log('submit!')
         const _this = this
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append("token", token)
         param.append("name", this.form.name)
         param.append("addr", this.form.addr)
         param.append("mail", this.form.mail)
         this.$axios({
-          method: 'post',
+          method: 'put',
           url: _this.baseUrl + '/user/updateInfo',
           data: param
         })

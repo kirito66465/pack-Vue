@@ -27,8 +27,7 @@ export default new Router({
   routes: [
     {
       path: '/',
-      name: 'Index',
-      component: Index
+      redirect: '/index'
     },
     {
       path: '/loginAndRegister',
@@ -36,6 +35,7 @@ export default new Router({
     },
     {
       path: '/index',
+      name: 'index',
       component: Index
     },
     {

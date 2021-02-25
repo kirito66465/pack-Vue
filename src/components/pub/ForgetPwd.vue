@@ -120,6 +120,7 @@
       };
     },
     methods: {
+		  // 下一项
       next() {
         const _this = this
         this.$refs['user'].validate((valid) => {
@@ -133,6 +134,7 @@
           }
         })
       },
+      // 忘记密码提交
       submit() {
         const _this = this
         this.$refs['user'].validate((valid) => {
@@ -143,6 +145,7 @@
           }
         })
       },
+      // 忘记密码请求
       forgetPwd() {
         let param = new URLSearchParams()
         let pwd = md5(this.user.password)
@@ -151,8 +154,8 @@
         param.append('password', pwd)
         const _this = this
         this.$axios({
-          method: 'post',
-          url: _this.baseUrl + 'http://localhost:8080/user/forgetPwd',
+          method: 'put',
+          url: _this.baseUrl + '/user/forgetPwd',
           data: param
         })
           .then(function (response) {
@@ -163,10 +166,10 @@
                 message: '重置密码成功！',
                 type: 'success'
               })
-              localStorage.setItem("token", response.data.token)
-              localStorage.setItem("card", _this.user.card)
-              localStorage.setItem("name", response.data.name)
-              _this.$router.push('/userHome')
+              sessionStorage.setItem("token", response.data.token)
+              sessionStorage.setItem("card", _this.user.card)
+              sessionStorage.setItem("name", response.data.name)
+              _this.$router.push('/userHome/allPacks')
             } else if (response.data.result === 'not exist') {
               _this.$message({
                 showClose: true,

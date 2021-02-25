@@ -37,9 +37,10 @@
       }
     },
     methods: {
+		  // 获取驿站信息
 		  getAdminInfo() {
-        this.adminCard = localStorage.getItem("card")
-        this.adminName = localStorage.getItem("name")
+        this.adminCard = sessionStorage.getItem("card")
+        this.adminName = sessionStorage.getItem("name")
       }
     },
     created() {

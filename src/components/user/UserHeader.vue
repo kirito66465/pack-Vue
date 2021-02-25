@@ -36,7 +36,7 @@
             <el-menu-item index="/userHome/resetPwd" @click.native="">修改密码</el-menu-item>
           </el-submenu>
           <el-menu-item>
-            <el-popconfirm title="确定退出登录吗？" @confirm="exit">
+            <el-popconfirm title="确定退出登录吗？" @confirm="logout">
               <el-button type="text" slot="reference">退出</el-button>
             </el-popconfirm>
           </el-menu-item>
@@ -59,9 +59,10 @@
       };
     },
     methods: {
-      exit() {
+		  // 退出
+      logout() {
         const _this = this
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let param = new URLSearchParams()
         param.append('token', token)
         this.$axios({
@@ -72,15 +73,15 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data === 'exit success') {
-              localStorage.removeItem("token")
-              localStorage.removeItem("card")
-              localStorage.removeItem("userCard")
-              localStorage.removeItem("name")
+              sessionStorage.removeItem("token")
+              sessionStorage.removeItem("card")
+              sessionStorage.removeItem("userCard")
+              sessionStorage.removeItem("name")
               _this.$message({
                 showClose: true,
                 message: '退出登录成功！'
               })
-              localStorage.removeItem("codePic")
+              sessionStorage.removeItem("codePic")
               _this.$router.push('/')
             } else {
               console.log("退出登录失败！")
@@ -101,13 +102,14 @@
             })
           })
       },
+      // 获取学生信息
       getUserInfo() {
-        this.card = localStorage.getItem("card")
-        this.name = localStorage.getItem("name")
-      },
-      removePic() {
-        localStorage.removeItem("codePic")
+        this.card = sessionStorage.getItem("card")
+        this.name = sessionStorage.getItem("name")
       }
+      // removePic() {
+      //   sessionStorage.removeItem("codePic")
+      // }
     },
     created() {
 		  let userUrl = 'assets/image/user.png'

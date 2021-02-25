@@ -124,9 +124,9 @@
           .then(function (response) {
             console.log(response.data)
             if (response.data.result === "register success") {
-              localStorage.setItem("card", _this.user.card)
-              localStorage.setItem("name", _this.user.name)
-              localStorage.setItem("token", response.data.token)
+              sessionStorage.setItem("card", _this.user.card)
+              sessionStorage.setItem("name", _this.user.name)
+              sessionStorage.setItem("token", response.data.token)
               _this.$message({
                 showClose: true,
                 message: '注册成功！',

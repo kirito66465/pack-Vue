@@ -91,11 +91,11 @@
       }
     },
     methods: {
+		  // 获取数量信息
       getTotal() {
         let _this = this
-        // 获取数量的请求
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         param.append("token", token)
         this.$axios({
           method: 'post',
@@ -165,7 +165,7 @@
           cancelButtonText: '取消'
         }).then(({ value }) => {
           let param = new URLSearchParams()
-          let token = localStorage.getItem("token")
+          let token = sessionStorage.getItem("token")
           param.append('id', value)
           param.append('token', token)
           _this.$axios({

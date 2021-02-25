@@ -85,7 +85,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
+                disable-transitions>{{ scope.row.org }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -101,7 +101,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.status === '已提交' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
+                disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -111,21 +111,36 @@
           </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
                 size="mini"
                 placeholder="输入关键字搜索"/>
             </template>
+          </el-table-column>
+          <el-table-column>
             <template slot-scope="scope">
-              <el-button
-                size="mini"
-                @click="handlePay(scope.$index, scope.row)">支付</el-button>
-              <el-button
-                size="mini"
-                type="danger"
-                @click="handleCancel(scope.$index, scope.row)">取消</el-button>
+              <!-- 支付 -->
+              <el-tooltip class="item" effect="dark" content="支付" placement="top">
+                <el-button
+                  size="medium"
+                  type="primary"
+                  icon="el-icon-edit"
+                  circle
+                  @click="handlePay(scope.$index, scope.row)"></el-button>
+              </el-tooltip>
+            </template>
+            <template slot="header" slot-scope="scope">
+              <!-- 取消 -->
+              <el-tooltip class="item" effect="dark" content="取消" placement="top">
+                <el-button
+                  size="medium"
+                  type="danger"
+                  icon="el-icon-delete"
+                  circle
+                  @click="cancelSelection"></el-button>
+              </el-tooltip>
             </template>
           </el-table-column>
         </el-table>
@@ -194,17 +209,17 @@
             type: 'warning'
           }).then(() => {
             let param = new URLSearchParams()
-            let token = localStorage.getItem("token")
+            let token = sessionStorage.getItem("token")
             param.append('id', _this.tableData[index].id)
             param.append('token', token)
             _this.$axios({
-              method: 'post',
+              method: 'put',
               url: _this.baseUrl + '/send/pay',
               data: param
             })
               .then(function (response) {
                 console.log(response.data)
-                if (response.data.result === 'please login to operate') {
+                if (response.data === 'please login to operate') {
                   _this.$notify({
                     showClose: true,
                     title: '警告',
@@ -212,7 +227,7 @@
                     type: 'warning'
                   })
                   _this.$router.push('/loginAndRegister')
-                } else if (response.data.result === 'do fail') {
+                } else if (response.data === 'do fail') {
                   _this.$notify({
                     showClose: true,
                     title: '警告',
@@ -259,75 +274,73 @@
           })
         }
       },
-      // 单条记录删除
-      handleCancel(index, row) {
-        console.log(index, row)
+      // 单条记录取消
+      handleCancel(ids, count) {
         const _this = this
-        if (_this.tableData[index].status === '已发出') {
+        if (count > 0) {
           _this.$notify.error({
             showClose: true,
             title: '错误',
-            message: '此寄件已发出，无法取消！'
-          })
-        } else {
-          this.$confirm('将取消此寄件, 是否继续?', '提示', {
-            confirmButtonText: '确定',
-            cancelButtonText: '取消',
-            type: 'warning'
-          }).then(() => {
-            let param = new URLSearchParams()
-            let token = localStorage.getItem("token")
-            param.append('id', _this.tableData[index].id)
-            param.append('token', token)
-            _this.$axios({
-              method: 'post',
-              url: _this.baseUrl + '/send/cancel',
-              data: param
-            })
-              .then(function (response) {
-                console.log(response.data)
-                if (response.data.result === 'please login to operate') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '登录状态失效，请重新登录！',
-                    type: 'warning'
-                  })
-                  _this.$router.push('/loginAndRegister')
-                } else if (response.data.result === 'do fail') {
-                  _this.$notify({
-                    showClose: true,
-                    title: '警告',
-                    message: '取消失败！',
-                    type: 'warning'
-                  })
-                } else {
-                  _this.$message({
-                    showClose: true,
-                    type: 'success',
-                    message: '取消成功!'
-                  })
-                  let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
-                  _this.$router.push(NewPage)
-                  _this.$router.go(-1)
-                }
-              })
-              .catch(function (error) {
-                console.log(error)
-                _this.$notify.error({
-                  showClose: true,
-                  title: '错误',
-                  message: '服务器出错啦！'
-                })
-              })
-          }).catch(() => {
-            this.$message({
-              showClose: true,
-              type: 'info',
-              message: '已取消删除'
-            })
+            message: '有 ' + count + ' 件寄件已发出，无法取消！'
           })
         }
+        this.$confirm('将取消选中的寄件, 是否继续?', '提示', {
+          confirmButtonText: '确定',
+          cancelButtonText: '取消',
+          type: 'warning'
+        }).then(() => {
+          let param = new URLSearchParams()
+          let token = sessionStorage.getItem("token")
+          param.append('ids', ids)
+          param.append('token', token)
+          _this.$axios({
+            method: 'delete',
+            url: _this.baseUrl + '/send/cancel',
+            data: param
+          })
+            .then(function (response) {
+              console.log(response.data)
+              if (response.data === 'please login to operate') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '登录状态失效，请重新登录！',
+                  type: 'warning'
+                })
+                _this.$router.push('/loginAndRegister')
+              } else if (response.data === 'do fail') {
+                _this.$notify({
+                  showClose: true,
+                  title: '警告',
+                  message: '取消失败！',
+                  type: 'warning'
+                })
+              } else {
+                _this.$message({
+                  showClose: true,
+                  type: 'success',
+                  message: '取消成功!'
+                })
+                let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
+                _this.$router.push(NewPage)
+                _this.$router.go(-1)
+              }
+            })
+            .catch(function (error) {
+              console.log(error)
+              _this.$notify.error({
+                showClose: true,
+                title: '错误',
+                message: '服务器出错啦！'
+              })
+            })
+        }).catch(() => {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '已取消删除'
+          })
+        })
       },
       // 条件过滤
       handleFilter(filters) {
@@ -341,9 +354,10 @@
         }
         this.getPacks(this.orgFilter, this.statusFilter)
       },
+      // 获取寄件结果集
       getPacks(org, status) {
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
@@ -384,15 +398,38 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
+      },
+      // 处理取消多选
+      cancelSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          let count = 0
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+            ids += _this.$refs.filterTable.selection[i].id + ','
+            if (_this.$refs.filterTable.selection[i].status === '已发出') {
+              count++
+            }
+          }
+          this.handleCancel(ids, count)
+        }
       }
     },
     created() {
 		  this.getPacks("", "")
     },
     mounted() {
-      // this.getPacks()
+
     },
     updated() {
 

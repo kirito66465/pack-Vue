@@ -148,7 +148,6 @@
 </template>
 
 <script>
-  import qs from 'qs'
   import { regionData, CodeToText } from 'element-china-area-data'
   import Constant from "../pub/Constant"
 	export default {
@@ -228,11 +227,12 @@
           { province: '香港', code: '810000', base: 0, continue: 0},
           { province: '澳门', code: '820000', base: 0, continue: 0}
         ],
-        priceDataTitle: '计费方式（以下区域码数据来自airyland/china-area-data）',
+        priceDataTitle: '计费方式（以下区域码数据来自 airyland/china-area-data）',
         prohibitDrawerTitle: '禁寄物品'
       }
     },
     methods: {
+		  // 寄件提交
       onSubmit(formName) {
         const _this = this
         this.$refs[formName].validate((valid) => {
@@ -246,7 +246,7 @@
                 type: 'warning'
               })
             } else {
-              let token = localStorage.getItem('token')
+              let token = sessionStorage.getItem('token')
               let addr = CodeToText[_this.form.addr[0]] + CodeToText[_this.form.addr[1]] + CodeToText[_this.form.addr[2]]
               _this.$axios({
                 method: 'post',
@@ -310,17 +310,20 @@
           }
         })
       },
+      // 重量处理
       handleChangeWeight(value) {
         console.log(value)
       },
+      // 选择省市区处理
       handleChangeCity(value) {
         console.log(CodeToText[value[0]])       // 省
         console.log(CodeToText[value[1]])       // 市
         console.log(CodeToText[value[2]])       // 区
       },
+      // 运费处理
       setPrice() {
         const _this = this
-        if (_this.form.addr[0] === '310000' || _this.form.addr[0] === '320000' || _this.form.addr[0] === '320000') {
+        if (_this.form.addr[0] === '310000' || _this.form.addr[0] === '320000' || _this.form.addr[0] === '330000') {
           _this.form.price = 4 + _this.form.weight
           _this.price.base = 5
           _this.price.weight = 1
@@ -351,6 +354,7 @@
           _this.price.weight = 10
         }
       },
+      // 查看运费明细
       clickPrice() {
         const _this = this
         this.$msgbox({

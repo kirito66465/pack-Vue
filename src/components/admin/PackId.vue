@@ -70,6 +70,7 @@
       }
     },
     methods: {
+		  // 根据快递所属公司获取对应快递单号
 		  getPackId(type) {
         const _this = this
         let param = new URLSearchParams()
@@ -96,7 +97,7 @@
       }
     },
     created() {
-		  let card = localStorage.getItem("card")
+		  let card = sessionStorage.getItem("card")
       if (card === '2101') {
         this.isShow.zy = true
         this.getPackId("ZTO")

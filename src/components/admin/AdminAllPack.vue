@@ -79,7 +79,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.org === '中通' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.org}}</el-tag>
+                disable-transitions>{{ scope.row.org }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -102,7 +102,7 @@
             <template slot-scope="scope">
               <el-tag
                 :type="scope.row.status === '已取件' ? 'primary' : 'success'"
-                disable-transitions>{{scope.row.status}}</el-tag>
+                disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
           <el-table-column
@@ -194,9 +194,10 @@
         }
         this.getPacks(this.orgFilter, this.statusFilter)
       },
+      // 获取全部快递结果集
       getPacks(org, status) {
         let param = new URLSearchParams()
-        let token = localStorage.getItem("token")
+        let token = sessionStorage.getItem("token")
         let jsonParam = {
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
@@ -235,12 +236,14 @@
             })
           })
       },
+      // 分页处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
       },
+      // 设置快递公司筛选选项
       setFilters() {
         const _this = this
-        let card = localStorage.getItem("card")
+        let card = sessionStorage.getItem("card")
         if (card === '2101') {
           _this.filters = [{ text: '中通', value: '中通' }
             , { text: '申通', value: '申通' }

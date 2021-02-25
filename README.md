@@ -77,3 +77,6 @@ handleFilter(filters) {
     this.getPacks(this.orgFilter, this.addrFilter)
 }
 ```
+4. 刷新数据丢失问题
+> 解决方法：
+> 使用 sessionStorage 进行存储 token，保证当前会话在浏览器关闭前数据一直存在
