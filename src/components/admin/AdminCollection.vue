@@ -191,6 +191,7 @@
         }).then(() => {
           let param = new URLSearchParams()
           let token = sessionStorage.getItem("token")
+          console.log('ids: ' + ids)
           param.append('ids', ids)
           param.append('token', token)
           _this.$axios({
@@ -241,16 +242,6 @@
             message: '已取消确认'
           })
         })
-        if (_this.tableData[index].status === '已提交') {
-
-        } else if (_this.tableData[index].status === '已确认' || _this.tableData[index].status === '已支付'
-          || _this.tableData[index].status === '已发出') {
-          _this.$message({
-            showClose: true,
-            message: '该寄件已确认!',
-            type: 'warning'
-          })
-        }
       },
       // 寄件发出
       handleOut(ids, outCount, payCount) {
@@ -276,6 +267,7 @@
         }).then(() => {
           let param = new URLSearchParams()
           let token = sessionStorage.getItem("token")
+          console.log('ids: ' + ids)
           param.append('ids', ids)
           param.append('token', token)
           _this.$axios({
@@ -403,8 +395,9 @@
           let ids = ''
           let count = 0
           for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
-            ids += _this.$refs.filterTable.selection[i].id + ','
-            if (_this.$refs.filterTable.selection[i].status === '已确认') {
+            if (_this.$refs.filterTable.selection[i].status === '已提交') {
+              ids += _this.$refs.filterTable.selection[i].id + ','
+            } else {
               count++
             }
           }
@@ -425,15 +418,17 @@
           let outCount = 0
           let payCount = 0
           for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
-            ids += _this.$refs.filterTable.selection[i].id + ','
             if (_this.$refs.filterTable.selection[i].status === '已发出') {
               outCount++
+              continue
             }
             if (_this.$refs.filterTable.selection[i].status === '已提交' || _this.$refs.filterTable.selection[i].status === '已确认') {
               payCount++
+              continue
             }
+            ids += _this.$refs.filterTable.selection[i].id + ','
           }
-          this.handleConfirm(ids, outCount, payCount)
+          this.handleOut(ids, outCount, payCount)
         }
       }
     },

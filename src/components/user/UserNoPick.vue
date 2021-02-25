@@ -120,18 +120,7 @@
                 disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
-          <el-table-column
-            align="right"
-            width="300">
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入关键字搜索"
-                @keyup.enter.native="searchHandler"/>
-            </template>
-          </el-table-column>
-          <el-table-column>
+          <el-table-column width="150">
             <template slot="header" slot-scope="scope">
               <!-- 取件 -->
               <el-tooltip class="item" effect="dark" content="取件" placement="top">
@@ -151,6 +140,17 @@
                   circle
                   @click="deleteSelection"></el-button>
               </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="right"
+            width="300">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchHandler"/>
             </template>
           </el-table-column>
         </el-table>

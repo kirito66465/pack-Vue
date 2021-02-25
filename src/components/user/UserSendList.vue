@@ -93,8 +93,8 @@
             prop="status"
             width="100"
             :filters="[{ text: '已提交', value: '已提交' }
-              , { text: '已支付', value: '已支付' }
               , { text: '已确认', value: '已确认' }
+              , { text: '已支付', value: '已支付' }
               , { text: '已发出', value: '已发出' }]"
             column-key="status"
             filter-placement="bottom-end">
@@ -109,17 +109,7 @@
             prop="dt"
             width="250">
           </el-table-column>
-          <el-table-column
-            align="right"
-            width="300">
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入关键字搜索"/>
-            </template>
-          </el-table-column>
-          <el-table-column>
+          <el-table-column width="50">
             <template slot-scope="scope">
               <!-- 支付 -->
               <el-tooltip class="item" effect="dark" content="支付" placement="top">
@@ -141,6 +131,16 @@
                   circle
                   @click="cancelSelection"></el-button>
               </el-tooltip>
+            </template>
+          </el-table-column>
+          <el-table-column
+            align="right"
+            width="300">
+            <template slot="header" slot-scope="scope">
+              <el-input
+                v-model="search"
+                size="mini"
+                placeholder="输入关键字搜索"/>
             </template>
           </el-table-column>
         </el-table>
