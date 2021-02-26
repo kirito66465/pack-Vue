@@ -61,10 +61,6 @@
             width="100">
           </el-table-column>
           <el-table-column
-            type="selection"
-            width="70">
-          </el-table-column>
-          <el-table-column
             label="快递单号"
             prop="id"
             width="250">
@@ -72,7 +68,7 @@
           <el-table-column
             label="快递公司"
             prop="org"
-            width="200"
+            width="150"
             :filters="filters"
             column-key="org"
             filter-placement="bottom-end">
@@ -85,6 +81,11 @@
           <el-table-column
             label="收件人"
             prop="perName"
+            width="200">
+          </el-table-column>
+          <el-table-column
+            label="收件手机号"
+            prop="perTel"
             width="200">
           </el-table-column>
           <el-table-column
@@ -105,9 +106,22 @@
                 disable-transitions>{{ scope.row.status }}</el-tag>
             </template>
           </el-table-column>
+          <el-table-column width="50">
+            <template slot="header" slot-scope="scope">
+              <!-- 导出下载 -->
+              <el-tooltip class="item" effect="dark" content="导出为 Excel" placement="top">
+                <el-button
+                  size="medium"
+                  type="primary"
+                  icon="el-icon-download"
+                  circle
+                  @click="getExcel('all')"></el-button>
+              </el-tooltip>
+            </template>
+          </el-table-column>
           <el-table-column
             align="right"
-            width="400">
+            width="300">
             <template slot="header" slot-scope="scope">
               <el-input
                 v-model="search"
@@ -115,7 +129,6 @@
                 placeholder="输入关键字搜索"
                 @keyup.enter.native="searchHandler"/>
             </template>
-
           </el-table-column>
         </el-table>
         <el-pagination
@@ -236,7 +249,7 @@
             })
           })
       },
-      // 分页处理
+      // 索引处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
       },
@@ -255,6 +268,66 @@
         } else {
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
+        }
+      },
+      // 获取 Excel 输出流并下载到本地
+      getExcel(type) {
+        const _this = this
+        let param = new URLSearchParams()
+        let token = sessionStorage.getItem("token")
+        param.append('token', token)
+        param.append('type', type)
+        this.$axios({
+          method: 'post',
+          url: _this.baseUrl + '/excel',
+          data: param,
+          responseType: 'blob'
+        })
+          .then(function (response) {
+            console.log(response.data)
+            let name = sessionStorage.getItem('name')
+            let time = _this.getCurrentTime()
+            let fileName = name + "-" + time + "-" + type + ".xlsx"
+            _this.download(response.data, fileName)
+          })
+      },
+      // 下载 blob 类型数据到本地
+      download(data, filename) {
+        //var blob = new Blob([data], {type: 'application/vnd.ms-excel'})接收的是blob，若接收的是文件流，需要转化一下
+        if (typeof window.chrome !== 'undefined') {
+          // Chrome version
+          let link = document.createElement('a');
+          link.href = window.URL.createObjectURL(data);
+          link.download = filename;
+          link.click();
+        } else if (typeof window.navigator.msSaveBlob !== 'undefined') {
+          // IE version
+          let blob = new Blob([data], {type: 'application/force-download'});
+          window.navigator.msSaveBlob(blob, filename);
+        } else {
+          // Firefox version
+          let file = new File([data], filename, {type: 'application/force-download'});
+          window.open(URL.createObjectURL(file));
+        }
+      },
+      // 获取当前时间 格式：yyyy-MM-dd HH:MM:SS
+      getCurrentTime() {
+        let date = new Date()                             // 当前时间
+        let month = this.zeroFill(date.getMonth() + 1)  // 月
+        let day = this.zeroFill(date.getDate())            // 日
+        let hour = this.zeroFill(date.getHours())          // 时
+        let minute = this.zeroFill(date.getMinutes())      // 分
+        let second = this.zeroFill(date.getSeconds())      // 秒
+        // 当前时间
+        let curTime = date.getFullYear() + month + day + hour + minute + second
+        return curTime
+      },
+      // 补零
+      zeroFill(i){
+        if (i >= 0 && i <= 9) {
+          return "0" + i
+        } else {
+          return i
         }
       }
     },

@@ -331,7 +331,7 @@
             })
           })
       },
-      // 分页处理
+      // 索引处理
       indexMethod(index) {
         return (this.currentPage - 1) * this.pageSize + index + 1
       },

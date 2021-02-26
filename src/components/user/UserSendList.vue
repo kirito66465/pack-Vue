@@ -197,7 +197,7 @@
         console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter, this.statusFilter)
       },
-      // 单条记录支付
+      // 支付寄件
       handlePay(index, row) {
         console.log(index, row)
         const _this = this
@@ -274,7 +274,7 @@
           })
         }
       },
-      // 单条记录取消
+      // 取消寄件
       handleCancel(ids, count) {
         const _this = this
         if (count > 0) {

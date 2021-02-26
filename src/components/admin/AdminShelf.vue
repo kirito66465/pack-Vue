@@ -25,6 +25,18 @@
         <el-form-item>
           <el-button type="primary" @click="getPacks">查询</el-button>
         </el-form-item>
+        <el-form-item>
+          <el-input
+            v-model="search"
+            size="mini"
+            placeholder="输入关键字搜索"
+            @keyup.enter.native="searchHandler"/>
+        </el-form-item>
+        <el-form-item>
+          <el-button
+            type="success"
+            @click="pickSelection">取件</el-button>
+        </el-form-item>
       </el-form>
     </div>
     <div class="block">
@@ -107,23 +119,6 @@
             label="入站时间"
             prop="start"
             width="200">
-          </el-table-column>
-          <el-table-column
-            align="right"
-            width="400">
-            <template slot="header" slot-scope="scope">
-              <el-input
-                v-model="search"
-                size="mini"
-                placeholder="输入关键字搜索"
-                @keyup.enter.native="searchHandler"/>
-            </template>
-            <template slot-scope="scope">
-              <el-button
-                size="medium"
-                type="primary"
-                @click="handlePick(scope.$index, scope.row)">取件</el-button>
-            </template>
           </el-table-column>
         </el-table>
       </div>
@@ -242,9 +237,8 @@
       }
     },
     methods: {
-      // 取件 TODO
-      handlePick(index, row) {
-        console.log(index, row)
+      // 取件
+      handlePick(ids) {
         const _this = this
         this.$confirm('将取件, 是否继续?', '提示', {
           confirmButtonText: '确定',
@@ -253,7 +247,7 @@
         }).then(() => {
           let param = new URLSearchParams()
           let token = sessionStorage.getItem("token")
-          param.append('id', _this.tableData[index].id)
+          param.append('ids', ids)
           param.append('token', token)
           _this.$axios({
             method: 'put',
@@ -271,10 +265,11 @@
                 let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
                 _this.$router.push(NewPage)
                 _this.$router.go(-1)
-              } else if (response.data === 'not exist') {
-                _this.$message({
+              } else if (response.data === 'pick up the package fail') {
+                _this.$notify({
                   showClose: true,
-                  message: '该快递不存在！',
+                  title: '警告',
+                  message: '取件失败！',
                   type: 'warning'
                 })
               } else if (response.data === 'please login to operate') {
@@ -286,10 +281,9 @@
                 })
                 _this.$router.push('/LoginAndRegister')
               } else {
-                _this.$notify({
+                _this.$message({
                   showClose: true,
-                  title: '警告',
-                  message: '取件失败！',
+                  message: response.data,
                   type: 'warning'
                 })
               }
@@ -359,7 +353,7 @@
             })
           })
       },
-      // 分页处理
+      // 索引处理
       indexMethod(index) {
         return index + 1
       },
@@ -379,7 +373,24 @@
           _this.filters = [{ text: '天天', value: '天天' }
             , { text: 'EMS', value: 'EMS' }]
         }
-      }
+      },
+      // 处理取件多选
+      pickSelection() {
+        const _this = this
+        if (this.$refs.filterTable.selection.length === 0) {
+          this.$message({
+            showClose: true,
+            type: 'info',
+            message: '请选择！'
+          })
+        } else {
+          let ids = ''
+          for (let i = 0; i < _this.$refs.filterTable.selection.length; i++) {
+            ids += _this.$refs.filterTable.selection[i].id + ','
+          }
+          this.handlePick(ids)
+        }
+      },
     },
     created() {
       this.setFilters()

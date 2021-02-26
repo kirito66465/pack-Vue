@@ -216,7 +216,7 @@
                   message: '确认失败！',
                   type: 'warning'
                 })
-              } else {
+              } else if (response.data === 'do success') {
                 _this.$message({
                   showClose: true,
                   type: 'success',
@@ -292,7 +292,7 @@
                   message: '发出失败！',
                   type: 'warning'
                 })
-              } else {
+              } else if (response.data === 'do success') {
                 _this.$message({
                   showClose: true,
                   type: 'success',

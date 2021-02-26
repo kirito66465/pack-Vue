@@ -4,32 +4,32 @@
     <el-row><br></el-row>
     <div v-show="isShow.zy">
       <el-row>
-        <span>中通: </span><el-link :underline="false" @click="getPackId('ZTO')">{{packId.zto}}</el-link>
+        <span>中通: </span><el-link :underline="false" @click="getPackId('ZTO')">{{ packId.zto }}</el-link>
       </el-row>
       <el-row><br></el-row>
       <el-row><br></el-row>
       <el-row>
-        <span>申通: </span><el-link :underline="false" @click="getPackId('STO')">{{packId.sto}}</el-link>
+        <span>申通: </span><el-link :underline="false" @click="getPackId('STO')">{{ packId.sto }}</el-link>
       </el-row>
       <el-row><br></el-row>
       <el-row><br></el-row>
       <el-row>
-        <span>圆通: </span><el-link :underline="false" @click="getPackId('YTO')">{{packId.yto}}</el-link>
+        <span>圆通: </span><el-link :underline="false" @click="getPackId('YTO')">{{ packId.yto }}</el-link>
       </el-row>
     </div>
     <div v-show="isShow.xy">
       <el-row>
-        <span>京东: </span><el-link :underline="false" @click="getPackId('JD')">{{packId.jd}}</el-link>
+        <span>京东: </span><el-link :underline="false" @click="getPackId('JD')">{{ packId.jd }}</el-link>
       </el-row>
       <el-row><br></el-row>
       <el-row><br></el-row>
       <el-row>
-        <span>顺丰: </span><el-link :underline="false" @click="getPackId('SF')">{{packId.sf}}</el-link>
+        <span>顺丰: </span><el-link :underline="false" @click="getPackId('SF')">{{ packId.sf }}</el-link>
       </el-row>
       <el-row><br></el-row>
       <el-row><br></el-row>
       <el-row>
-        <span>韵达: </span><el-link :underline="false" @click="getPackId('YD')">{{packId.yd}}</el-link>
+        <span>韵达: </span><el-link :underline="false" @click="getPackId('YD')">{{ packId.yd }}</el-link>
       </el-row>
     </div>
     <div v-show="isShow.by">
