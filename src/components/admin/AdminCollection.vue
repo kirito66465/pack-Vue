@@ -167,11 +167,11 @@
     methods: {
 		  // 获取每页记录条数
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`)
+        // console.log(`每页 ${val} 条`)
       },
       // 获取当前页数
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        // console.log(`当前页: ${val}`)
         this.getPacks(this.statusFilter)
       },
       // 寄件确认
@@ -191,7 +191,7 @@
         }).then(() => {
           let param = new URLSearchParams()
           let token = sessionStorage.getItem("token")
-          console.log('ids: ' + ids)
+          // console.log('ids: ' + ids)
           param.append('ids', ids)
           param.append('token', token)
           _this.$axios({
@@ -200,7 +200,7 @@
             data: param
           })
             .then(function (response) {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,
@@ -228,7 +228,7 @@
               }
             })
             .catch(function (error) {
-              console.log(error)
+              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -267,7 +267,7 @@
         }).then(() => {
           let param = new URLSearchParams()
           let token = sessionStorage.getItem("token")
-          console.log('ids: ' + ids)
+          // console.log('ids: ' + ids)
           param.append('ids', ids)
           param.append('token', token)
           _this.$axios({
@@ -276,7 +276,7 @@
             data: param
           })
             .then(function (response) {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,
@@ -304,7 +304,7 @@
               }
             })
             .catch(function (error) {
-              console.log(error)
+              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -331,7 +331,7 @@
       filterStatus(filters) {
         if (filters.status !== undefined) {
           this.statusFilter = filters.status
-          console.log("status: " + this.statusFilter)
+          // console.log("status: " + this.statusFilter)
         }
         this.getPacks(this.statusFilter)
       },
@@ -347,15 +347,15 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
-        console.log("准备发出请求")
+        // console.log("准备发出请求")
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/send/getSendByAdmin',
           data: param
         })
           .then(function (response) {
-            console.log("收到响应")
-            console.log(response.data)
+            // console.log("收到响应")
+            // console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -370,7 +370,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

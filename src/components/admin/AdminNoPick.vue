@@ -196,11 +196,11 @@
     methods: {
 		  // 获取每页记录条数
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`)
+        // console.log(`每页 ${val} 条`)
       },
       // 获取当前页数
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        // console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter)
       },
       // 邮件通知
@@ -221,7 +221,7 @@
             data: param
           })
             .then(function (response) {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data.result === 'do success') {
                 _this.$message({
                   showClose: true,
@@ -252,7 +252,7 @@
               }
             })
             .catch(function (error) {
-              console.log(error)
+              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -285,7 +285,7 @@
             data: param
           })
             .then(function (response) {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data === 'pick up the package success') {
                 _this.$message({
                   showClose: true,
@@ -319,7 +319,7 @@
               }
             })
             .catch(function (error) {
-              console.log(error)
+              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -346,11 +346,11 @@
       handleFilter(filters) {
         if (filters.org !== undefined) {
           this.orgFilter = filters.org
-          console.log("org: " + this.orgFilter)
+          // console.log("org: " + this.orgFilter)
         }
         if (filters.status !== undefined) {
           this.statusFilter = filters.status
-          console.log("status: " + this.statusFilter)
+          // console.log("status: " + this.statusFilter)
         }
         this.getPacks(this.orgFilter, this.statusFilter)
       },
@@ -367,15 +367,15 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
-        console.log("准备发出请求")
+        // console.log("准备发出请求")
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/pack/getAdminNoPick',
           data: param
         })
           .then(function (response) {
-            console.log("收到响应")
-            console.log(response.data)
+            // console.log("收到响应")
+            // console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -390,7 +390,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -467,7 +467,7 @@
           responseType: 'blob'
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             let name = sessionStorage.getItem('name')
             let time = _this.getCurrentTime()
             let fileName = name + "-" + time + "-" + type + ".xlsx"

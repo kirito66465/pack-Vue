@@ -159,7 +159,7 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data.result === 'update password success') {
               _this.$message({
                 showClose: true,
@@ -186,7 +186,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

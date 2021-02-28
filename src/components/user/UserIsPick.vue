@@ -186,11 +186,11 @@
     methods: {
 		  // 获取每页记录条数
       handleSizeChange(val) {
-        console.log(`每页 ${val} 条`)
+        // console.log(`每页 ${val} 条`)
       },
       // 获取当前页数
       handleCurrentChange(val) {
-        console.log(`当前页: ${val}`)
+        // console.log(`当前页: ${val}`)
         this.getPacks(this.orgFilter)
       },
       // 删除快递
@@ -211,7 +211,7 @@
             data: param
           })
             .then(function (response) {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,
@@ -239,7 +239,7 @@
               }
             })
             .catch(function (error) {
-              console.log(error)
+              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -265,7 +265,7 @@
       // 快递所属公司过滤
       filterOrg(filters) {
         let org = filters.org
-        console.log(org)   // 中通，申通，圆通
+        // console.log(org)   // 中通，申通，圆通
         this.orgFilter = org
         if (org === '' || org === null) {
           this.getPacks("")
@@ -285,15 +285,15 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
-        console.log("准备发出请求")
+        // console.log("准备发出请求")
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/pack/getUserIsPick',
           data: param
         })
           .then(function (response) {
-            console.log("收到响应")
-            console.log(response.data)
+            // console.log("收到响应")
+            // console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -308,7 +308,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

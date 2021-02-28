@@ -263,7 +263,7 @@
                 }
               })
                 .then(function (response) {
-                  console.log(response.data)
+                  // console.log(response.data)
                   if (response.data.result === 'do success') {
                     _this.$message({
                       showClose: true,
@@ -291,7 +291,7 @@
                   }
                 })
                 .catch(function (error) {
-                  console.log(error)
+                  // console.log(error)
                   _this.$notify.error({
                     showClose: true,
                     title: '错误',
@@ -300,7 +300,7 @@
                 })
             }
           } else {
-            console.log('error submit!!')
+            // console.log('error submit!!')
             _this.$message({
               showClose: true,
               message: '警告哦，请完成寄件信息填写！',
@@ -312,13 +312,13 @@
       },
       // 重量处理
       handleChangeWeight(value) {
-        console.log(value)
+        // console.log(value)
       },
       // 选择省市区处理
       handleChangeCity(value) {
-        console.log(CodeToText[value[0]])       // 省
-        console.log(CodeToText[value[1]])       // 市
-        console.log(CodeToText[value[2]])       // 区
+        // console.log(CodeToText[value[0]])       // 省
+        // console.log(CodeToText[value[1]])       // 市
+        // console.log(CodeToText[value[2]])       // 区
       },
       // 运费处理
       setPrice() {

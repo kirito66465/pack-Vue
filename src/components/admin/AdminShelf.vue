@@ -255,7 +255,7 @@
             data: param
           })
             .then(function (response) {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data === 'pick up the package success') {
                 _this.$message({
                   showClose: true,
@@ -289,7 +289,7 @@
               }
             })
             .catch(function (error) {
-              console.log(error)
+              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -322,7 +322,7 @@
         let param = new URLSearchParams()
         let token = sessionStorage.getItem("token")
         let choice = this.formInline.shelf + this.formInline.layer
-        console.log("货架: " + choice)
+        // console.log("货架: " + choice)
         param.append('token', token)
         param.append('shelf', choice)
         this.$axios({
@@ -331,7 +331,7 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -345,7 +345,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

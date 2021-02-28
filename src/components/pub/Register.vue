@@ -97,7 +97,7 @@
           if (valid) {
             this.userRegister()
           } else {
-            console.log('error submit!!');
+            // console.log('error submit!!');
             return false
           }
         })
@@ -122,7 +122,7 @@
           }
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data.result === "register success") {
               sessionStorage.setItem("card", _this.user.card)
               sessionStorage.setItem("name", _this.user.name)
@@ -148,7 +148,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

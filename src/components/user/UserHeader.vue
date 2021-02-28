@@ -71,7 +71,7 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data === 'exit success') {
               sessionStorage.removeItem("token")
               sessionStorage.removeItem("card")
@@ -84,7 +84,7 @@
               sessionStorage.removeItem("codePic")
               _this.$router.push('/')
             } else {
-              console.log("退出登录失败！")
+              // console.log("退出登录失败！")
               _this.$notify({
                 showClose: true,
                 title: '警告',
@@ -94,7 +94,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

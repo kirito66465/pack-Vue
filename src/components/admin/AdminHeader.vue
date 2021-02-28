@@ -72,7 +72,7 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data === 'exit success') {
               sessionStorage.removeItem("token")
               sessionStorage.removeItem("card")
@@ -93,7 +93,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

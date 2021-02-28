@@ -60,7 +60,7 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data.result === 'login success') {
               // 将用户的 token 存储到本地 sessionStorage 中
               sessionStorage.setItem('card', _this.user.card)
@@ -76,7 +76,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -97,7 +97,7 @@
           data: param
         })
           .then(function (response) {
-            console.log(response.data)
+            // console.log(response.data)
             if (response.data.result === 'login success') {
               // 将用户的 token 存储到本地 sessionStorage 中
               sessionStorage.setItem('card', _this.user.card)
@@ -113,7 +113,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -156,7 +156,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -195,7 +195,7 @@
             }
           })
           .catch(function (error) {
-            console.log(error)
+            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
