@@ -25,13 +25,13 @@
         <el-form-item>
           <el-button type="primary" @click="getPacks">查询</el-button>
         </el-form-item>
-        <el-form-item>
-          <el-input
-            v-model="search"
-            size="mini"
-            placeholder="输入关键字搜索"
-            @keyup.enter.native="searchHandler"/>
-        </el-form-item>
+<!--        <el-form-item>-->
+<!--          <el-input-->
+<!--            v-model="search"-->
+<!--            size="mini"-->
+<!--            placeholder="输入关键字搜索"-->
+<!--            @keyup.enter.native="searchHandler"/>-->
+<!--        </el-form-item>-->
         <el-form-item>
           <el-button
             type="success"
@@ -305,13 +305,13 @@
         })
       },
       // 搜索
-      searchHandler() {
-        this.$message({
-          showClose: true,
-          type: 'info',
-          message: '暂未实现！'
-        })
-      },
+      // searchHandler() {
+      //   this.$message({
+      //     showClose: true,
+      //     type: 'info',
+      //     message: '暂未实现！'
+      //   })
+      // },
       // 快递所属公司过滤
       filterOrg(value, row) {
         return row.org === value

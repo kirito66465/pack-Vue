@@ -256,11 +256,7 @@
       },
       // 搜索
       searchHandler() {
-        this.$message({
-          showClose: true,
-          type: 'info',
-          message: '暂未实现！'
-        })
+        this.getPacks(this.orgFilter)
       },
       // 快递所属公司过滤
       filterOrg(filters) {
@@ -281,7 +277,8 @@
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
           "token" : token,
-          "org" : org
+          "org" : org,
+          "search" : this.search
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this

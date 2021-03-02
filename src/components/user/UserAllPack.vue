@@ -264,11 +264,7 @@
       },
       // 搜索
       searchHandler() {
-        this.$message({
-          showClose: true,
-          type: 'info',
-          message: '暂未实现！'
-        })
+        this.getPacks(this.orgFilter, this.addrFilter, this.statusFilter)
       },
       // 条件过滤
       handleFilter(filters) {
@@ -296,7 +292,8 @@
           "token" : token,
           "org" : org,
           "addr" : addr,
-          "status" : status
+          "status" : status,
+          "search" : this.search
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this

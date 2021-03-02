@@ -321,11 +321,7 @@
       },
       // 搜索
       searchHandler() {
-        this.$message({
-          showClose: true,
-          type: 'info',
-          message: '暂未实现！'
-        })
+        this.getPacks(this.statusFilter)
       },
       // 快递状态过滤
       filterStatus(filters) {
@@ -343,7 +339,8 @@
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
           "token" : token,
-          "status" : status
+          "status" : status,
+          "search" : this.search
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this

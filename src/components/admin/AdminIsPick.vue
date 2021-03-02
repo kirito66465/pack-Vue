@@ -123,7 +123,7 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入签收人关键字搜索"
+                placeholder="输入关键字搜索"
                 @keyup.enter.native="searchHandler"/>
             </template>
           </el-table-column>
@@ -185,11 +185,7 @@
       },
       // 搜索
       searchHandler() {
-        this.$message({
-          showClose: true,
-          type: 'info',
-          message: '暂未实现！'
-        })
+        this.getPacks(this.orgFilter)
       },
       // 快递所属公司过滤
       filterOrg(filters) {
@@ -210,7 +206,8 @@
           "currentPage" : this.currentPage,
           "pageSize" : this.pageSize,
           "token" : token,
-          "org" : org
+          "org" : org,
+          "search" : this.search
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this

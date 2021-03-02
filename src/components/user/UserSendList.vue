@@ -140,7 +140,8 @@
               <el-input
                 v-model="search"
                 size="mini"
-                placeholder="输入关键字搜索"/>
+                placeholder="输入关键字搜索"
+                @keyup.enter.native="searchHandler"/>
             </template>
           </el-table-column>
         </el-table>
@@ -342,6 +343,10 @@
           })
         })
       },
+      // 搜索
+      searchHandler() {
+        this.getPacks(this.orgFilter, this.statusFilter)
+      },
       // 条件过滤
       handleFilter(filters) {
         if (filters.org !== undefined) {
@@ -363,7 +368,8 @@
           "pageSize" : this.pageSize,
           "token" : token,
           "org" : org,
-          "status" : status
+          "status" : status,
+          "search" : this.search
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
