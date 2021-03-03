@@ -3,7 +3,7 @@
     <div>
       <el-form :inline="true" :model="formInline" class="demo-form-inline">
         <el-form-item label="货架:">
-          <el-select v-model="formInline.shelf" placeholder="请选择货架" clearable filterable>
+          <el-select v-model="formInline.shelf" placeholder="请选择货架" clearable filterable @change="getPacks">
             <el-option
               v-for="item in options1"
               :key="item.value"
@@ -13,7 +13,7 @@
           </el-select>
         </el-form-item>
         <el-form-item label="层数:">
-          <el-select v-model="formInline.layer" placeholder="请选择层数" clearable filterable>
+          <el-select v-model="formInline.layer" placeholder="请选择层数" clearable filterable @change="getPacks">
             <el-option
               v-for="item in options2"
               :key="item.value"
@@ -22,9 +22,9 @@
             </el-option>
           </el-select>
         </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="getPacks">查询</el-button>
-        </el-form-item>
+<!--        <el-form-item>-->
+<!--          <el-button type="primary" @click="getPacks">查询</el-button>-->
+<!--        </el-form-item>-->
 <!--        <el-form-item>-->
 <!--          <el-input-->
 <!--            v-model="search"-->
