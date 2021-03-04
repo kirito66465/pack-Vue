@@ -1,8 +1,5 @@
 <template>
   <div id="app">
-<!--    <img src="./assets/logo.png">-->
-<!--    <a href="#/loginAndRegister">login</a>-->
-<!--    <a href="#/index">index</a>-->
     <router-view/>
   </div>
 </template>
@@ -26,4 +23,11 @@ export default {
 /*  color: #2c3e50;*/
 /*  margin-top: 60px;*/
 /*}*/
+  #app {
+    width: 100%;
+    height: 100%;
+    background: url("./assets/image/bg.jpg") center center no-repeat;
+    background-size: 100% 100%;
+    position:absolute;
+  }
 </style>
