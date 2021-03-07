@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div class="index">
     <el-container>
       <el-header>
         <user-header></user-header>
@@ -84,5 +84,13 @@
 
   .el-container:nth-child(7) .el-aside {
     line-height: 320px;
+  }
+
+  .index{
+    height: calc(100vh);
+  }
+
+  html, body, #app, .el-container {
+    height: 100%;
   }
 </style>
