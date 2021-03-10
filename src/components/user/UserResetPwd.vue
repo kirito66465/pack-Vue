@@ -25,7 +25,6 @@
         </el-form>
       </el-col>
     </el-row>
-
   </div>
 </template>
 

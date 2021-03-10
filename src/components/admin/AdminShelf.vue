@@ -22,16 +22,6 @@
             </el-option>
           </el-select>
         </el-form-item>
-<!--        <el-form-item>-->
-<!--          <el-button type="primary" @click="getPacks">查询</el-button>-->
-<!--        </el-form-item>-->
-<!--        <el-form-item>-->
-<!--          <el-input-->
-<!--            v-model="search"-->
-<!--            size="mini"-->
-<!--            placeholder="输入关键字搜索"-->
-<!--            @keyup.enter.native="searchHandler"/>-->
-<!--        </el-form-item>-->
         <el-form-item>
           <el-button
             type="success"
