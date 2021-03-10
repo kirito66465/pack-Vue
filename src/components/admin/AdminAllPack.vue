@@ -290,7 +290,7 @@
       },
       // 下载 blob 类型数据到本地
       download(data, filename) {
-        //var blob = new Blob([data], {type: 'application/vnd.ms-excel'})接收的是blob，若接收的是文件流，需要转化一下
+        // var blob = new Blob([data], {type: 'application/vnd.ms-excel'})接收的是blob，若接收的是文件流，需要转化一下
         if (typeof window.chrome !== 'undefined') {
           // Chrome version
           let link = document.createElement('a');
