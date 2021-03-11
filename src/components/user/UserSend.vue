@@ -370,7 +370,7 @@
                   if (response.data.result === 'do success') {
                     _this.$message({
                       showClose: true,
-                      message: '下单成功，请支付！',
+                      message: '下单成功，请等待驿站管理员确认！',
                       type: 'success'
                     })
                     let NewPage = "_empty" + "?time=" + new Date().getTime() / 500
