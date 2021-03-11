@@ -2,7 +2,7 @@
 	<div>
     <el-row>
       <el-col :span="8" :offset="8">
-        <el-form ref="form" :model="form" label-width="80px">
+        <el-form ref="form" :model="form" label-width="80px" status-icon>
           <el-form-item label="学号">
             <el-input v-model="form.card" disabled></el-input>
           </el-form-item>
@@ -26,7 +26,7 @@
           <el-form-item label="未取快递">
             <el-input v-model="form.count" disabled></el-input>
           </el-form-item>
-          <el-button type="primary" @click="onSubmit">修改信息</el-button>
+          <el-button type="primary" @click="verify('form')">修改信息</el-button>
         </el-form>
       </el-col>
     </el-row>
@@ -52,6 +52,18 @@
       }
     },
     methods: {
+		  // 表单验证
+		  verify(formName) {
+        const _this = this
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            _this.onSubmit()
+          } else {
+            // console.log('error submit!!')
+            return false
+          }
+        })
+      },
 		  // 获取学生信息
 		  getUserInfo() {
         const _this = this

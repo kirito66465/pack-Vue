@@ -2,17 +2,17 @@
 	<div>
     <el-row>
       <el-col :span="8" :offset="8">
-        <el-form ref="form" :model="form" label-width="80px">
-          <el-form-item label="原密码">
+        <el-form ref="form" :model="form" label-width="80px" status-icon :rules="rules">
+          <el-form-item label="原密码" prop="oldPwd">
             <el-input v-model="form.oldPwd" placeholder="请输入原密码" show-password clearable type="password"></el-input>
           </el-form-item>
-          <el-form-item label="新密码">
+          <el-form-item label="新密码" prop="newPwd">
             <el-input v-model="form.newPwd" placeholder="请输入新密码" show-password clearable type="password"></el-input>
           </el-form-item>
-          <el-form-item label="新密码">
+          <el-form-item label="新密码" prop="newPwdAgain">
             <el-input v-model="form.newPwdAgain" placeholder="请再次输入新密码" show-password clearable type="password"></el-input>
           </el-form-item>
-          <el-form-item label="验证码">
+          <el-form-item label="验证码" prop="code">
             <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
             <el-image
               style="width: 100px; height: 100px"
@@ -21,7 +21,9 @@
               @click="getCheckCode">
             </el-image>
           </el-form-item>
-          <el-button type="primary" @click="onSubmit" :disabled="form.code === ''">修改密码</el-button>
+          <el-form-item>
+            <el-button type="primary" @click="verify('form')" :disabled="form.code === ''">修改密码</el-button>
+          </el-form-item>
         </el-form>
       </el-col>
     </el-row>
@@ -34,6 +36,39 @@
 	export default {
 		name: "AdminResetPwd",
     data() {
+      let checkOldPwd = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入原密码'))
+        } else {
+          callback()
+        }
+      }
+      let checkNewPwd = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入新密码'))
+        } else {
+          if (this.form.newPwdAgain !== '') {
+            this.$refs.form.validateField('checkPass')
+          }
+          callback()
+        }
+      }
+      let checkNewPwdAgain = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请再次输入新密码'))
+        } else if (value !== this.form.newPwd) {
+          callback(new Error('两次输入密码不一致!'))
+        } else {
+          callback()
+        }
+      }
+      let checkCode = (rule, value, callback) => {
+        if (value === '') {
+          callback(new Error('请输入验证码'));
+        } else {
+          callback()
+        }
+      }
 		  return {
 		    baseUrl: Constant.data.baseUrl,
 		    form: {
@@ -43,10 +78,28 @@
           code: ''
         },
         fit: 'contain',
-        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg'
+        url: 'https://fuss10.elemecdn.com/e/5d/4a731a90594a4af544c0c25941171jpeg.jpeg',
+        rules: {
+          oldPwd: [{validator: checkOldPwd, trigger: 'blur'}],
+          newPwd: [{validator: checkNewPwd, trigger: 'blur'}],
+          newPwdAgain: [{validator: checkNewPwdAgain, trigger: 'blur'}],
+          code: [{validator: checkCode, trigger: 'blur'}],
+        }
       }
     },
     methods: {
+      // 表单验证
+      verify(formName) {
+        const _this = this
+        this.$refs[formName].validate((valid) => {
+          if (valid) {
+            _this.onSubmit()
+          } else {
+            // console.log('error submit!!')
+            return false
+          }
+        })
+      },
 		  // 修改密码提交
       onSubmit() {
         // console.log('submit!')
