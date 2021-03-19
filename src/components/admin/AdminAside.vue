@@ -97,13 +97,18 @@
         let param = new URLSearchParams()
         let token = sessionStorage.getItem("token")
         param.append("token", token)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/pack/getAdminTotalNum',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
             if (response.data.result === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -120,7 +125,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -133,7 +137,7 @@
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data.result === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -149,7 +153,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -168,12 +171,19 @@
           let token = sessionStorage.getItem("token")
           param.append('id', value)
           param.append('token', token)
+          const loading = this.$loading({
+            lock: true,
+            text: '快递入站中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           _this.$axios({
             method: 'post',
             url: _this.baseUrl + '/pack/addPack',
             data: param
           })
             .then(function (response) {
+              loading.close()
               // console.log(response.data)
               if (response.data === 'the package enter addr success') {
                 _this.$message({
@@ -202,7 +212,6 @@
               }
             })
             .catch(function (error) {
-              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',

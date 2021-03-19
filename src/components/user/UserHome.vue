@@ -42,7 +42,6 @@
       }
     },
     created() {
-      // console.log("UserHead的created时获取信息")
       this.getUserInfo()
     },
     mounted() {

@@ -200,7 +200,6 @@
       },
       // 支付寄件
       handlePay(index, row) {
-        // console.log(index, row)
         const _this = this
         if (_this.tableData[index].status === '已确认') {
           let msg = '将支付' + _this.tableData[index].price + '元运费, 是否继续?'
@@ -213,13 +212,19 @@
             let token = sessionStorage.getItem("token")
             param.append('id', _this.tableData[index].id)
             param.append('token', token)
+            const loading = this.$loading({
+              lock: true,
+              text: '正在支付中',
+              spinner: 'el-icon-loading',
+              background: 'rgba(0, 0, 0, 0.7)'
+            })
             _this.$axios({
               method: 'put',
               url: _this.baseUrl + '/send/pay',
               data: param
             })
               .then(function (response) {
-                // console.log(response.data)
+                loading.close()
                 if (response.data === 'please login to operate') {
                   _this.$notify({
                     showClose: true,
@@ -247,7 +252,6 @@
                 }
               })
               .catch(function (error) {
-                // console.log(error)
                 _this.$notify.error({
                   showClose: true,
                   title: '错误',
@@ -294,13 +298,19 @@
           let token = sessionStorage.getItem("token")
           param.append('ids', ids)
           param.append('token', token)
+          const loading = this.$loading({
+            lock: true,
+            text: '正在取消中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           _this.$axios({
             method: 'delete',
             url: _this.baseUrl + '/send/cancel',
             data: param
           })
             .then(function (response) {
-              // console.log(response.data)
+              loading.close()
               if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,
@@ -328,7 +338,6 @@
               }
             })
             .catch(function (error) {
-              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -351,11 +360,9 @@
       handleFilter(filters) {
         if (filters.org !== undefined) {
           this.orgFilter = filters.org
-          // console.log("org: " + this.orgFilter)
         }
         if (filters.status !== undefined) {
           this.statusFilter = filters.status
-          // console.log("status: " + this.statusFilter)
         }
         this.getPacks(this.orgFilter, this.statusFilter)
       },
@@ -373,15 +380,19 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
-        // console.log("准备发出请求")
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/send/getSendByUser',
           data: param
         })
           .then(function (response) {
-            // console.log("收到响应")
-            // console.log(response.data)
+            loading.close()
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -396,7 +407,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

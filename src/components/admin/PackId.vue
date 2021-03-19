@@ -75,12 +75,19 @@
         const _this = this
         let param = new URLSearchParams()
         param.append('type', type)
+        const loading = this.$loading({
+          lock: true,
+          text: '随机生成中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/admin/getPackId',
           data: param
         })
           .then(function (response) {
+            loading.close()
             switch (type) {
               case 'ZTO': _this.packId.zto = response.data;break;
               case 'STO': _this.packId.sto = response.data;break;

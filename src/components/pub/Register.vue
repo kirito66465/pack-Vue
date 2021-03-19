@@ -108,6 +108,12 @@
       userRegister() {
         const _this = this
         let pwd = md5(this.user.password)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在注册中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/user/register',
@@ -122,6 +128,7 @@
           }
         })
           .then(function (response) {
+            loading.close()
             // console.log(response.data)
             if (response.data.result === "register success") {
               sessionStorage.setItem("card", _this.user.card)

@@ -150,11 +150,11 @@
         pageSize: 10,         // 每一页的记录条数
         search: '',
         tableData: [{
-          from_name: '严晨',
-          from_tel: '13305193691',
+          from_name: 'user1',
+          from_tel: '12345678900',
           from_addr: '中苑',
-          to_name: '王杰',
-          to_tel: '17751773079',
+          to_name: 'user2',
+          to_tel: '12345678901',
           to_addr: '',
           id: '75422907315890',
           org: '中通',
@@ -194,13 +194,19 @@
           // console.log('ids: ' + ids)
           param.append('ids', ids)
           param.append('token', token)
+          const loading = this.$loading({
+            lock: true,
+            text: '寄件确认中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           _this.$axios({
             method: 'put',
             url: _this.baseUrl + '/send/confirm',
             data: param
           })
             .then(function (response) {
-              // console.log(response.data)
+              loading.close()
               if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,
@@ -228,7 +234,6 @@
               }
             })
             .catch(function (error) {
-              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -267,16 +272,21 @@
         }).then(() => {
           let param = new URLSearchParams()
           let token = sessionStorage.getItem("token")
-          // console.log('ids: ' + ids)
           param.append('ids', ids)
           param.append('token', token)
+          const loading = this.$loading({
+            lock: true,
+            text: '寄件发出中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           _this.$axios({
             method: 'put',
             url: _this.baseUrl + '/send/out',
             data: param
           })
             .then(function (response) {
-              // console.log(response.data)
+              loading.close()
               if (response.data === 'please login to operate') {
                 _this.$notify({
                   showClose: true,
@@ -304,7 +314,6 @@
               }
             })
             .catch(function (error) {
-              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -327,7 +336,6 @@
       filterStatus(filters) {
         if (filters.status !== undefined) {
           this.statusFilter = filters.status
-          // console.log("status: " + this.statusFilter)
         }
         this.getPacks(this.statusFilter)
       },
@@ -344,15 +352,19 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
-        // console.log("准备发出请求")
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/send/getSendByAdmin',
           data: param
         })
           .then(function (response) {
-            // console.log("收到响应")
-            // console.log(response.data)
+            loading.close()
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -367,7 +379,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

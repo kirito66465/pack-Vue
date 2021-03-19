@@ -65,13 +65,19 @@
         let token = sessionStorage.getItem("token")
         let param = new URLSearchParams()
         param.append('token', token)
+        const loading = this.$loading({
+          lock: true,
+          text: '退出登录中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/user/logout',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data === 'exit success') {
               sessionStorage.removeItem("token")
               sessionStorage.removeItem("card")
@@ -84,7 +90,6 @@
               sessionStorage.removeItem("codePic")
               _this.$router.push('/')
             } else {
-              // console.log("退出登录失败！")
               _this.$notify({
                 showClose: true,
                 title: '警告',
@@ -94,7 +99,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

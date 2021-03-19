@@ -351,6 +351,12 @@
             } else {
               let token = sessionStorage.getItem('token')
               let addr = CodeToText[_this.form.addr[0]] + CodeToText[_this.form.addr[1]] + CodeToText[_this.form.addr[2]]
+              const loading = this.$loading({
+                lock: true,
+                text: '正在提交中',
+                spinner: 'el-icon-loading',
+                background: 'rgba(0, 0, 0, 0.7)'
+              })
               _this.$axios({
                 method: 'post',
                 url: _this.baseUrl + '/send/getSendInfo',
@@ -366,7 +372,7 @@
                 }
               })
                 .then(function (response) {
-                  // console.log(response.data)
+                  loading.close()
                   if (response.data.result === 'do success') {
                     _this.$message({
                       showClose: true,
@@ -394,7 +400,6 @@
                   }
                 })
                 .catch(function (error) {
-                  // console.log(error)
                   _this.$notify.error({
                     showClose: true,
                     title: '错误',
@@ -403,7 +408,6 @@
                 })
             }
           } else {
-            // console.log('error submit!!')
             _this.$message({
               showClose: true,
               message: '警告哦，请完成寄件信息填写！',

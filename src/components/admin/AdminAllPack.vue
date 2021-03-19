@@ -195,11 +195,9 @@
       handleFilter(filters) {
         if (filters.org !== undefined) {
           this.orgFilter = filters.org
-          // console.log("org: " + this.orgFilter)
         }
         if (filters.status !== undefined) {
           this.statusFilter = filters.status
-          // console.log("status: " + this.statusFilter)
         }
         this.getPacks(this.orgFilter, this.statusFilter)
       },
@@ -217,13 +215,19 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/pack/getAdminPacksByPage',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -238,7 +242,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -274,6 +277,12 @@
         let token = sessionStorage.getItem("token")
         param.append('token', token)
         param.append('type', type)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/excel',
@@ -281,11 +290,11 @@
           responseType: 'blob'
         })
           .then(function (response) {
-            // console.log(response.data)
             let name = sessionStorage.getItem('name')
             let time = _this.getCurrentTime()
             let fileName = name + "-" + time + "-" + type + ".xlsx"
             _this.download(response.data, fileName)
+            loading.close()
           })
       },
       // 下载 blob 类型数据到本地

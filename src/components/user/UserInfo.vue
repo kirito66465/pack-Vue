@@ -44,8 +44,8 @@
         form: {
           card: '2120170000',
           phone: '17700000000',
-          name: 'kirito',
-          mail: '1204505357@qq.com',
+          name: 'user',
+          mail: 'user@show.com',
           addr: '中苑',
           count: 0
         }
@@ -59,7 +59,6 @@
           if (valid) {
             _this.onSubmit()
           } else {
-            // console.log('error submit!!')
             return false
           }
         })
@@ -70,13 +69,19 @@
         let param = new URLSearchParams()
         let token = sessionStorage.getItem("token")
         param.append("token", token)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/user/getInfo',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data.result === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -94,7 +99,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -111,13 +115,19 @@
         param.append("name", this.form.name)
         param.append("addr", this.form.addr)
         param.append("mail", this.form.mail)
+        const loading = this.$loading({
+          lock: true,
+          text: '修改提交中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'put',
           url: _this.baseUrl + '/user/updateInfo',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data.result === 'do success') {
               _this.$message({
                 showClose: true,
@@ -143,7 +153,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

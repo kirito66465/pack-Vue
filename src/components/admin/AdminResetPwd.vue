@@ -15,6 +15,7 @@
           <el-form-item label="验证码" prop="code">
             <el-input v-model="form.code" placeholder="请输入验证码"></el-input>
             <el-image
+              v-loading.lock="loading"
               style="width: 100px; height: 100px"
               :src="url"
               :fit="fit"
@@ -84,7 +85,8 @@
           newPwd: [{validator: checkNewPwd, trigger: 'blur'}],
           newPwdAgain: [{validator: checkNewPwdAgain, trigger: 'blur'}],
           code: [{validator: checkCode, trigger: 'blur'}],
-        }
+        },
+        loading: false
       }
     },
     methods: {
@@ -95,14 +97,12 @@
           if (valid) {
             _this.onSubmit()
           } else {
-            // console.log('error submit!!')
             return false
           }
         })
       },
 		  // 修改密码提交
       onSubmit() {
-        // console.log('submit!')
         const _this = this
         let token = sessionStorage.getItem("token")
         let card = sessionStorage.getItem("card")
@@ -114,12 +114,19 @@
         param.append('oldPwd', oldPwd)
         param.append('newPwd', newPwd)
         param.append('checkCode', this.form.code)
+        const loading = this.$loading({
+          lock: true,
+          text: '修改密码中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'put',
           url: _this.baseUrl + '/admin/resetPwd',
           data: param
         })
           .then(function (response) {
+            loading.close()
             if (response.data.result === 'update password success') {
               _this.$message({
                 showClose: true,
@@ -169,7 +176,6 @@
             _this.url = 'data:image/png;base64,' + codePic
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -183,13 +189,14 @@
         let token = sessionStorage.getItem("token")
         let param = new URLSearchParams()
         param.append('token', token)
+        this.loading = true
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/getCheckCode',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            _this.loading = false
             if (response.data.result === 'get info success') {
               sessionStorage.setItem("codePic", response.data.codePic)
               let codePic = response.data.codePic
@@ -211,7 +218,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

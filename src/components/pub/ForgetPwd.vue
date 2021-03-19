@@ -153,13 +153,19 @@
         param.append('phone', this.user.phone)
         param.append('password', pwd)
         const _this = this
+        const loading = this.$loading({
+          lock: true,
+          text: '重置密码中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'put',
           url: _this.baseUrl + '/user/forgetPwd',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data.result === 'update password success') {
               _this.$message({
                 showClose: true,
@@ -186,7 +192,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

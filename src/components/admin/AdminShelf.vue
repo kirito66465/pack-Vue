@@ -239,13 +239,19 @@
           let token = sessionStorage.getItem("token")
           param.append('ids', ids)
           param.append('token', token)
+          const loading = this.$loading({
+            lock: true,
+            text: '正在取件中',
+            spinner: 'el-icon-loading',
+            background: 'rgba(0, 0, 0, 0.7)'
+          })
           _this.$axios({
             method: 'put',
             url: _this.baseUrl + '/pack/pickPackByAdmin',
             data: param
           })
             .then(function (response) {
-              // console.log(response.data)
+              loading.close()
               if (response.data === 'pick up the package success') {
                 _this.$message({
                   showClose: true,
@@ -279,7 +285,6 @@
               }
             })
             .catch(function (error) {
-              // console.log(error)
               _this.$notify.error({
                 showClose: true,
                 title: '错误',
@@ -294,14 +299,6 @@
           })
         })
       },
-      // 搜索
-      // searchHandler() {
-      //   this.$message({
-      //     showClose: true,
-      //     type: 'info',
-      //     message: '暂未实现！'
-      //   })
-      // },
       // 快递所属公司过滤
       filterOrg(value, row) {
         return row.org === value
@@ -312,16 +309,21 @@
         let param = new URLSearchParams()
         let token = sessionStorage.getItem("token")
         let choice = this.formInline.shelf + this.formInline.layer
-        // console.log("货架: " + choice)
         param.append('token', token)
         param.append('shelf', choice)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/pack/getShelfPack',
           data: param
         })
           .then(function (response) {
-            // console.log(response.data)
+            loading.close()
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -335,7 +337,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

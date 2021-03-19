@@ -190,7 +190,6 @@
       // 快递所属公司过滤
       filterOrg(filters) {
         let org = filters.org
-        // console.log(org)   // 中通，申通，圆通
         this.orgFilter = org
         if (org === '' || org === null) {
           this.getPacks("")
@@ -211,15 +210,19 @@
         }
         param.append('json', JSON.stringify(jsonParam))
         const _this = this
-        // console.log("准备发出请求")
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/pack/getAdminIsPick',
           data: param
         })
           .then(function (response) {
-            // console.log("收到响应")
-            // console.log(response.data)
+            loading.close()
             if (response.data.fail === 'get info fail') {
               _this.$notify({
                 showClose: true,
@@ -234,7 +237,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',
@@ -270,6 +272,12 @@
         let token = sessionStorage.getItem("token")
         param.append('token', token)
         param.append('type', type)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在导出中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/excel',
@@ -277,16 +285,16 @@
           responseType: 'blob'
         })
           .then(function (response) {
-            // console.log(response.data)
             let name = sessionStorage.getItem('name')
             let time = _this.getCurrentTime()
             let fileName = name + "-" + time + "-" + type + ".xlsx"
             _this.download(response.data, fileName)
+            loading.close()
           })
       },
       // 下载 blob 类型数据到本地
       download(data, filename) {
-        //var blob = new Blob([data], {type: 'application/vnd.ms-excel'})接收的是blob，若接收的是文件流，需要转化一下
+        // var blob = new Blob([data], {type: 'application/vnd.ms-excel'})接收的是blob，若接收的是文件流，需要转化一下
         if (typeof window.chrome !== 'undefined') {
           // Chrome version
           let link = document.createElement('a');
