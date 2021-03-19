@@ -279,7 +279,7 @@
         param.append('type', type)
         const loading = this.$loading({
           lock: true,
-          text: '正在获取中',
+          text: '正在导出中',
           spinner: 'el-icon-loading',
           background: 'rgba(0, 0, 0, 0.7)'
         })
