@@ -54,19 +54,12 @@
         param.append('card', this.user.card)
         param.append('password', pwd)
         const _this = this
-        const loading = this.$loading({
-          lock: true,
-          text: '正在登录中',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/user/login',
           data: param
         })
           .then(function (response) {
-            loading.close()
             if (response.data.result === 'login success') {
               // 将用户的 token 存储到本地 sessionStorage 中
               sessionStorage.setItem('card', _this.user.card)
@@ -96,19 +89,12 @@
         param.append('card', this.user.card)
         param.append('password', pwd)
         const _this = this
-        const loading = this.$loading({
-          lock: true,
-          text: '正在登录中',
-          spinner: 'el-icon-loading',
-          background: 'rgba(0, 0, 0, 0.7)'
-        })
         this.$axios({
           method: 'post',
           url: _this.baseUrl + '/admin/login',
           data: param
         })
           .then(function (response) {
-            loading.close()
             if (response.data.result === 'login success') {
               // 将用户的 token 存储到本地 sessionStorage 中
               sessionStorage.setItem('card', _this.user.card)
