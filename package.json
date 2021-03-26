@@ -15,6 +15,7 @@
     "async-validator": "^3.5.1",
     "axios": "^0.21.0",
     "build": "^0.1.4",
+    "echarts": "^5.0.2",
     "element-china-area-data": "^5.0.2",
     "element-ui": "^2.14.1",
     "js-md5": "^0.7.3",
