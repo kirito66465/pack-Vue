@@ -32,13 +32,9 @@
         subText: '仅供参考',
         name: '取件时间',
         data: [
-          {value: 1048, name: '搜索引擎'},
-          {value: 735, name: '直接访问'},
-          {value: 580, name: '邮件营销'},
-          {value: 484, name: '联盟广告'},
-          {value: 300, name: '视频广告'}
+          {value: 0, name: '9点'}
         ],
-        count: [19, 20, 36, 48, 52, 61, 71, 81, 69, 100, 65],
+        count: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
         chosen: '2021-03-28',
         pickerOptions: {
           disabledDate(time) {
@@ -164,9 +160,22 @@
                 type: 'warning'
               })
               _this.$router.push('/loginAndRegister')
+            } else if (response.data.fail === 'not exist') {
+              _this.$notify({
+                showClose: true,
+                title: '警告',
+                message: '此日暂无人员取件！',
+                type: 'warning'
+              })
+              _this.data = [{value: 0, name: '9点'}]
+              _this.count = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+              _this.pie(_this.data)
+              _this.line(_this.count)
             } else {
               _this.data = response.data.result.data
               _this.count = response.data.result.count
+              _this.pie(_this.data)
+              _this.line(_this.count)
             }
           })
           .catch(function (error) {
@@ -184,9 +193,6 @@
     mounted() {
       this.pie(this.data)
       this.line(this.count)
-    },
-    watch: {
-
     }
   }
 </script>

@@ -2,7 +2,7 @@
 	<div>
     <el-row>
       <el-col :span="8" class="grid-content">
-        <div id="title">基 于 Web 的 校 园 快 递 管 理 系 统</div>
+        <div id="title"><b>基 于 Web 的 校 园 快 递 管 理 系 统</b></div>
       </el-col>
       <el-col :span="8" class="grid-content">
         <el-menu
@@ -140,12 +140,12 @@
   }
 
   #title {
-    font: 20px Extra large;
+    font: 30px Extra large;
     font-family: "微软雅黑";
     line-height: 1.7;
     text-align: center;
-    color: coral;
-    margin-top: 3%;
+    color: #048afc;
+    margin-top: 2%;
     /*position: absolute;*/
     left: 20%;
   }
