@@ -179,7 +179,7 @@
                 message: response.data.admin.name + ', 登录成功',
                 type: 'success'
               })
-              _this.$router.push('/adminHome/allPacks')
+              _this.$router.push('/adminHome/echarts')
             } else {
               _this.$message({
                 showClose: true,

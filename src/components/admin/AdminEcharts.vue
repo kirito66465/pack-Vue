@@ -39,7 +39,7 @@
           {value: 300, name: '视频广告'}
         ],
         count: [19, 20, 36, 48, 52, 61, 71, 81, 69, 100, 65],
-        chosen: '',
+        chosen: '2021-03-28',
         pickerOptions: {
           disabledDate(time) {
             return time.getTime() > Date.now();
@@ -68,6 +68,7 @@
       }
     },
     methods: {
+		  // Echarts 饼图
       pie() {
         const _this = this
         let chartDom = document.getElementById('pie');
@@ -104,6 +105,7 @@
         };
         option && myChart.setOption(option);
       },
+      // Echarts 平滑折线图
       line() {
         const _this = this
         let chartDom = document.getElementById('line')
@@ -134,12 +136,53 @@
         };
         option && myChart.setOption(option)
       },
+      // 获取数据
       getInfo() {
         const _this = this
-        console.log(_this.chosen)
+        let param = new URLSearchParams()
+        let token = sessionStorage.getItem("token")
+        param.append('token', token)
+        param.append('datee', this.chosen)
+        const loading = this.$loading({
+          lock: true,
+          text: '正在获取中',
+          spinner: 'el-icon-loading',
+          background: 'rgba(0, 0, 0, 0.7)'
+        })
+        this.$axios({
+          method: 'post',
+          url: _this.baseUrl + '/echarts/get-data',
+          data: param
+        })
+          .then(function (response) {
+            loading.close()
+            if (response.data.fail === 'get info fail') {
+              _this.$notify({
+                showClose: true,
+                title: '警告',
+                message: '登录状态失效，请重新登录！',
+                type: 'warning'
+              })
+              _this.$router.push('/loginAndRegister')
+            } else {
+              _this.data = response.data.result.data
+              _this.count = response.data.result.count
+            }
+          })
+          .catch(function (error) {
+            _this.$notify.error({
+              showClose: true,
+              title: '错误',
+              message: '服务器出错啦！'
+            })
+          })
       }
     },
+    created() {
+		  // this.getInfo()
+    },
     mounted() {
+      this.getInfo()
 		  this.pie()
       this.line()
     }
