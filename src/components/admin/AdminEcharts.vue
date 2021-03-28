@@ -69,7 +69,7 @@
     },
     methods: {
 		  // Echarts 饼图
-      pie() {
+      pie(value) {
         const _this = this
         let chartDom = document.getElementById('pie');
         let myChart = echarts.init(chartDom);
@@ -92,7 +92,7 @@
               name: _this.name,
               type: 'pie',
               radius: '50%',
-              data: _this.data,
+              data: value,
               emphasis: {
                 itemStyle: {
                   shadowBlur: 10,
@@ -106,7 +106,7 @@
         option && myChart.setOption(option);
       },
       // Echarts 平滑折线图
-      line() {
+      line(value) {
         const _this = this
         let chartDom = document.getElementById('line')
         let myChart = echarts.init(chartDom)
@@ -114,7 +114,7 @@
         option = {
           xAxis: {
             type: 'category',
-            data: ['9点', '10点', '11点', '12点', '13点', '14点', '15点', "16点", "17点", "18点", "19点"]
+            data: value
           },
           yAxis: {
             type: 'value'
@@ -179,12 +179,14 @@
       }
     },
     created() {
-		  // this.getInfo()
+		  this.getInfo()
     },
     mounted() {
-      this.getInfo()
-		  this.pie()
-      this.line()
+      this.pie(this.data)
+      this.line(this.count)
+    },
+    watch: {
+
     }
   }
 </script>
