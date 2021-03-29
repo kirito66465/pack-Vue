@@ -111,13 +111,13 @@
         option = {
           xAxis: {
             type: 'category',
-            data: value
+            data: ['9点', '10点', '11点', '12点', '13点', '14点', '15点', '16点', '17点', '18点', '19点',]
           },
           yAxis: {
             type: 'value'
           },
           series: [{
-            data: _this.count,
+            data: value,
             type: 'line',
             smooth: true
           }],
