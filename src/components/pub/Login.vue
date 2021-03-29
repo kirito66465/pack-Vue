@@ -119,7 +119,7 @@
       },
       // 忘记密码跳转
       forgetPwd() {
-        this.$router.push('/forgetPwd')
+        this.$router.push('/forget-pwd')
       },
       // 获取学生信息
       getUserInfo() {
@@ -141,14 +141,14 @@
                 message: response.data.user.name + ', 登录成功',
                 type: 'success'
               })
-              _this.$router.push('/userHome/allPacks')
+              _this.$router.push('/user-home/all-pack')
             } else {
               _this.$message({
                 showClose: true,
                 message: '请先登录！',
                 type: 'warning'
               })
-              _this.$router.push('/LoginAndRegister')
+              _this.$router.push('/login-register')
             }
           })
           .catch(function (error) {
@@ -179,14 +179,14 @@
                 message: response.data.admin.name + ', 登录成功',
                 type: 'success'
               })
-              _this.$router.push('/adminHome/echarts')
+              _this.$router.push('/admin-home/echarts')
             } else {
               _this.$message({
                 showClose: true,
                 message: '警告,请登录！',
                 type: 'warning'
               })
-              _this.$router.push('/LoginAndRegister')
+              _this.$router.push('/login-register')
             }
           })
           .catch(function (error) {

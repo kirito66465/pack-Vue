@@ -92,6 +92,7 @@
       }
     },
     methods: {
+      // 提交表单前数据验证
       submitForm(formName) {
         this.$refs[formName].validate((valid) => {
           if (valid) {
@@ -102,9 +103,11 @@
           }
         })
       },
+      // 重置表单
       resetForm(formName) {
         this.$refs[formName].resetFields();
       },
+      // 学生注册
       userRegister() {
         const _this = this
         let pwd = md5(this.user.password)
@@ -129,7 +132,6 @@
         })
           .then(function (response) {
             loading.close()
-            // console.log(response.data)
             if (response.data.result === "register success") {
               sessionStorage.setItem("card", _this.user.card)
               sessionStorage.setItem("name", _this.user.name)
@@ -139,7 +141,7 @@
                 message: '注册成功！',
                 type: 'success'
               })
-              _this.$router.push('/userHome')
+              _this.$router.push('/user-home/all-pack')
             } else if (response.data.result === "is exist") {
               _this.$message({
                 showClose: true,
@@ -155,7 +157,6 @@
             }
           })
           .catch(function (error) {
-            // console.log(error)
             _this.$notify.error({
               showClose: true,
               title: '错误',

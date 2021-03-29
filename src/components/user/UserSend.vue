@@ -396,7 +396,7 @@
                       message: '请在登录状态操作',
                       type: 'warning'
                     })
-                    _this.$router.push('/LoginAndRegister')
+                    _this.$router.push('/login-register')
                   }
                 })
                 .catch(function (error) {

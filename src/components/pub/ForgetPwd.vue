@@ -175,7 +175,7 @@
               sessionStorage.setItem("token", response.data.token)
               sessionStorage.setItem("card", _this.user.card)
               sessionStorage.setItem("name", response.data.name)
-              _this.$router.push('/userHome/allPacks')
+              _this.$router.push('/user-home/all-pack')
             } else if (response.data.result === 'not exist') {
               _this.$message({
                 showClose: true,

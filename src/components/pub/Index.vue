@@ -4,7 +4,7 @@
       <el-header height="300px">
         <div>
           <div id="toLogin">
-            <span>你好，请<i><router-link to="/loginAndRegister">登录</router-link></i></span>
+            <span>你好，请<i><router-link to="/login-register">登录</router-link></i></span>
           </div>
           <div id="title"><b>基 于 Web 的 校 园 快 递 管 理 系 统</b></div>
         </div>

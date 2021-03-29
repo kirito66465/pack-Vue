@@ -22,18 +22,18 @@
               </div>
             </div>
           </el-menu-item>
-          <el-menu-item index="/userHome/send" @click.native="">我要寄件</el-menu-item>
+          <el-menu-item index="/user-home/send" @click.native="">我要寄件</el-menu-item>
           <el-submenu index="1">
             <template slot="title">快递管理</template>
-            <el-menu-item index="/userHome/allPacks" @click.native="">全部快递</el-menu-item>
-            <el-menu-item index="/userHome/isPacks" @click.native="">已取快递</el-menu-item>
-            <el-menu-item index="/userHome/noPacks" @click.native="">未取快递</el-menu-item>
-            <el-menu-item index="/userHome/sendList" @click.native="">我的寄件</el-menu-item>
+            <el-menu-item index="/user-home/all-pack" @click.native="">全部快递</el-menu-item>
+            <el-menu-item index="/user-home/is-pack" @click.native="">已取快递</el-menu-item>
+            <el-menu-item index="/user-home/no-pack" @click.native="">未取快递</el-menu-item>
+            <el-menu-item index="/user-home/send-list" @click.native="">我的寄件</el-menu-item>
           </el-submenu>
           <el-submenu index="2">
             <template slot="title">个人管理</template>
-            <el-menu-item index="/userHome/info" @click.native="">我的信息</el-menu-item>
-            <el-menu-item index="/userHome/resetPwd" @click.native="">修改密码</el-menu-item>
+            <el-menu-item index="/user-home/info" @click.native="">我的信息</el-menu-item>
+            <el-menu-item index="/user-home/reset-pwd" @click.native="">修改密码</el-menu-item>
           </el-submenu>
           <el-menu-item>
             <el-popconfirm title="确定退出登录吗？" @confirm="logout">

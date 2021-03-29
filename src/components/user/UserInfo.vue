@@ -89,6 +89,7 @@
                 message: '登录状态失效！请重新登录！',
                 type: 'warning'
               })
+              _this.$router.push('/login-register')
             } else {
               _this.form.card = response.data.user.card
               _this.form.phone = response.data.user.phone
@@ -142,7 +143,7 @@
                 message: '请在登录状态操作!',
                 type: 'warning'
               })
-              _this.$router.push('/LoginAndRegister')
+              _this.$router.push('/login-register')
             } else {
               _this.$notify({
                 showClose: true,

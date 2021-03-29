@@ -160,7 +160,7 @@
                 message: '登录状态失效，请重新登录！',
                 type: 'warning'
               })
-              _this.$router.push('/loginAndRegister')
+              _this.$router.push('/login-register')
             } else if (response.data.fail === 'not exist') {
               _this.$notify({
                 showClose: true,

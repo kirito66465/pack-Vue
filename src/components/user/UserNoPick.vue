@@ -242,7 +242,7 @@
                   message: '登录状态失效，请重新登录！',
                   type: 'warning'
                 })
-                _this.$router.push('/loginAndRegister')
+                _this.$router.push('/login-register')
               } else if (response.data === 'do fail') {
                 _this.$notify({
                   showClose: true,
@@ -332,7 +332,7 @@
                   message: '请在登录状态操作!',
                   type: 'warning'
                 })
-                _this.$router.push('/LoginAndRegister')
+                _this.$router.push('/login-register')
               } else {
                 _this.$message({
                   showClose: true,
@@ -408,7 +408,7 @@
                 message: '登录状态失效，请重新登录！',
                 type: 'warning'
               })
-              _this.$router.push('/loginAndRegister')
+              _this.$router.push('/login-register')
             } else {
               _this.total = response.data.pack_result.total
               _this.tableData = response.data.pack_result.list

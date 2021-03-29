@@ -164,7 +164,8 @@
 </template>
 
 <script>
-	import Constant from "../pub/Constant"
+  import Constant from "../pub/Constant"
+
   export default {
 		name: "UserNoPick",
     data() {
@@ -248,7 +249,7 @@
                   message: '登录状态失效，请重新登录！',
                   type: 'warning'
                 })
-                _this.$router.push('/loginAndRegister')
+                _this.$router.push('/login-register')
               } else {
                 _this.$message({
                   showClose: true,
@@ -320,7 +321,7 @@
                   message: '请在登录状态操作!',
                   type: 'warning'
                 })
-                _this.$router.push('/LoginAndRegister')
+                _this.$router.push('/login-register')
               } else {
                 _this.$message({
                   showClose: true,
@@ -392,7 +393,7 @@
                 message: '登录状态失效，请重新登录！',
                 type: 'warning'
               })
-              _this.$router.push('/loginAndRegister')
+              _this.$router.push('/login-register')
             } else {
               _this.total = response.data.pack_result.total
               _this.tableData = response.data.pack_result.list
@@ -516,8 +517,7 @@
         let minute = this.zeroFill(date.getMinutes())      // 分
         let second = this.zeroFill(date.getSeconds())      // 秒
         // 当前时间
-        let curTime = date.getFullYear() + month + day + hour + minute + second
-        return curTime
+        return date.getFullYear() + month + day + hour + minute + second
       },
       // 补零
       zeroFill(i){

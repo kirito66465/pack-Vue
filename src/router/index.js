@@ -31,7 +31,7 @@ export default new Router({
       redirect: '/index'
     },
     {
-      path: '/loginAndRegister',
+      path: '/login-register',
       component: LoginAndRegister
     },
     {
@@ -40,98 +40,98 @@ export default new Router({
       component: Index
     },
     {
-      path: '/forgetPwd',
+      path: '/forget-pwd',
       component: ForgetPwd
     },
     {
-      path: '/userHome',
+      path: '/user-home',
       name: 'userHome',
       component: UserHome,
       children: [
         {
-          path: '/userHome/allPacks',
+          path: '/user-home/all-pack',
           name: 'allPacks',
           component: UserAllPack
         },
         {
-          path: '/userHome/isPacks',
+          path: '/user-home/is-pack',
           name: 'isPack',
           component: UserIsPick
         },
         {
-          path: '/userHome/noPacks',
+          path: '/user-home/no-pack',
           name: 'noPack',
           component: UserNoPick
         },
         {
-          path: '/userHome/send',
+          path: '/user-home/send',
           name: 'send',
           component: UserSend
         },
         {
-          path: '/userHome/sendList',
+          path: '/user-home/send-list',
           name: 'sendList',
           component: UserSendList
         },
         {
-          path: '/userHome/info',
+          path: '/user-home/info',
           name: 'info',
           component: UserInfo
         },
         {
-          path: '/userHome/resetPwd',
+          path: '/user-home/reset-pwd',
           name: 'resetPwd',
           component: UserResetPwd
         }
       ]
     },
     {
-      path: '/adminHome',
+      path: '/admin-home',
       name: 'adminHome',
       component: AdminHome,
       children: [
         {
-          path: '/adminHome/allPacks',
+          path: '/admin-home/all-pack',
           name: 'allPacks',
           component: AdminAllPack
         },
         {
-          path: '/adminHome/resetPwd',
+          path: '/admin-home/reset-pwd',
           name: 'resetPwd',
           component: AdminResetPwd
         },
         {
-          path: '/adminHome/info',
+          path: '/admin-home/info',
           name: 'info',
           component: AdminInfo
         },
         {
-          path: '/adminHome/isPicks',
+          path: '/admin-home/is-pick',
           name: 'isPick',
           component: AdminIsPick
         },
         {
-          path: '/adminHome/noPicks',
+          path: '/admin-home/no-pick',
           name: 'noPick',
           component: AdminNoPick
         },
         {
-          path: '/adminHome/shelf',
+          path: '/admin-home/shelf',
           name: 'shelf',
           component: AdminShelf
         },
         {
-          path: '/adminHome/packId',
+          path: '/admin-home/pack-id',
           name: 'packId',
           component: PackId
         },
         {
-          path: '/adminHome/collection',
+          path: '/admin-home/collection',
           name: 'collection',
           component: AdminCollection
         },
         {
-          path: '/adminHome/echarts',
+          path: '/admin-home/echarts',
           name: 'echarts',
           component: AdminEcharts
         }

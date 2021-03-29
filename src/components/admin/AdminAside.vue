@@ -116,6 +116,7 @@
                 message: '登录状态失效！请重新登录！',
                 type: 'warning'
               })
+              _this.$router.push('/login-register')
             } else {
               // 四舍五入保留小数点后两位
               _this.percentage = response.data.percentage.toFixed(2)
@@ -145,6 +146,7 @@
                 message: '登录状态失效！请重新登录！',
                 type: 'warning'
               })
+              _this.$router.push('/login-register')
             } else {
               _this.sendSubmit = response.data.sendSubmit
               _this.sendConfirm = response.data.sendConfirm
@@ -184,7 +186,6 @@
           })
             .then(function (response) {
               loading.close()
-              // console.log(response.data)
               if (response.data === 'the package enter addr success') {
                 _this.$message({
                   showClose: true,
@@ -201,7 +202,7 @@
                   message: '请在登录状态操作',
                   type: 'warning'
                 })
-                _this.$router.push('/LoginAndRegister')
+                _this.$router.push('/login-register')
               } else {
                 _this.$notify({
                   showClose: true,
