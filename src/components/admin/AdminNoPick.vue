@@ -56,13 +56,13 @@
           </el-table-column>
           <!-- 未展开时显示内容 -->
           <el-table-column
+            type="selection"
+            width="70">
+          </el-table-column>
+          <el-table-column
             type="index"
             :index="indexMethod"
             width="100">
-          </el-table-column>
-          <el-table-column
-            type="selection"
-            width="70">
           </el-table-column>
           <el-table-column
             label="快递单号"

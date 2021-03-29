@@ -23,6 +23,7 @@
 <script>
   import * as echarts from 'echarts'
   import Constant from "../pub/Constant";
+
   export default {
 		name: "AdminEcharts",
     data() {
@@ -185,9 +186,25 @@
               message: '服务器出错啦！'
             })
           })
+      },
+      // 获取 yyyy-MM-dd 格式的当前日期
+      getNowFormatDate() {
+        let date = new Date()
+        let separator = "-"
+        let year = date.getFullYear()
+        let month = date.getMonth() + 1
+        let strDate = date.getDate()
+        if (month >= 1 && month <= 9) {
+          month = "0" + month
+        }
+        if (strDate >= 0 && strDate <= 9) {
+          strDate = "0" + strDate
+        }
+        return year + separator + month + separator + strDate
       }
     },
     created() {
+		  this.chosen = this.getNowFormatDate()
 		  this.getInfo()
     },
     mounted() {
