@@ -168,7 +168,7 @@
         tableData: [{
           id: '12987122',
           org: '中通',
-          per_name: 'user1',
+          perName: 'user1',
           perTel: '12345678900',
           perAddr: '中苑',
           addr: '中苑',
@@ -213,7 +213,7 @@
           })
           _this.$axios({
             method: 'delete',
-            url: _this.baseUrl + '/pack/deletePacks',
+            url: _this.baseUrl + '/pack/delete-pack',
             data: param
           })
             .then(function (response) {
@@ -294,7 +294,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserIsPick',
+          url: _this.baseUrl + '/pack/user-is-pack',
           data: param
         })
           .then(function (response) {

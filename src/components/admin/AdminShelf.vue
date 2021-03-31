@@ -47,10 +47,10 @@
                   <span>{{ props.row.org }}</span>
                 </el-form-item>
                 <el-form-item label="收件人: ">
-                  <span>{{ props.row.per_name }}</span>
+                  <span>{{ props.row.perName }}</span>
                 </el-form-item>
                 <el-form-item label="收件手机号: ">
-                  <span>{{ props.row.per_tel }}</span>
+                  <span>{{ props.row.perTel }}</span>
                 </el-form-item>
                 <el-form-item label="取件码: ">
                   <span>{{ props.row.code }}</span>
@@ -92,12 +92,12 @@
           </el-table-column>
           <el-table-column
             label="收件人"
-            prop="per_name"
+            prop="perName"
             width="100">
           </el-table-column>
           <el-table-column
             label="收件手机号"
-            prop="per_tel"
+            prop="perTel"
             width="200">
           </el-table-column>
           <el-table-column
@@ -127,15 +127,15 @@
         tableData: [{
           id: '12987122',
           org: '中通',
-          per_name: 'user1',
-          per_tel: '12345678900',
+          perName: 'user1',
+          perTel: '12345678900',
           code: '1-1-16',
           start: '2020-12-28 10:24:00',
         }, {
           id: '12987123',
           org: '中通',
-          per_name: 'user2',
-          per_tel: '12345678901',
+          perName: 'user2',
+          perTel: '12345678901',
           code: '1-1-17',
           start: '2020-12-28 10:25:00',
         }],
@@ -247,7 +247,7 @@
           })
           _this.$axios({
             method: 'put',
-            url: _this.baseUrl + '/pack/pickPackByAdmin',
+            url: _this.baseUrl + '/pack/pick-by-admin',
             data: param
           })
             .then(function (response) {
@@ -319,7 +319,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getShelfPack',
+          url: _this.baseUrl + '/pack/shelf-pack',
           data: param
         })
           .then(function (response) {

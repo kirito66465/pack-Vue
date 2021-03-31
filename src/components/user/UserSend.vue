@@ -359,7 +359,7 @@
               })
               _this.$axios({
                 method: 'post',
-                url: _this.baseUrl + '/send/getSendInfo',
+                url: _this.baseUrl + '/send/get-send',
                 data: {
                   admin: _this.form.admin,
                   name: _this.form.name,

@@ -122,7 +122,7 @@
         })
         this.$axios({
           method: 'put',
-          url: _this.baseUrl + '/admin/resetPwd',
+          url: _this.baseUrl + '/admin/reset-pwd',
           data: param
         })
           .then(function (response) {
@@ -192,7 +192,7 @@
         this.loading = true
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/getCheckCode',
+          url: _this.baseUrl + '/get-check-code',
           data: param
         })
           .then(function (response) {

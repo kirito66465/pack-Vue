@@ -161,7 +161,7 @@
         })
         this.$axios({
           method: 'put',
-          url: _this.baseUrl + '/user/forgetPwd',
+          url: _this.baseUrl + '/user/forget-pwd',
           data: param
         })
           .then(function (response) {

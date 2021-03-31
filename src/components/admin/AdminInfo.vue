@@ -56,7 +56,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/admin/getInfo',
+          url: _this.baseUrl + '/admin/get-info',
           data: param
         })
           .then(function (response) {
@@ -101,7 +101,7 @@
         })
         this.$axios({
           method: 'put',
-          url: _this.baseUrl + '/admin/updateInfo',
+          url: _this.baseUrl + '/admin/update-info',
           data: param
         })
           .then(function (response) {

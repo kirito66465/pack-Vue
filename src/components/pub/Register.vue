@@ -145,7 +145,7 @@
             } else if (response.data.result === "is exist") {
               _this.$message({
                 showClose: true,
-                message: '此学号已注册！',
+                message: '此学号或手机号已注册！',
                 type: 'warning'
               })
             } else {

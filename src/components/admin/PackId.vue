@@ -83,7 +83,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/admin/getPackId',
+          url: _this.baseUrl + '/admin/pack-id',
           data: param
         })
           .then(function (response) {

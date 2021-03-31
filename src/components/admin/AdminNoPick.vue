@@ -293,7 +293,7 @@
           })
           _this.$axios({
             method: 'put',
-            url: _this.baseUrl + '/pack/pickPackByAdmin',
+            url: _this.baseUrl + '/pack/pick-by-admin',
             data: param
           })
             .then(function (response) {
@@ -381,7 +381,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getAdminNoPick',
+          url: _this.baseUrl + '/pack/admin-no-pack',
           data: param
         })
           .then(function (response) {

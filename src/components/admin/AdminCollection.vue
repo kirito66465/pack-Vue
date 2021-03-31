@@ -360,7 +360,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/send/getSendByAdmin',
+          url: _this.baseUrl + '/send/admin-send',
           data: param
         })
           .then(function (response) {

@@ -224,7 +224,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getAdminPacksByPage',
+          url: _this.baseUrl + '/pack/admin-all-pack',
           data: param
         })
           .then(function (response) {

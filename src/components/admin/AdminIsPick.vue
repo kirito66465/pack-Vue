@@ -219,7 +219,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getAdminIsPick',
+          url: _this.baseUrl + '/pack/admin-is-pack',
           data: param
         })
           .then(function (response) {

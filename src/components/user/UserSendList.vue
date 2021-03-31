@@ -13,22 +13,22 @@
             <template slot-scope="props">
               <el-form label-position="left" inline class="demo-table-expand">
                 <el-form-item label="寄件人姓名: ">
-                  <span>{{ props.row.from_name }}</span>
+                  <span>{{ props.row.fromName }}</span>
                 </el-form-item>
                 <el-form-item label="寄件人联系方式: ">
-                  <span>{{ props.row.from_tel }}</span>
+                  <span>{{ props.row.fromTel }}</span>
                 </el-form-item>
                 <el-form-item label="寄件人地址: ">
-                  <span>{{ props.row.from_addr }}</span>
+                  <span>{{ props.row.fromAddr }}</span>
                 </el-form-item>
                 <el-form-item label="收件人姓名: ">
-                  <span>{{ props.row.to_name }}</span>
+                  <span>{{ props.row.toName }}</span>
                 </el-form-item>
                 <el-form-item label="收件人联系方式: ">
-                  <span>{{ props.row.to_tel }}</span>
+                  <span>{{ props.row.toTel }}</span>
                 </el-form-item>
                 <el-form-item label="收件人地址: ">
-                  <span>{{ props.row.to_addr }}</span>
+                  <span>{{ props.row.toAddr }}</span>
                 </el-form-item>
                 <el-form-item label="运费: ￥">
                   <span>{{ props.row.price }}</span>
@@ -60,7 +60,7 @@
           </el-table-column>
           <el-table-column
             label="收件人"
-            prop="to_name"
+            prop="toName"
             width="150">
           </el-table-column>
           <el-table-column
@@ -172,12 +172,12 @@
         pageSize: 10,         // 每一页的记录条数
         search: '',
         tableData: [{
-          from_name: '严晨',
-          from_tel: '13305193691',
-          from_addr: '中苑',
-          to_name: '王杰',
-          to_tel: '17751773079',
-          to_addr: '',
+          fromName: '严晨',
+          fromTel: '13305193691',
+          fromAddr: '中苑',
+          toName: '王杰',
+          toTel: '17751773079',
+          toAddr: '',
           price: 10,
           id: '75422907315890',
           org: '中通',
@@ -388,7 +388,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/send/getSendByUser',
+          url: _this.baseUrl + '/send/user-send',
           data: param
         })
           .then(function (response) {

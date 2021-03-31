@@ -118,7 +118,7 @@
         })
         this.$axios({
           method: 'put',
-          url: _this.baseUrl + '/pack/pickPackByUser',
+          url: _this.baseUrl + '/pack/pick-by-code',
           data: param
         })
           .then(function (response) {
@@ -189,7 +189,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserTotalNum',
+          url: _this.baseUrl + '/pack/user-count',
           data: param
         })
           .then(function (response) {
@@ -215,7 +215,7 @@
           })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/send/getTotalByUser',
+          url: _this.baseUrl + '/send/user-count',
           data: param
         })
           .then(function (response) {

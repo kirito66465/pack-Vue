@@ -129,7 +129,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/user/getInfo',
+          url: _this.baseUrl + '/user/get-info',
           data: param
         })
           .then(function (response) {
@@ -167,7 +167,7 @@
         param.append('token', token)
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/admin/getInfo',
+          url: _this.baseUrl + '/admin/get-info',
           data: param
         })
           .then(function (response) {

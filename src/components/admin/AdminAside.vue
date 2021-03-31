@@ -105,7 +105,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getAdminTotalNum',
+          url: _this.baseUrl + '/pack/admin-count',
           data: param
         })
           .then(function (response) {
@@ -134,7 +134,7 @@
           })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/send/getTotalByAdmin',
+          url: _this.baseUrl + '/send/admin-count',
           data: param
         })
           .then(function (response) {
@@ -181,7 +181,7 @@
           })
           _this.$axios({
             method: 'post',
-            url: _this.baseUrl + '/pack/addPack',
+            url: _this.baseUrl + '/pack/add-pack',
             data: param
           })
             .then(function (response) {

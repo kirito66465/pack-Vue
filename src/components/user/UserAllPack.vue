@@ -221,7 +221,7 @@
           })
           _this.$axios({
             method: 'delete',
-            url: _this.baseUrl + '/pack/deletePacks',
+            url: _this.baseUrl + '/pack/delete-pack',
             data: param
           })
             .then(function (response) {
@@ -307,7 +307,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserPackByPage',
+          url: _this.baseUrl + '/pack/user-all-pack',
           data: param
         })
           .then(function (response) {

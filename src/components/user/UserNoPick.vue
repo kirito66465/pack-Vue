@@ -230,7 +230,7 @@
           })
           _this.$axios({
             method: 'delete',
-            url: _this.baseUrl + '/pack/deletePacks',
+            url: _this.baseUrl + '/pack/delete-pack',
             data: param
           })
             .then(function (response) {
@@ -304,7 +304,7 @@
           })
           _this.$axios({
             method: 'put',
-            url: _this.baseUrl + '/pack/pickById',
+            url: _this.baseUrl + '/pack/pick-by-id',
             data: param
           })
             .then(function (response) {
@@ -396,7 +396,7 @@
         })
         this.$axios({
           method: 'post',
-          url: _this.baseUrl + '/pack/getUserNoPick',
+          url: _this.baseUrl + '/pack/user-no-pack',
           data: param
         })
           .then(function (response) {
